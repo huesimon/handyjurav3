@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">HandyJuraLayout</string>
+    <string name="titleBar">HandyJura</string>
+
+    <string-array name="branches">
+        <item>Choose Business</item>
+        <item>Tømrer</item>
+        <item>Murer</item>
+        <item>Glarmester</item>
+        <item>Skiltemager</item>
+        <item>Elektriker</item>
+        <item>VVS</item>
+        <item>Maler</item>
+        <item>Smedie</item>
+        <item>Snedker</item>
+        <item>Gulvlægger</item>
+    </string-array>
+
+    <string-array name="settingSelection">
+        <item>Select one</item>
+        <item>Help</item>
+        <item>Settings</item>
+        <item>About</item>
+        <item>User Info</item>
+        <item>Sign Out</item>
+    </string-array>
+</resources>
