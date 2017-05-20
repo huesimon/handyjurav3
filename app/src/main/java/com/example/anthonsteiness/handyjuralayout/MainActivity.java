@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
     // Anthon's Commit test 18-05-2017 10:28
+    // Commit test too anthon's branch
 
     String title = "HandyJura";
 
