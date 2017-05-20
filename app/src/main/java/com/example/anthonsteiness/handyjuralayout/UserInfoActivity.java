@@ -125,8 +125,8 @@ public class UserInfoActivity extends AppCompatActivity
         adapter2 = ArrayAdapter.createFromResource(this, R.array.settingSelection, android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         helpDropDown.setAdapter(adapter2);
-
         helpDropDown.setOnItemSelectedListener(dropDownListener);
+        titleBar.setText("HandyJura");
     }
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener()
@@ -180,7 +180,7 @@ public class UserInfoActivity extends AppCompatActivity
             String help = "Help";
             String settings = "Settings";
             String about = "About";
-            String userInfo = "User Info";
+            //String userInfo = "User Info";
             String signOut = "Sign Out";
             String defaultItem = "Select one";
             if (parent.getItemAtPosition(position).equals(help))
@@ -200,11 +200,11 @@ public class UserInfoActivity extends AppCompatActivity
                 // This is the default "Select One"
                 //Toast.makeText(MainActivity.this, "Default selected", Toast.LENGTH_SHORT).show();
             }
-            else if (parent.getItemAtPosition(position).equals(userInfo))
-            {
-                // Open user information activity.
-                toastMessage("You are already on this page.");
-            }
+//            else if (parent.getItemAtPosition(position).equals(userInfo))
+//            {
+//                // Open user information activity.
+//                toastMessage("You are already on this page.");
+//            }
             else if (parent.getItemAtPosition(position).equals(signOut))
             {
                 finish();

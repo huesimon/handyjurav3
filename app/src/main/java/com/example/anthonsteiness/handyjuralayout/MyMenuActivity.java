@@ -1,21 +1,17 @@
 package com.example.anthonsteiness.handyjuralayout;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
-import android.view.Gravity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,39 +19,39 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity {
-    // Anthon's Commit test 18-05-2017 10:28
-    // Commit test too anthon's branch
+public class MyMenuActivity extends AppCompatActivity
+{
+    private String title = "Min Menu";
 
-    String title = "HandyJura";
-
-    Button loginBtn;
-    Button registerBtn;
-    ImageView plumber;
-    String str;
-
-    int height;
-    int width;
+    private Button tasksBtn, makeTaskBtn, coworkersBtn, addCoworkerBtn, userInfoBtn, signOutBtn;
+    private int height;
+    private int width;
+    private String str;
+    private RelativeLayout relativeLayout;
+    ViewGroup.MarginLayoutParams btn1Params, btn2Params, btn3Params, btn4Params, btn5Params, btn6Params;
 
     // Buttons and stuff from app_bar class
-    ImageButton searchBtn;
-    Spinner helpDropDown;
-    ArrayAdapter<CharSequence> adapter;
+    private ImageButton searchBtn;
+    private Spinner helpDropDown;
+    private ArrayAdapter<CharSequence> adapter;
 
-    TextView titleBar;
-    EditText searchBar;
-    // variable for searchBar (NOT NEEDED HERE, SAVED FOR LATER USAGE)
-    //private String saveSearch = "";
+    private TextView titleBar;
+    private EditText searchBar;
+    private String saveSearch = "";
 
     // Firebase stuff
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private ProgressDialog progressDialog;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_my_menu);
+
+        height = getWindowManager().getDefaultDisplay().getHeight();
+        width = getWindowManager().getDefaultDisplay().getWidth();
 
         // Fierbase declaration stuff
         firebaseAuth = FirebaseAuth.getInstance();
@@ -63,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
         if (firebaseAuth.getCurrentUser() != null)
         {
             // The Firebase is already logged in to
-            finish();
-            startActivity(new Intent(MainActivity.this, MyMenuActivity.class));
         }
         mAuthListener = new FirebaseAuth.AuthStateListener()
         {
@@ -74,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser fbUser = firebaseAuth.getCurrentUser();
                 if (fbUser != null)
                 {
-                    //toastMessage("Successfully signed in with " + fbUser.getEmail());
+                    toastMessage("Successfully signed in with " + fbUser.getEmail());
                 }
                 else
                 {
@@ -83,18 +77,29 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        progressDialog = new ProgressDialog(this);
 
-        loginBtn = (Button) findViewById(R.id.loginBtn);
-        registerBtn = (Button) findViewById(R.id.registerBtn);
-        plumber = (ImageView) findViewById(R.id.plumberIcon);
+        tasksBtn = (Button) findViewById(R.id.btn1);
+        makeTaskBtn = (Button) findViewById(R.id.btn2);
+        coworkersBtn = (Button) findViewById(R.id.btn3);
+        addCoworkerBtn = (Button) findViewById(R.id.btn4);
+        userInfoBtn = (Button) findViewById(R.id.btn5);
+        signOutBtn = (Button) findViewById(R.id.btn6);
+        relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
+        relativeLayout.setOnClickListener(buttonClickListener);
 
-        plumber.setOnClickListener(buttonClickListener);
-        loginBtn.setOnClickListener(buttonClickListener);
-        registerBtn.setOnClickListener(buttonClickListener);
+        tasksBtn.setOnClickListener(buttonClickListener);
+        makeTaskBtn.setOnClickListener(buttonClickListener);
+        coworkersBtn.setOnClickListener(buttonClickListener);
+        addCoworkerBtn.setOnClickListener(buttonClickListener);
+        userInfoBtn.setOnClickListener(buttonClickListener);
+        signOutBtn.setOnClickListener(buttonClickListener);
 
-        height = getWindowManager().getDefaultDisplay().getHeight();
-        width = getWindowManager().getDefaultDisplay().getWidth();
+        btn1Params = (ViewGroup.MarginLayoutParams) tasksBtn.getLayoutParams();
+        btn2Params = (ViewGroup.MarginLayoutParams) makeTaskBtn.getLayoutParams();
+        btn3Params = (ViewGroup.MarginLayoutParams) coworkersBtn.getLayoutParams();
+        btn4Params = (ViewGroup.MarginLayoutParams) addCoworkerBtn.getLayoutParams();
+        btn5Params = (ViewGroup.MarginLayoutParams) userInfoBtn.getLayoutParams();
+        btn6Params = (ViewGroup.MarginLayoutParams) signOutBtn.getLayoutParams();
 
         // Everything here is from app_bar class -----------------
         searchBtn = (ImageButton) findViewById(R.id.searchbtn);
@@ -108,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         helpDropDown.setAdapter(adapter);
         helpDropDown.setOnItemSelectedListener(dropDownListener);
-        titleBar.setText("HandyJura");
+        titleBar.setText("Min Menu");
 
         checkScreenReso();
 
@@ -128,35 +133,14 @@ public class MainActivity extends AppCompatActivity {
 
             switch(view.getId())
             {
-                case R.id.loginBtn:
-                    //finish();
-                    Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(loginIntent);
-                    //toastMessage("Height: " +height + "\nWidht: " + width);
-
-                    break;
-                case R.id.registerBtn:
-                    //finish();
-                    Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
-                    startActivity(registerIntent);
-
-                    break;
                 case R.id.searchbtn:
                     //Toast.makeText(MainActivity.this, "This is the search button", Toast.LENGTH_SHORT).show();
-
                     /*
                     This is the method to make the SearchField show and accessable.
                     But as there is nothing to search for on this activity I decided to comment it out for now.
                     if (!titleBar.getText().equals(title))
                     {
-                        searchBar.setHint("");
-                        searchBar.setText("");
-                        titleBar.setText(title);
-                        searchBar.setInputType(InputType.TYPE_NULL);
-
-                        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
+                        setTitle(view);
                     }
                     else
                     {
@@ -164,72 +148,52 @@ public class MainActivity extends AppCompatActivity {
                         titleBar.setText("");
                         searchBar.setInputType(InputType.TYPE_CLASS_TEXT);
 
+                        if (!saveSearch.equals(""))
+                        {
+                            searchBar.setText(saveSearch);
+                        }
+
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.showSoftInput(searchBar, InputMethodManager.SHOW_IMPLICIT);
                     }*/
-
-
                     break;
-                case R.id.plumberIcon:
-                    Toast toast = Toast.makeText(MainActivity.this, "Hello, I'm the plumber!", Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 200);
-                    toast.show();
+                case R.id.relativeLayout:
+                    // I made this clickable to test if I could hide the searchBar when this was clicked.
+                    // The answer to that is YES. So remember this for later usage.
                     break;
-
+                case R.id.btn1: // Tasks button
+                    break;
+                case R.id.btn2: // Add task Button
+                    break;
+                case R.id.btn3: // Workers button
+                    break;
+                case R.id.btn4: // Add worker Button
+                    break;
+                case R.id.btn5: // User Info Button
+                    // Open user information activity.
+                    if (firebaseAuth.getCurrentUser() != null)
+                    {
+                        // The Firebase is already logged in to
+                        startActivity(new Intent(MyMenuActivity.this, UserInfoActivity.class));
+                    }
+                    else
+                    {
+                        toastMessage("Please login to access this");
+                    }
+                    break;
+                case R.id.btn6: // Sign Out Button
+                    if (firebaseAuth.getCurrentUser() != null)
+                    {
+                        // The Firebase is logged in to
+                        firebaseAuth.signOut();
+                        finish();
+                        startActivity(new Intent(MyMenuActivity.this, MainActivity.class));
+                        toastMessage("Successfully signed out");
+                    }
+                    break;
             }
         }
     };
-
-    private void checkScreenReso()
-    {
-        if (height>=1790)
-        {
-            // For 5.2" screen
-            plumber.setImageResource(R.drawable.plumber);
-            loginBtn.setHeight(305);
-            registerBtn.setHeight(305);
-
-            if (height>=1800)
-            {
-                // For 7" Screen
-                plumber.setImageResource(R.drawable.plumberr_vtwo);
-                loginBtn.setHeight(285);
-                registerBtn.setHeight(285);
-
-                if (height>=1950)
-                {
-                    // For 9" Screen
-                    plumber.setImageResource(R.drawable.plumberrr);
-                    loginBtn.setHeight(245);
-                    registerBtn.setHeight(245);
-
-                    if (height>=2390)
-                    {
-                        // For 6" Screen
-                        plumber.setImageResource(R.drawable.plumber);
-                        loginBtn.setHeight(385);
-                        registerBtn.setHeight(385);
-
-                        if (height>=2460)
-                        {
-                            // For 10" Screen
-                            plumber.setImageResource(R.drawable.plumberrrr);
-                            loginBtn.setHeight(315);
-                            registerBtn.setHeight(315);
-                        }
-                    }
-                }
-            }
-        }
-
-        if (height>=1920 && height<=1920)
-        {
-            plumber.setImageResource(R.drawable.plumber);
-            loginBtn.setHeight(295);
-            registerBtn.setHeight(315);
-        }
-    }
-
 
     // This is the drop down menu with Help, Settings and About page buttons ----------------------------------
     private AdapterView.OnItemSelectedListener dropDownListener = new AdapterView.OnItemSelectedListener()
@@ -259,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
             else if (parent.getItemAtPosition(position).equals(defaultItem))
             {
                 // This is the default "Select One"
-                //Toast.makeText(MainActivity.this, "Default selected", Toast.LENGTH_SHORT).show();
+
             }
 //            else if (parent.getItemAtPosition(position).equals(userInfo))
 //            {
@@ -267,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
 //                if (firebaseAuth.getCurrentUser() != null)
 //                {
 //                    // The Firebase is already logged in to
-//                    startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
+//                    startActivity(new Intent(MyMenuActivity.this, UserInfoActivity.class));
 //                }
 //                else
 //                {
@@ -276,10 +240,19 @@ public class MainActivity extends AppCompatActivity {
 //            }
             else if (parent.getItemAtPosition(position).equals(signOut))
             {
-                firebaseAuth.signOut();
-                toastMessage("Successfully signed out");
+                if (firebaseAuth.getCurrentUser() != null)
+                {
+                    // The Firebase is logged in to
+                    firebaseAuth.signOut();
+                    finish();
+                    startActivity(new Intent(MyMenuActivity.this, MainActivity.class));
+                    toastMessage("Successfully signed out");
+                }
+                else
+                {
+                    toastMessage("Already signed out...");
+                }
             }
-
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
@@ -312,6 +285,78 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    private void checkScreenReso()
+    {
+
+        if (height>=1790)
+        {
+            // For 5.2" screen
+            // Do nothing, it is designed for 5.2" - 6"
+
+            if (height>=1800)
+            {
+                // For 7" Screen
+                setBtnParams(105, 400,450);
+
+                if (height>=1950)
+                {
+                    // For 9" Screen
+                    setBtnParams(105, 480, 640);
+
+                    if (height>=2390)
+                    {
+                        // For 6" Screen
+                        setBtnParams(105, 500, 600);
+
+                        if (height>=2460)
+                        {
+                            // For 10" Screen
+                            setBtnParams(105, 580, 750);
+                        }
+                    }
+                }
+            }
+        }
+        if (height>=1920 && height<=1920)
+        {
+            // for 1920x1080 screens
+            setBtnParams(45, 400, 485);
+        }
+
+
+    }
+
+    private void setBtnParams(int sides, int btnHeight, int btnWidth)
+    {
+        btn1Params.height = btnHeight;
+        btn1Params.width = btnWidth;
+        tasksBtn.setLayoutParams(btn1Params);
+
+        btn2Params.rightMargin = sides;
+        btn2Params.height = btnHeight;
+        btn2Params.width = btnWidth;
+        makeTaskBtn.setLayoutParams(btn2Params);
+
+        btn3Params.leftMargin = sides;
+        btn3Params.height = btnHeight;
+        btn3Params.width = btnWidth;
+        coworkersBtn.setLayoutParams(btn3Params);
+
+        btn4Params.rightMargin = sides;
+        btn4Params.height = btnHeight;
+        btn4Params.width = btnWidth;
+        addCoworkerBtn.setLayoutParams(btn4Params);
+
+        btn5Params.height = btnHeight;
+        btn5Params.width = btnWidth;
+        userInfoBtn.setLayoutParams(btn5Params);
+
+        btn6Params.rightMargin = sides;
+        btn6Params.height = btnHeight;
+        btn6Params.width = btnWidth;
+        signOutBtn.setLayoutParams(btn6Params);
+    }
+
     // Method for searchBar (NOT NEEDED HERE, SAVED FOR LATER USAGE)
     /*private void setTitle(View view)
     {
@@ -324,5 +369,4 @@ public class MainActivity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }*/
-
 }

@@ -21,7 +21,6 @@
         <item>Help</item>
         <item>Settings</item>
         <item>About</item>
-        <item>User Info</item>
         <item>Sign Out</item>
     </string-array>
 </resources>

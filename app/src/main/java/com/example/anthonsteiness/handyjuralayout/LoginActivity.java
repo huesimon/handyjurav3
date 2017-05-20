@@ -92,8 +92,8 @@ public class LoginActivity extends AppCompatActivity {
         adapter2 = ArrayAdapter.createFromResource(this, R.array.settingSelection, android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         helpDropDown.setAdapter(adapter2);
-
         helpDropDown.setOnItemSelectedListener(dropDownListener);
+        titleBar.setText("HandyJura");
 
         checkScreenReso();
     }
@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
             {
                 case R.id.loginBtn2:
                     userLogin();
-                    Toast.makeText(LoginActivity.this, "You are trying to Login...", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(LoginActivity.this, "You are trying to Login...", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.forgotPassText:
                     Toast.makeText(LoginActivity.this, "You have forgot your password...", Toast.LENGTH_SHORT).show();
@@ -177,11 +177,12 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful())
                         {
                             // The login is successful
-                            Toast.makeText(LoginActivity.this, "User Login successful", Toast.LENGTH_SHORT).show();
+                            //toastMessage("User login successful");
+
                             // Finish the LoginActivity and start up the MyFrontPageActivity (Not made yet) instead of main
                             finish();
-                            //startActivity(new Intent(LoginActivity.this, MyFronPageActivity.class));
-                            startActivity(new Intent(LoginActivity.this, UserInfoActivity.class));
+                            //startActivity(new Intent(LoginActivity.this, MyMenuActivity.class));
+                            startActivity(new Intent(LoginActivity.this, MyMenuActivity.class));
                         }
                         else
                         {
@@ -249,7 +250,7 @@ public class LoginActivity extends AppCompatActivity {
             String help = "Help";
             String settings = "Settings";
             String about = "About";
-            String userInfo = "User Info";
+            //String userInfo = "User Info";
             String signOut = "Sign Out";
             String defaultItem = "Select one";
             if (parent.getItemAtPosition(position).equals(help))
@@ -269,19 +270,19 @@ public class LoginActivity extends AppCompatActivity {
                 // This is the default "Select One"
                 //Toast.makeText(MainActivity.this, "Default selected", Toast.LENGTH_SHORT).show();
             }
-            else if (parent.getItemAtPosition(position).equals(userInfo))
-            {
-                // Open user information activity.
-                if (firebaseAuth.getCurrentUser() != null)
-                {
-                    // The Firebase is already logged in to
-                    startActivity(new Intent(LoginActivity.this, UserInfoActivity.class));
-                }
-                else
-                {
-                    toastMessage("Please login to access this");
-                }
-            }
+//            else if (parent.getItemAtPosition(position).equals(userInfo))
+//            {
+//                // Open user information activity.
+//                if (firebaseAuth.getCurrentUser() != null)
+//                {
+//                    // The Firebase is already logged in to
+//                    startActivity(new Intent(LoginActivity.this, UserInfoActivity.class));
+//                }
+//                else
+//                {
+//                    toastMessage("Please login to access this");
+//                }
+//            }
             else if (parent.getItemAtPosition(position).equals(signOut))
             {
                 firebaseAuth.signOut();
