@@ -1,4 +1,4 @@
-package com.example.anthonsteiness.handyjuralayout;
+package com.example.anthonsteiness.handyjuralayout.objects;
 
 /**
  * Created by Anthon Steiness on 17-05-2017.
