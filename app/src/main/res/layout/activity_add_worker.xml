@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.anthonsteiness.handyjuralayout.RegisterActivity">
+    tools:context="com.example.anthonsteiness.handyjuralayout.AddWorkerActivity">
 
     <include layout="@layout/app_bar"
         android:id="@+id/action_bar"/>
@@ -17,11 +17,11 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/editName"
+            android:id="@+id/editName2"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:hint="Full Name"
+            android:hint="Fulde navn"
             android:inputType="textPersonName"
             android:singleLine="true"
             android:textColorHint="@color/colorDarkGrey"
@@ -33,11 +33,11 @@
             android:layout_height="wrap_content" />
 
         <EditText
-            android:id="@+id/editEmailReg"
+            android:id="@+id/editEmailReg2"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:hint="Email Address"
+            android:hint="Email Adresse"
             android:inputType="textEmailAddress"
             android:singleLine="true"
             android:textColorHint="@color/colorDarkGrey"
@@ -49,11 +49,11 @@
             android:layout_height="wrap_content" />
 
         <EditText
-            android:id="@+id/editEmailRegRepeat"
+            android:id="@+id/editEmailRegRepeat2"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:hint="Repeat Email"
+            android:hint="Gentag Email"
             android:inputType="textEmailAddress"
             android:singleLine="true"
             android:textColorHint="@color/colorDarkGrey"
@@ -65,11 +65,11 @@
             android:layout_height="wrap_content" />
 
         <EditText
-            android:id="@+id/editPasswordReg"
+            android:id="@+id/editPasswordReg2"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:hint="Password"
+            android:hint="Kodeord"
             android:inputType="textPassword"
             android:singleLine="true"
             android:textColorHint="@color/colorDarkGrey"
@@ -81,11 +81,11 @@
             android:layout_height="wrap_content" />
 
         <EditText
-            android:id="@+id/editPasswordRegRepeat"
+            android:id="@+id/editPasswordRegRepeat2"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:hint="Repeat Password"
+            android:hint="Gentag Koden"
             android:inputType="textPassword"
             android:singleLine="true"
             android:textColorHint="@color/colorDarkGrey"
@@ -95,77 +95,13 @@
             android:textAlignment="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <EditText
-            android:id="@+id/editCVR"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:hint="CVR"
-            android:inputType="number"
-            android:singleLine="true"
-            android:textColorHint="@color/colorDarkGrey"
-            android:textColor="@android:color/black"
-            android:textColorHighlight="@color/colorDarkGrey"
-            android:backgroundTint="@color/colorPrimary"
-            android:textAlignment="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/chooseBusiText"
-            android:text="Please choose your line of business"
-            android:textSize="15dip"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:textColor="@color/colorDarkGrey"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-
-
-
-        <GridLayout
-            android:id="@+id/grid"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:columnCount="2"
-            android:rowCount="1"
-            android:layout_marginTop="10dp"
-            android:useDefaultMargins="true"
-            android:orientation="horizontal"
-            >
-
-            <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/branchSpinner"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginRight="-15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_gravity="center">
-            </android.support.v7.widget.AppCompatSpinner>
-
-            <TextView
-                android:id="@+id/chosenBusiText"
-                android:text="Choose Business"
-                android:textSize="20dip"
-                android:textAlignment="center"
-                android:textColor="@color/colorDarkGrey"
-                android:layout_gravity="left"
-                android:layout_marginTop="7dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
-
-        </GridLayout>
-
 
         <Button
-            android:id="@+id/registerBtn2"
-            android:layout_marginTop="80dp"
+            android:id="@+id/registerBtn3"
+            android:layout_marginTop="220dp"
             android:textStyle="bold"
             android:background="@color/colorRed"
-            android:text="Sign up"
+            android:text="Registrer"
             android:textSize="40dp"
             android:textColor="@android:color/white"
             android:layout_width="match_parent"

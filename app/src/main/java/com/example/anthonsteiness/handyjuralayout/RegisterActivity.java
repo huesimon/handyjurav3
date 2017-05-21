@@ -1,16 +1,13 @@
 package com.example.anthonsteiness.handyjuralayout;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.anthonsteiness.handyjuralayout.objects.BossUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -118,8 +116,8 @@ public class RegisterActivity extends AppCompatActivity {
         adapter2 = ArrayAdapter.createFromResource(this, R.array.settingSelection, android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         helpDropDown.setAdapter(adapter2);
-
         helpDropDown.setOnItemSelectedListener(dropDownListener);
+        titleBar.setText("HandyJura");
 
         checkScreenReso();
     }
@@ -303,7 +301,7 @@ public class RegisterActivity extends AppCompatActivity {
             String help = "Help";
             String settings = "Settings";
             String about = "About";
-            String userInfo = "User Info";
+            //String userInfo = "User Info";
             String signOut = "Sign Out";
             String defaultItem = "Select one";
             String defaultItem2 = "Choose Business";
@@ -329,19 +327,19 @@ public class RegisterActivity extends AppCompatActivity {
             {
                 Toast.makeText(RegisterActivity.this, about + " selected", Toast.LENGTH_SHORT).show();
             }
-            else if (parent.getItemAtPosition(position).equals(userInfo))
-            {
-                // Open user information activity.
-                if (firebaseAuth.getCurrentUser() != null)
-                {
-                    // The Firebase is already logged in to
-                    startActivity(new Intent(RegisterActivity.this, UserInfoActivity.class));
-                }
-                else
-                {
-                    toastMessage("Please login to access this", true);
-                }
-            }
+//            else if (parent.getItemAtPosition(position).equals(userInfo))
+//            {
+//                // Open user information activity.
+//                if (firebaseAuth.getCurrentUser() != null)
+//                {
+//                    // The Firebase is already logged in to
+//                    startActivity(new Intent(RegisterActivity.this, UserInfoActivity.class));
+//                }
+//                else
+//                {
+//                    toastMessage("Please login to access this", true);
+//                }
+//            }
             else if (parent.getItemAtPosition(position).equals(signOut))
             {
                 firebaseAuth.signOut();

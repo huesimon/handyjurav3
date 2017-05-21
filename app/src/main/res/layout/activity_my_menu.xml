@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.anthonsteiness.handyjuralayout.MyMenuActivity">
+
+    <include layout="@layout/app_bar"
+        android:id="@+id/action_bar"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/action_bar"
+        android:onClick=""
+        android:clickable="true"
+        android:soundEffectsEnabled="false"
+        android:id="@+id/relativeLayout">
+
+        <Button
+            android:id="@+id/btn1"
+            android:layout_width="182dp"
+            android:layout_height="150dp"
+            android:scaleType="centerInside"
+            android:layout_above="@+id/btn3"
+            android:layout_alignLeft="@+id/btn3"
+            android:layout_alignStart="@+id/btn3"
+            android:background="@color/colorPrimary"
+            android:layout_marginBottom="10dp"
+            android:textAllCaps="false"
+
+            android:text="Opgaver"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"/>/>
+
+        <Button
+            android:id="@+id/btn2"
+            android:layout_width="182dp"
+            android:layout_height="150dp"
+            android:scaleType="centerInside"
+            android:layout_above="@+id/btn4"
+            android:layout_alignLeft="@+id/btn4"
+            android:layout_alignStart="@+id/btn4"
+            android:background="@color/colorPrimary"
+            android:layout_marginBottom="10dp"
+            android:textAllCaps="false"
+            android:text="Tilføj opgave"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"/>/>
+
+        <Button
+            android:id="@+id/btn3"
+            android:layout_width="182dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="false"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="0dp"
+            android:background="@color/colorPrimary"
+            android:scaleType="centerInside"
+            android:textAllCaps="false"
+            android:text="Medarbejdere"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"/>/>
+
+        <Button
+            android:id="@+id/btn4"
+            android:layout_width="182dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="false"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/colorPrimary"
+            android:scaleType="centerInside"
+            android:textAllCaps="false"
+            android:text="Tilføj medarbejder"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"/>/>
+
+        <Button
+            android:id="@+id/btn5"
+            android:layout_width="182dp"
+            android:layout_height="150dp"
+            android:scaleType="centerInside"
+            android:layout_below="@+id/btn3"
+            android:layout_alignLeft="@+id/btn3"
+            android:layout_alignStart="@+id/btn3"
+            android:background="@color/colorDarkGrey"
+            android:layout_marginTop="10dp"
+            android:textAllCaps="false"
+            android:text="Bruger information"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"/>
+
+        <Button
+            android:id="@+id/btn6"
+            android:layout_width="182dp"
+            android:layout_height="150dp"
+            android:scaleType="centerInside"
+            android:layout_below="@+id/btn4"
+            android:layout_alignLeft="@+id/btn4"
+            android:layout_alignStart="@+id/btn4"
+            android:background="@color/colorRed"
+            android:layout_marginTop="10dp"
+            android:textAllCaps="false"
+            android:text="Log ud"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"/>
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
