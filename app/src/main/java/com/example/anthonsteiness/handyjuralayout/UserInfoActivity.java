@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 public class UserInfoActivity extends AppCompatActivity
 {
+    // Commit test
     private static final String TAG = "UserInfoActivity";
 
     TextView textView;
