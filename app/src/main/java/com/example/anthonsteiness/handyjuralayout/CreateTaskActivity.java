@@ -2,6 +2,7 @@ package com.example.anthonsteiness.handyjuralayout;
 
 import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -11,11 +12,12 @@ import android.widget.TextView;
  */
 
 public class CreateTaskActivity extends AppCompatActivity{
-    private String navn = "Opret opgave";
+    private String title = "Opret opgave";
     private TextView customerView;
-    private EditText Name, address, city, zip, phone;
+    private EditText name, address, city, zip, phone;
     private TextView task;
-    private EditText title, description, price;
+    private EditText topic, description, price;
+    private Button addTask;
     private RelativeLayout relativeLayout;
     private int height;
     private int width;
