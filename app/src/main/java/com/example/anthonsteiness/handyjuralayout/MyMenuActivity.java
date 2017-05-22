@@ -166,6 +166,7 @@ public class MyMenuActivity extends AppCompatActivity
                 case R.id.btn2: // Add task Button
                     break;
                 case R.id.btn3: // Workers button
+                    startActivity(new Intent(MyMenuActivity.this, WorkersActivity.class));
                     break;
                 case R.id.btn4: // Add worker Button
                     startActivity(new Intent(MyMenuActivity.this, AddWorkerActivity.class));

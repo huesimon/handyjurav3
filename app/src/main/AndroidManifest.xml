@@ -24,7 +24,8 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".UserInfoActivity" />
         <activity android:name=".MyMenuActivity" />
-        <activity android:name=".AddWorkerActivity"></activity>
+        <activity android:name=".AddWorkerActivity" />
+        <activity android:name=".WorkersActivity"></activity>
     </application>
 
 </manifest>

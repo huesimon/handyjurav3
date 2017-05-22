@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.anthonsteiness.handyjuralayout.objects.BossUser;
+import com.example.anthonsteiness.handyjuralayout.objects.RegularUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,13 +27,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class UserInfoActivity extends AppCompatActivity
+public class WorkersActivity extends AppCompatActivity
 {
-    // Commit test
-    private static final String TAG = "UserInfoActivity";
+    private static final String TAG = "WorkersActivity";
 
-    private String title = "User Info";
+    private String title = "Medarbejdere";
 
     TextView textView;
     ListView listView;
@@ -42,7 +43,8 @@ public class UserInfoActivity extends AppCompatActivity
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference myRootRef;
-    private DatabaseReference myChildRef;
+    private DatabaseReference myUserIDRef;
+    private DatabaseReference myRegUserRef;
     private String userID;
     private FirebaseUser fbUser;
 
@@ -56,14 +58,21 @@ public class UserInfoActivity extends AppCompatActivity
     TextView titleBar;
     EditText searchBar;
 
+
+    List<RegularUser> userList;
+    List<String> stringArray;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_info);
+        setContentView(R.layout.activity_workers);
 
-        textView = (TextView) findViewById(R.id.tvUserInfo);
-        listView = (ListView) findViewById(R.id.listView);
+        textView = (TextView) findViewById(R.id.textViewCoworkers);
+        listView = (ListView) findViewById(R.id.listViewCoworkers);
+
+        userList = new ArrayList<>();
+        stringArray = new ArrayList<>();
 
         // Firebase declaration stuff
         firebaseAuth = FirebaseAuth.getInstance();
@@ -81,7 +90,10 @@ public class UserInfoActivity extends AppCompatActivity
         FirebaseUser user = firebaseAuth.getCurrentUser();
         fbUser = user;
         userID = user.getUid();
-        myChildRef = mFirebaseDatabase.getReference(userID);
+
+        myRootRef = mFirebaseDatabase.getReference();
+        myUserIDRef = mFirebaseDatabase.getReference(userID);
+        myRegUserRef = mFirebaseDatabase.getReference(userID + "/RegularUsers");
 
         mAuthListener = new FirebaseAuth.AuthStateListener()
         {
@@ -101,20 +113,23 @@ public class UserInfoActivity extends AppCompatActivity
             }
         };
 
-        myChildRef.addValueEventListener(new ValueEventListener()
+        myRegUserRef.addValueEventListener(new ValueEventListener()
         {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
                 showData(dataSnapshot);
+
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError)
+            {
 
             }
         });
 
-        toastMessage("hello " + fbUser.getEmail());
+
 
         // Everything here is from app_bar class -----------------
         searchBtn = (ImageButton) findViewById(R.id.searchbtn);
@@ -141,7 +156,7 @@ public class UserInfoActivity extends AppCompatActivity
             switch(view.getId())
             {
                 case R.id.searchbtn:
-                    toastMessage("Nothing to search for here...");
+                    toastMessage("Search function not yet implemented..");
                     break;
             }
         }
@@ -150,34 +165,23 @@ public class UserInfoActivity extends AppCompatActivity
     private void showData(DataSnapshot dataSnapshot)
     {
         // For loop to iterate through all the snapshots of the database
-        for (DataSnapshot ds : dataSnapshot.getChildren())
-        {
-            BossUser bossUser = new BossUser();
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
-            bossUser = ds.getValue(BossUser.class);
+            RegularUser regUser = ds.getValue(RegularUser.class);
 
-            //nameView.setText(bossUser.getFullName());
-            //emailView.setText(bossUser.getEmail());
-            //branchView.setText(bossUser.getBranch());
-            //cvrView.setText(bossUser.getCVR());
+            // This arrayList is made for later usage
+            // At some point we want the users to be clickable. And we might need all the users
+            // information to show when clicked.
+            // And the users are added the same time as the String name. (This is thoughts. don't know if possible)
+            userList.add(regUser);
 
+            String str = regUser.getFullName();
+            stringArray.add(str);
 
-            ArrayList<String> array = new ArrayList<>();
-
-            array.add("Name:       " + bossUser.getFullName());
-            array.add("Email:        " + bossUser.getEmail());
-            String branchStr = bossUser.getBranch();
-            String cvrStr = bossUser.getCVR();
-            if(branchStr != null
-                    && cvrStr != null)
-            {
-                array.add("Branch:     " + bossUser.getBranch());
-                array.add("CVR:          " + bossUser.getCVR());
-            }
-
-            ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, array);
-            listView.setAdapter(adapter);
         }
+
+        ArrayAdapter adapter = new ArrayAdapter(WorkersActivity.this, android.R.layout.simple_list_item_1, stringArray);
+        listView.setAdapter(adapter);
     }
 
     // This is the drop down menu with Help, Settings and About page buttons ----------------------------------
@@ -216,10 +220,18 @@ public class UserInfoActivity extends AppCompatActivity
 //            }
             else if (parent.getItemAtPosition(position).equals(signOut))
             {
-                finish();
-                startActivity(new Intent(UserInfoActivity.this, LoginActivity.class));
-                firebaseAuth.signOut();
-                toastMessage("Successfully signed out");
+                if (firebaseAuth.getCurrentUser() != null)
+                {
+                    finish();
+                    startActivity(new Intent(WorkersActivity.this, LoginActivity.class));
+                    firebaseAuth.signOut();
+                    toastMessage("Successfully signed out");
+                }
+                else
+                {
+                    toastMessage("You are not signed in");
+                }
+
             }
         }
         @Override
