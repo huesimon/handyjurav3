@@ -3,6 +3,7 @@ package com.example.anthonsteiness.handyjuralayout;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -70,6 +71,7 @@ public class WorkersActivity extends AppCompatActivity
 
         textView = (TextView) findViewById(R.id.textViewCoworkers);
         listView = (ListView) findViewById(R.id.listViewCoworkers);
+        listView.setOnItemClickListener(itemClickListener);
 
         userList = new ArrayList<>();
         stringArray = new ArrayList<>();
@@ -147,21 +149,6 @@ public class WorkersActivity extends AppCompatActivity
         titleBar.setText(title);
     }
 
-    private View.OnClickListener buttonClickListener = new View.OnClickListener()
-    {
-        @Override
-        public void onClick(View view)
-        {
-
-            switch(view.getId())
-            {
-                case R.id.searchbtn:
-                    toastMessage("Search function not yet implemented..");
-                    break;
-            }
-        }
-    };
-
     private void showData(DataSnapshot dataSnapshot)
     {
         // For loop to iterate through all the snapshots of the database
@@ -182,6 +169,46 @@ public class WorkersActivity extends AppCompatActivity
 
         ArrayAdapter adapter = new ArrayAdapter(WorkersActivity.this, android.R.layout.simple_list_item_1, stringArray);
         listView.setAdapter(adapter);
+    }
+
+    private View.OnClickListener buttonClickListener = new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View view)
+        {
+
+            switch(view.getId())
+            {
+                case R.id.searchbtn:
+                    toastMessage("Search function not yet implemented..");
+                    break;
+            }
+        }
+    };
+
+    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener()
+    {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+        {
+            //for (RegularUser testUser : userList)
+            //{
+                //toastMessage(testUser.getFullName());
+            //}
+
+            RegularUser testUser = userList.get(position);
+            dialogEvent(view, testUser.getEmail(), testUser.getFullName());
+        }
+    };
+
+    private void dialogEvent(View view, String mail, String name)
+    {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(WorkersActivity.this);
+        alertDialog.setMessage(mail).setCancelable(true);
+
+        AlertDialog alert = alertDialog.create();
+        alert.setTitle(name);
+        alert.show();
     }
 
     // This is the drop down menu with Help, Settings and About page buttons ----------------------------------
