@@ -78,10 +78,11 @@ public class AddWorkerActivity extends AppCompatActivity {
 
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        myRootRef = mFirebaseDatabase.getReference();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         fbUser = user;
         userID = user.getUid();
+
+        myRootRef = mFirebaseDatabase.getReference();
         myChildRef = mFirebaseDatabase.getReference(userID);
 
         mAuthListener = new FirebaseAuth.AuthStateListener()
@@ -101,20 +102,6 @@ public class AddWorkerActivity extends AppCompatActivity {
                 // ...
             }
         };
-
-        myChildRef.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         mEmail = (EditText) findViewById(R.id.editEmailReg2);
         mEmailRepeat = (EditText) findViewById(R.id.editEmailRegRepeat2);
@@ -138,7 +125,7 @@ public class AddWorkerActivity extends AppCompatActivity {
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         helpDropDown.setAdapter(adapter2);
         helpDropDown.setOnItemSelectedListener(dropDownListener);
-        titleBar.setText("HandyJura");
+        titleBar.setText("Tilføj medarbejder");
 
         checkScreenReso();
 
@@ -241,7 +228,9 @@ public class AddWorkerActivity extends AppCompatActivity {
         RegularUser regUser = new RegularUser(name, mail, regUserID, userID, true);
         String childInfo = "UserInfo";
         String userTable = "RegularUsers";
-        myChildRef.child(userTable).child(regUserID).child(childInfo).setValue(regUser);
+        //myChildRef.child(userTable).child(regUserID).child(childInfo).setValue(regUser);
+        myChildRef.child(userTable).child(regUserID).setValue(regUser);
+        myRootRef.child(regUserID).child(childInfo).setValue(regUser);
     }
 
 
