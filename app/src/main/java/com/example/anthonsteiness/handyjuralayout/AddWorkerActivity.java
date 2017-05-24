@@ -239,7 +239,7 @@ public class AddWorkerActivity extends AppCompatActivity {
         if (height>=1790)
         {
             // For 5.2" screen
-
+            // Test commit
 
             if (height>=1800)
             {
