@@ -25,7 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
     // Anthon's Commit test 18-05-2017 10:28
-    // Commit test too anthon's branch
+    // Anthon's Commit test 20-05-2017 13:10
 
     String title = "HandyJura";
 
@@ -44,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
     TextView titleBar;
     EditText searchBar;
-    // variable for searchBar (NOT NEEDED HERE, SAVED FOR LATER USAGE)
-    //private String saveSearch = "";
 
     // Firebase stuff
     private FirebaseAuth firebaseAuth;
@@ -63,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
         if (firebaseAuth.getCurrentUser() != null)
         {
             // The Firebase is already logged in to
-            finish();
-            startActivity(new Intent(MainActivity.this, MyMenuActivity.class));
         }
         mAuthListener = new FirebaseAuth.AuthStateListener()
         {
@@ -74,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser fbUser = firebaseAuth.getCurrentUser();
                 if (fbUser != null)
                 {
-                    //toastMessage("Successfully signed in with " + fbUser.getEmail());
+                    toastMessage("Successfully signed in with " + fbUser.getEmail());
                 }
                 else
                 {
@@ -107,8 +103,9 @@ public class MainActivity extends AppCompatActivity {
         adapter = ArrayAdapter.createFromResource(this, R.array.settingSelection, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         helpDropDown.setAdapter(adapter);
+
+        //helpDropDown.setOnItemClickListener(dropDownListener);
         helpDropDown.setOnItemSelectedListener(dropDownListener);
-        titleBar.setText("HandyJura");
 
         checkScreenReso();
 
@@ -129,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
             switch(view.getId())
             {
                 case R.id.loginBtn:
+                    //Toast.makeText(MainActivity.this, str, Toast.LENGTH_SHORT).show();
                     //finish();
                     Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(loginIntent);
@@ -136,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
                     break;
                 case R.id.registerBtn:
+                    //Toast.makeText(MainActivity.this, str, Toast.LENGTH_SHORT).show();
                     //finish();
                     Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
                     startActivity(registerIntent);
@@ -144,9 +143,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.searchbtn:
                     //Toast.makeText(MainActivity.this, "This is the search button", Toast.LENGTH_SHORT).show();
 
-                    /*
-                    This is the method to make the SearchField show and accessable.
-                    But as there is nothing to search for on this activity I decided to comment it out for now.
                     if (!titleBar.getText().equals(title))
                     {
                         searchBar.setHint("");
@@ -166,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.showSoftInput(searchBar, InputMethodManager.SHOW_IMPLICIT);
-                    }*/
+                    }
 
 
                     break;
@@ -174,6 +170,17 @@ public class MainActivity extends AppCompatActivity {
                     Toast toast = Toast.makeText(MainActivity.this, "Hello, I'm the plumber!", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 200);
                     toast.show();
+                    if (!titleBar.getText().equals(title))
+                    {
+                        searchBar.setHint("");
+                        searchBar.setText("");
+                        titleBar.setText(title);
+                        searchBar.setInputType(InputType.TYPE_NULL);
+
+                        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                    }
                     break;
 
             }
@@ -240,10 +247,9 @@ public class MainActivity extends AppCompatActivity {
             String help = "Help";
             String settings = "Settings";
             String about = "About";
-            //String userInfo = "User Info";
+            String userInfo = "User Info";
             String signOut = "Sign Out";
             String defaultItem = "Select one";
-
             if (parent.getItemAtPosition(position).equals(help))
             {
                 toastMessage(help + " selected");
@@ -261,25 +267,24 @@ public class MainActivity extends AppCompatActivity {
                 // This is the default "Select One"
                 //Toast.makeText(MainActivity.this, "Default selected", Toast.LENGTH_SHORT).show();
             }
-//            else if (parent.getItemAtPosition(position).equals(userInfo))
-//            {
-//                // Open user information activity.
-//                if (firebaseAuth.getCurrentUser() != null)
-//                {
-//                    // The Firebase is already logged in to
-//                    startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
-//                }
-//                else
-//                {
-//                    toastMessage("Please login to access this");
-//                }
-//            }
+            else if (parent.getItemAtPosition(position).equals(userInfo))
+            {
+                // Open user information activity.
+                if (firebaseAuth.getCurrentUser() != null)
+                {
+                    // The Firebase is already logged in to
+                    startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
+                }
+                else
+                {
+                    toastMessage("Please login to access this");
+                }
+            }
             else if (parent.getItemAtPosition(position).equals(signOut))
             {
                 firebaseAuth.signOut();
                 toastMessage("Successfully signed out");
             }
-
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
@@ -312,17 +317,40 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    // Method for searchBar (NOT NEEDED HERE, SAVED FOR LATER USAGE)
-    /*private void setTitle(View view)
-    {
-        saveSearch = searchBar.getText().toString().trim();
-        searchBar.setHint("");
-        searchBar.setText("");
-        titleBar.setText(title);
-        searchBar.setInputType(InputType.TYPE_NULL);
 
-        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }*/
+//    private void userLogin()
+//    {
+//        String email = "AuthUser@Authmail.com";
+//        String pass  = "123456";
+//
+//        if((TextUtils.isEmpty(email)) || (TextUtils.isEmpty(pass)))
+//        {
+//            // Email or Password empty
+//            Toast.makeText(MainActivity.this, "Please enter valid values in text fields", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        // If EditText not empty it comes to here
+//        progressDialog.setMessage("Checking user information...");
+//        progressDialog.show();
+//
+//        firebaseAuth.signInWithEmailAndPassword(email, pass)
+//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        progressDialog.dismiss();
+//                        if (task.isSuccessful())
+//                        {
+//                            // The login is successful
+//                            Toast.makeText(MainActivity.this, "User Login successful", Toast.LENGTH_SHORT).show();
+//                        }
+//                        else
+//                        {
+//                            // Not successful
+//                            Toast.makeText(MainActivity.this, "User not found", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//    }
 
 }
