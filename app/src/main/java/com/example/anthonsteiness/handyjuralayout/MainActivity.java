@@ -1,6 +1,5 @@
 package com.example.anthonsteiness.handyjuralayout;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -20,8 +19,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.anthonsteiness.handyjuralayout.objects.BossUser;
+import com.example.anthonsteiness.handyjuralayout.objects.RegularUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     // Anthon's Commit test 18-05-2017 10:28
@@ -47,22 +53,78 @@ public class MainActivity extends AppCompatActivity {
     EditText searchBar;
 
     // Firebase stuff
+    private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private ProgressDialog progressDialog;
+    private DatabaseReference myUserIDRef;
+    private String userID;
+    private FirebaseUser fbUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Fierbase declaration stuff
+        // Firebase declaration stuff
         firebaseAuth = FirebaseAuth.getInstance();
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+
+        //mFirebaseDatabase = FirebaseDatabase.getInstance();
+        //myRootRef = mFirebaseDatabase.getReference();
+        //myUserIDRef = mFirebaseDatabase.getReference(userID);
+
+
         // Check if Firebase is already logged in to
         if (firebaseAuth.getCurrentUser() != null)
         {
             // The Firebase is already logged in to
+
+            fbUser = firebaseAuth.getCurrentUser();
+            userID = fbUser.getUid();
+
+            myUserIDRef = mFirebaseDatabase.getReference(userID);
+
+            myUserIDRef.addValueEventListener(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    //showData(dataSnapshot);
+                    for (DataSnapshot ds : dataSnapshot.getChildren())
+                    {
+                        RegularUser regUser = new RegularUser();
+
+                        regUser = ds.getValue(RegularUser.class);
+
+                        boolean check = regUser.isRegUser();
+                        if (!check)
+                        {
+                            // this is the BossUser
+                            //toastMessage("check = false");
+
+                            finish();
+                            startActivity(new Intent(MainActivity.this, MyMenuActivity.class));
+                        }
+                        else
+                        {
+                            // This is the RegularUser
+                            toastMessage("check = true\nNew activity needs to be made for this user");
+                            // We need to make a MyMenuActivity2 for the Regular Users.
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+
+                }
+            });
+
         }
+
         mAuthListener = new FirebaseAuth.AuthStateListener()
         {
             @Override
@@ -80,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        progressDialog = new ProgressDialog(this);
+
 
         loginBtn = (Button) findViewById(R.id.loginBtn);
         registerBtn = (Button) findViewById(R.id.registerBtn);
@@ -107,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
         //helpDropDown.setOnItemClickListener(dropDownListener);
         helpDropDown.setOnItemSelectedListener(dropDownListener);
+        titleBar.setText(title);
 
         checkScreenReso();
 

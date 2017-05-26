@@ -217,7 +217,7 @@ public class RegisterActivity extends AppCompatActivity {
         // No need to check text fields conditions
         // this method is only called if the user registration is successful
         // So if userRegister() method is unsuccessful. this will never be called
-        BossUser bossUser = new BossUser(CVR, fullName, email, branch);
+        BossUser bossUser = new BossUser(CVR, fullName, email, branch, false);
         FirebaseUser fbUser = firebaseAuth.getCurrentUser();
         String userID = fbUser.getUid();
         bossUser.setUserID(userID);

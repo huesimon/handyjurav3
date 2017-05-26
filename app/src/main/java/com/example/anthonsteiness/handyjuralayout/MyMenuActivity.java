@@ -170,6 +170,8 @@ public class MyMenuActivity extends AppCompatActivity
                     startActivity(new Intent(MyMenuActivity.this, WorkersActivity.class));
                     break;
                 case R.id.btn4: // Add worker Button
+                    // This Activity is finished because right now, you are logged out when registering new users.
+                    finish();
                     startActivity(new Intent(MyMenuActivity.this, AddWorkerActivity.class));
                     break;
                 case R.id.btn5: // User Info Button

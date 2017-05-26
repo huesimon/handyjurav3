@@ -11,17 +11,27 @@ public class BossUser
     private String CVR;
     private String branch;
     private String userID;
+    private boolean regUser;
 
     public BossUser()
     {
 
     }
 
-    public BossUser(String CVR, String fullName, String email, String branch) {
+    public BossUser(String CVR, String fullName, String email, String branch, boolean check) {
         this.fullName = fullName;
         this.email = email;
         this.CVR = CVR;
         this.branch = branch;
+        this.regUser = check;
+    }
+
+    public boolean isRegUser() {
+        return regUser;
+    }
+
+    public void setRegUser(boolean regUser) {
+        this.regUser = regUser;
     }
 
     public void setEmail(String email) {

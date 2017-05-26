@@ -67,21 +67,19 @@ public class UserInfoActivity extends AppCompatActivity
 
         // Firebase declaration stuff
         firebaseAuth = FirebaseAuth.getInstance();
-        // Check if Firebase is already logged in to
-        if (firebaseAuth.getCurrentUser() != null)
-        {
-            // The Firebase is logged in to
-
-        }
-
-
-
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRootRef = mFirebaseDatabase.getReference();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         fbUser = user;
         userID = user.getUid();
         myChildRef = mFirebaseDatabase.getReference(userID);
+
+        // Check if Firebase is already logged in to
+        if (firebaseAuth.getCurrentUser() != null)
+        {
+            // The Firebase is logged in to
+
+        }
 
         mAuthListener = new FirebaseAuth.AuthStateListener()
         {
