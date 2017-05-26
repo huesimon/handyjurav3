@@ -272,8 +272,8 @@ public class LoginActivity extends AppCompatActivity {
                         {
                             // For 10" Screen
                             marginParams.topMargin = 1380;
+                            //marginParams.height = 400; -- This works
                             loginBtn2.setLayoutParams(marginParams);
-                            //loginBtn2.setHeight(400); -- IT WONT CHANGE FOR SOME REASON!?!?
                         }
                     }
                 }

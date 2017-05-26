@@ -83,7 +83,7 @@
             android:background="@color/colorPrimary"
             android:scaleType="centerInside"
             android:textAllCaps="false"
-            android:text="Tilføj medarbejder"
+            android:text="Kontrakter"
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:textSize="25dp"/>/>

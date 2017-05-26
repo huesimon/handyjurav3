@@ -6,8 +6,10 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ButtonBarLayout;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -38,6 +40,9 @@ public class WorkersActivity extends AppCompatActivity
 
     TextView textView;
     ListView listView;
+    ImageButton addWorkerBtn;
+    ViewGroup.MarginLayoutParams marginParams;
+    private int height, width;
 
     // Firebase stuff
     private FirebaseDatabase mFirebaseDatabase;
@@ -46,6 +51,8 @@ public class WorkersActivity extends AppCompatActivity
     private DatabaseReference myRootRef;
     private DatabaseReference myUserIDRef;
     private DatabaseReference myRegUserRef;
+    private DatabaseReference myBossIDRef;
+    private String bossID;
     private String userID;
     private FirebaseUser fbUser;
 
@@ -69,9 +76,15 @@ public class WorkersActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workers);
 
+        height = getWindowManager().getDefaultDisplay().getHeight();
+        width = getWindowManager().getDefaultDisplay().getWidth();
+
         textView = (TextView) findViewById(R.id.textViewCoworkers);
         listView = (ListView) findViewById(R.id.listViewCoworkers);
         listView.setOnItemClickListener(itemClickListener);
+        addWorkerBtn = (ImageButton) findViewById(R.id.addWorkerBtn);
+        addWorkerBtn.setOnClickListener(buttonClickListener);
+        marginParams = (ViewGroup.MarginLayoutParams) addWorkerBtn.getLayoutParams();
 
         userList = new ArrayList<>();
         stringArray = new ArrayList<>();
@@ -88,7 +101,6 @@ public class WorkersActivity extends AppCompatActivity
 
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        myRootRef = mFirebaseDatabase.getReference();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         fbUser = user;
         userID = user.getUid();
@@ -115,21 +127,9 @@ public class WorkersActivity extends AppCompatActivity
             }
         };
 
-        myRegUserRef.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                showData(dataSnapshot);
 
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-
-            }
-        });
+        checkUserType();
 
 
 
@@ -149,8 +149,12 @@ public class WorkersActivity extends AppCompatActivity
         titleBar.setText(title);
     }
 
+    // This shows the workers no matter if the userType is regular or boss.
+    // this get the datasnapshot when called. So it depends on the Datasnapshot from the ValueEventListener.
     private void showData(DataSnapshot dataSnapshot)
     {
+        userList.clear();
+        stringArray.clear();
         // For loop to iterate through all the snapshots of the database
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
@@ -171,6 +175,7 @@ public class WorkersActivity extends AppCompatActivity
         listView.setAdapter(adapter);
     }
 
+
     private View.OnClickListener buttonClickListener = new View.OnClickListener()
     {
         @Override
@@ -182,9 +187,91 @@ public class WorkersActivity extends AppCompatActivity
                 case R.id.searchbtn:
                     toastMessage("Search function not yet implemented..");
                     break;
+                case R.id.addWorkerBtn:
+                    //Gotta finish this activity for now. As the user gets logged out.
+                    finish();
+                    startActivity(new Intent(WorkersActivity.this, AddWorkerActivity.class));
             }
         }
     };
+
+
+    // Method to check the users information.
+    // If RegularUser = true.
+    // Then set addWorkerBtn height and width = 0.
+    // addValueEventListener for myBossIDRef database reference so that the data from the bosses database can be shown for regUsers
+    // if RegularUser = false
+    // addValueEventListener for myRegUserRef database reference. So that the data from the bosses databse can be shown
+    private void checkUserType()
+    {
+        myUserIDRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+
+                for (DataSnapshot ds : dataSnapshot.getChildren())
+                {
+                    RegularUser regUser = new RegularUser();
+
+                    regUser = ds.getValue(RegularUser.class);
+
+                    boolean check = regUser.isRegUser();
+                    if (!check)
+                    {
+                        // this is the BossUser
+
+                        myRegUserRef.addValueEventListener(new ValueEventListener()
+                        {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot)
+                            {
+                                showData(dataSnapshot);
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError)
+                            {
+
+                            }
+                        });
+
+                    }
+                    else
+                    {
+                        // This is the RegularUser
+                        marginParams.height = 0;
+                        marginParams.width = 0;
+                        addWorkerBtn.setLayoutParams(marginParams);
+
+                        bossID = regUser.getBossUserID();
+                        myBossIDRef = mFirebaseDatabase.getReference(bossID + "/RegularUsers");
+
+                        myBossIDRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                showData(dataSnapshot);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+
+            }
+        });
+    }
+
 
     private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener()
     {

@@ -139,7 +139,7 @@ public class MyMenu2Activity extends AppCompatActivity
                 case R.id.btn33: // Workers button
                     // I will make a new method in WorkersActivty that get's called if RegularUser = true.
                     // But for now it doesn't do anything, so the button is disabled.
-                    //startActivity(new Intent(MyMenu2Activity.this, WorkersActivity.class));
+                    startActivity(new Intent(MyMenu2Activity.this, WorkersActivity.class));
                     break;
                 case R.id.btn44: // Contracts Button
                     // This button opens up a page that should display all the different Contract templates.
