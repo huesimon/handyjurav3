@@ -19,11 +19,12 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MyMenuActivity extends AppCompatActivity
+public class MyMenu2Activity extends AppCompatActivity
 {
+
     private String title = "Min Menu";
 
-    private Button tasksBtn, makeTaskBtn, coworkersBtn, addCoworkerBtn, userInfoBtn, signOutBtn;
+    private Button tasksBtn, makeTaskBtn, coworkersBtn, contractsBtn, userInfoBtn, signOutBtn;
     private int height;
     private int width;
     private String str;
@@ -43,12 +44,11 @@ public class MyMenuActivity extends AppCompatActivity
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_menu);
+        setContentView(R.layout.activity_my_menu2);
 
         height = getWindowManager().getDefaultDisplay().getHeight();
         width = getWindowManager().getDefaultDisplay().getWidth();
@@ -78,26 +78,24 @@ public class MyMenuActivity extends AppCompatActivity
         };
 
 
-        tasksBtn = (Button) findViewById(R.id.btn1);
-        makeTaskBtn = (Button) findViewById(R.id.btn2);
-        coworkersBtn = (Button) findViewById(R.id.btn3);
-        addCoworkerBtn = (Button) findViewById(R.id.btn4);
-        userInfoBtn = (Button) findViewById(R.id.btn5);
-        signOutBtn = (Button) findViewById(R.id.btn6);
-        relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
-        relativeLayout.setOnClickListener(buttonClickListener);
+        tasksBtn = (Button) findViewById(R.id.btn11);
+        makeTaskBtn = (Button) findViewById(R.id.btn22);
+        coworkersBtn = (Button) findViewById(R.id.btn33);
+        contractsBtn = (Button) findViewById(R.id.btn44);
+        userInfoBtn = (Button) findViewById(R.id.btn55);
+        signOutBtn = (Button) findViewById(R.id.btn66);
 
         tasksBtn.setOnClickListener(buttonClickListener);
         makeTaskBtn.setOnClickListener(buttonClickListener);
         coworkersBtn.setOnClickListener(buttonClickListener);
-        addCoworkerBtn.setOnClickListener(buttonClickListener);
+        contractsBtn.setOnClickListener(buttonClickListener);
         userInfoBtn.setOnClickListener(buttonClickListener);
         signOutBtn.setOnClickListener(buttonClickListener);
 
         btn1Params = (ViewGroup.MarginLayoutParams) tasksBtn.getLayoutParams();
         btn2Params = (ViewGroup.MarginLayoutParams) makeTaskBtn.getLayoutParams();
         btn3Params = (ViewGroup.MarginLayoutParams) coworkersBtn.getLayoutParams();
-        btn4Params = (ViewGroup.MarginLayoutParams) addCoworkerBtn.getLayoutParams();
+        btn4Params = (ViewGroup.MarginLayoutParams) contractsBtn.getLayoutParams();
         btn5Params = (ViewGroup.MarginLayoutParams) userInfoBtn.getLayoutParams();
         btn6Params = (ViewGroup.MarginLayoutParams) signOutBtn.getLayoutParams();
 
@@ -133,66 +131,38 @@ public class MyMenuActivity extends AppCompatActivity
 
             switch(view.getId())
             {
-                case R.id.searchbtn:
-                    //Toast.makeText(MainActivity.this, "This is the search button", Toast.LENGTH_SHORT).show();
-                    /*
-                    This is the method to make the SearchField show and accessable.
-                    But as there is nothing to search for on this activity I decided to comment it out for now.
-                    if (!titleBar.getText().equals(title))
-                    {
-                        setTitle(view);
-                    }
-                    else
-                    {
-                        searchBar.setHint("Search");
-                        titleBar.setText("");
-                        searchBar.setInputType(InputType.TYPE_CLASS_TEXT);
-
-                        if (!saveSearch.equals(""))
-                        {
-                            searchBar.setText(saveSearch);
-                        }
-
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(searchBar, InputMethodManager.SHOW_IMPLICIT);
-                    }*/
+                case R.id.btn11: // Tasks button
                     break;
-                case R.id.relativeLayout:
-                    // I made this clickable to test if I could hide the searchBar when this was clicked.
-                    // The answer to that is YES. So remember this for later usage.
+                case R.id.btn22: // Add task Button
+                    startActivity(new Intent(MyMenu2Activity.this, CreateTaskActivity.class));
                     break;
-                case R.id.btn1: // Tasks button
+                case R.id.btn33: // Workers button
+                    // I will make a new method in WorkersActivty that get's called if RegularUser = true.
+                    // But for now it doesn't do anything, so the button is disabled.
+                    //startActivity(new Intent(MyMenu2Activity.this, WorkersActivity.class));
                     break;
-                case R.id.btn2: // Add task Button
-                    startActivity(new Intent(MyMenuActivity.this, CreateTaskActivity.class));
+                case R.id.btn44: // Contracts Button
+                    // This button opens up a page that should display all the different Contract templates.
                     break;
-                case R.id.btn3: // Workers button
-                    startActivity(new Intent(MyMenuActivity.this, WorkersActivity.class));
-                    break;
-                case R.id.btn4: // Add worker Button
-                    // This Activity is finished because right now, you are logged out when registering new users.
-                    finish();
-                    startActivity(new Intent(MyMenuActivity.this, AddWorkerActivity.class));
-                    break;
-                case R.id.btn5: // User Info Button
+                case R.id.btn55: // User Info Button
                     // Open user information activity.
                     if (firebaseAuth.getCurrentUser() != null)
                     {
                         // The Firebase is already logged in to
-                        startActivity(new Intent(MyMenuActivity.this, UserInfoActivity.class));
+                        startActivity(new Intent(MyMenu2Activity.this, UserInfoActivity.class));
                     }
                     else
                     {
                         toastMessage("Please login to access this");
                     }
                     break;
-                case R.id.btn6: // Sign Out Button
+                case R.id.btn66: // Sign Out Button
                     if (firebaseAuth.getCurrentUser() != null)
                     {
                         // The Firebase is logged in to
                         firebaseAuth.signOut();
                         finish();
-                        startActivity(new Intent(MyMenuActivity.this, MainActivity.class));
+                        startActivity(new Intent(MyMenu2Activity.this, MainActivity.class));
                         toastMessage("Successfully signed out");
                     }
                     break;
@@ -211,6 +181,7 @@ public class MyMenuActivity extends AppCompatActivity
             String about = "Om";
             String signOut = "Log ud";
             String defaultItem = "Vælg en";
+
             if (parent.getItemAtPosition(position).equals(help))
             {
                 toastMessage(help + " valgt");
@@ -232,9 +203,10 @@ public class MyMenuActivity extends AppCompatActivity
             {
                 if (firebaseAuth.getCurrentUser() != null)
                 {
+                    // The Firebase is logged in to
                     firebaseAuth.signOut();
                     finish();
-                    startActivity(new Intent(MyMenuActivity.this, MainActivity.class));
+                    startActivity(new Intent(MyMenu2Activity.this, MainActivity.class));
                     toastMessage("Du er nu logget ud");
                 }
                 else
@@ -334,7 +306,7 @@ public class MyMenuActivity extends AppCompatActivity
         btn4Params.rightMargin = sides;
         btn4Params.height = btnHeight;
         btn4Params.width = btnWidth;
-        addCoworkerBtn.setLayoutParams(btn4Params);
+        contractsBtn.setLayoutParams(btn4Params);
 
         btn5Params.height = btnHeight;
         btn5Params.width = btnWidth;
@@ -345,17 +317,4 @@ public class MyMenuActivity extends AppCompatActivity
         btn6Params.width = btnWidth;
         signOutBtn.setLayoutParams(btn6Params);
     }
-
-    // Method for searchBar (NOT NEEDED HERE, SAVED FOR LATER USAGE)
-    /*private void setTitle(View view)
-    {
-        saveSearch = searchBar.getText().toString().trim();
-        searchBar.setHint("");
-        searchBar.setText("");
-        titleBar.setText(title);
-        searchBar.setInputType(InputType.TYPE_NULL);
-
-        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }*/
 }

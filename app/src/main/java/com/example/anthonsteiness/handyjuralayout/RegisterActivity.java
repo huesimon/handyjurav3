@@ -298,12 +298,6 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
         {
-            String help = "Help";
-            String settings = "Settings";
-            String about = "About";
-            //String userInfo = "User Info";
-            String signOut = "Sign Out";
-            String defaultItem = "Select one";
             String defaultItem2 = "Choose Business";
             String tømrer = "Tømrer";
             String murer = "Murer";
@@ -315,40 +309,40 @@ public class RegisterActivity extends AppCompatActivity {
             String smedie = "Smedie";
             String snedker = "Snedker";
             String gulv = "Gulvlægger";
+
+            String help = "Hjælp";
+            String settings = "Indstillinger";
+            String about = "Om";
+            String signOut = "Log ud";
+            String defaultItem = "Vælg en";
             if (parent.getItemAtPosition(position).equals(help))
             {
-                Toast.makeText(RegisterActivity.this, help + " selected", Toast.LENGTH_SHORT).show();
+                toastMessage(help + " valgt", true);
             }
             else if (parent.getItemAtPosition(position).equals(settings))
             {
-                Toast.makeText(RegisterActivity.this, settings + " selected", Toast.LENGTH_SHORT).show();
+                toastMessage(settings + " valgt", true);
             }
             else if (parent.getItemAtPosition(position).equals(about))
             {
-                Toast.makeText(RegisterActivity.this, about + " selected", Toast.LENGTH_SHORT).show();
-            }
-//            else if (parent.getItemAtPosition(position).equals(userInfo))
-//            {
-//                // Open user information activity.
-//                if (firebaseAuth.getCurrentUser() != null)
-//                {
-//                    // The Firebase is already logged in to
-//                    startActivity(new Intent(RegisterActivity.this, UserInfoActivity.class));
-//                }
-//                else
-//                {
-//                    toastMessage("Please login to access this", true);
-//                }
-//            }
-            else if (parent.getItemAtPosition(position).equals(signOut))
-            {
-                firebaseAuth.signOut();
-                toastMessage("Successfully signed out", true);
+                toastMessage(about + " valgt", true);
             }
             else if (parent.getItemAtPosition(position).equals(defaultItem))
             {
                 // This is the default "Select One"
-                //Toast.makeText(MainActivity.this, "Default selected", Toast.LENGTH_SHORT).show();
+                //toastMessage("Du valgte en", true);
+            }
+            else if (parent.getItemAtPosition(position).equals(signOut))
+            {
+                if (firebaseAuth.getCurrentUser() != null)
+                {
+                    firebaseAuth.signOut();
+                    toastMessage("Du er nu logget ud", true);
+                }
+                else
+                {
+                    toastMessage("Du er ikke logget ind", true);
+                }
             }
             else if (parent.getItemAtPosition(position).equals(tømrer))
             {

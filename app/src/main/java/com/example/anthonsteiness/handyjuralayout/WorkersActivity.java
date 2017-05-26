@@ -217,48 +217,41 @@ public class WorkersActivity extends AppCompatActivity
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
         {
-            String help = "Help";
-            String settings = "Settings";
-            String about = "About";
-            //String userInfo = "User Info";
-            String signOut = "Sign Out";
-            String defaultItem = "Select one";
+            String help = "Hjælp";
+            String settings = "Indstillinger";
+            String about = "Om";
+            String signOut = "Log ud";
+            String defaultItem = "Vælg en";
             if (parent.getItemAtPosition(position).equals(help))
             {
-                toastMessage(help + " selected");
+                toastMessage(help + " valgt");
             }
             else if (parent.getItemAtPosition(position).equals(settings))
             {
-                toastMessage(settings + " selected");
+                toastMessage(settings + " valgt");
             }
             else if (parent.getItemAtPosition(position).equals(about))
             {
-                toastMessage(about + " selected");
+                toastMessage(about + " valgt");
             }
             else if (parent.getItemAtPosition(position).equals(defaultItem))
             {
                 // This is the default "Select One"
-                //Toast.makeText(MainActivity.this, "Default selected", Toast.LENGTH_SHORT).show();
+                //toastMessage("Du valgte en");
             }
-//            else if (parent.getItemAtPosition(position).equals(userInfo))
-//            {
-//                // Open user information activity.
-//                toastMessage("You are already on this page.");
-//            }
             else if (parent.getItemAtPosition(position).equals(signOut))
             {
                 if (firebaseAuth.getCurrentUser() != null)
                 {
-                    finish();
-                    startActivity(new Intent(WorkersActivity.this, LoginActivity.class));
                     firebaseAuth.signOut();
-                    toastMessage("Successfully signed out");
+                    finish();
+                    startActivity(new Intent(WorkersActivity.this, MainActivity.class));
+                    toastMessage("Du er nu logget ud");
                 }
                 else
                 {
-                    toastMessage("You are not signed in");
+                    toastMessage("Du er ikke logget ind");
                 }
-
             }
         }
         @Override
