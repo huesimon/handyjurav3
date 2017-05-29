@@ -61,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
         if (firebaseAuth.getCurrentUser() != null)
         {
             // The Firebase is already logged in to
+
+            finish();
+            startActivity(new Intent(MainActivity.this, MyMenuActivity.class));
         }
         mAuthListener = new FirebaseAuth.AuthStateListener()
         {

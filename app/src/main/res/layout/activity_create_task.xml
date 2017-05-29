@@ -6,136 +6,152 @@
     tools:context="com.example.anthonsteiness.handyjuralayout.CreateTaskActivity">
 
     <include layout="@layout/app_bar"
-        android:id="@+id/action_bar"/>
+        android:id="@+id/action_bar"
+        />
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/action_bar">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:onClick=""
-        android:clickable="true"
-        android:soundEffectsEnabled="false"
         android:id="@+id/relativeLayout"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/action_bar">
 
+
+
         <TextView
-            android:id="@+id/customerView"
+            android:id="@+id/customerView1"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:text="Kundeoplysninger"
-            android:textSize="24sp"
             android:layout_below="@+id/action_bar"
             android:background="@color/colorDarkGrey"
+            android:hint="Kundeoplysninger"
+            android:text="Kundeopysninger"
             android:textColor="@android:color/white"
-            />
+            android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/editName"
+            android:id="@+id/editName1"
             android:layout_width="180dp"
             android:layout_height="40dp"
-            android:layout_below="@id/customerView"
+            android:layout_below="@id/customerView1"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:inputType="text"
-            android:text="Navn" />
+            android:hint="Navn" />
 
         <EditText
-            android:id="@+id/editAdress"
+            android:id="@+id/editAddress1"
             android:layout_width="180dp"
             android:layout_height="40dp"
-            android:layout_below="@+id/customerView"
+            android:layout_below="@+id/customerView1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="10dp"
-            android:layout_toRightOf="@id/editName"
+            android:layout_toRightOf="@id/editName1"
             android:inputType="text"
-            android:text="Adresse" />
+            android:hint="Adresse" />
 
         <EditText
-            android:id="@+id/editCity"
+            android:id="@+id/editCity1"
             android:layout_width="180dp"
             android:layout_height="40dp"
-            android:layout_below="@id/editName"
+            android:layout_below="@id/editName1"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:inputType="text"
-            android:text="By" />
+            android:hint="By" />
         <EditText
-            android:id="@+id/editZip"
+            android:id="@+id/editZip1"
             android:layout_width="180dp"
             android:layout_height="40dp"
-            android:layout_below="@+id/editAdress"
+            android:layout_below="@+id/editAddress1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="10dp"
-            android:layout_toRightOf="@id/editCity"
-            android:inputType="text"
-            android:text="Post nr." />
+            android:layout_toRightOf="@id/editCity1"
+            android:inputType="number"
+            android:hint="Post nr." />
         <EditText
-            android:id="@+id/editPhone"
+            android:id="@+id/editPhone1"
             android:layout_width="180dp"
             android:layout_height="40dp"
-            android:layout_below="@id/editCity"
+            android:layout_below="@id/editCity1"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:inputType="number"
-            android:text="Telefon nr." />
+            android:hint="Telefon nr." />
 
         <TextView
-            android:id="@+id/taskView"
+            android:id="@+id/taskView1"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:text="Opgavebeskrivelse"
             android:textSize="24sp"
-            android:layout_below="@+id/editPhone"
+            android:layout_below="@+id/editPhone1"
             android:layout_marginTop="10dp"
             android:background="@color/colorDarkGrey"
             android:textColor="@android:color/white"
             />
         <EditText
-            android:id="@+id/editTopic"
+            android:id="@+id/editEmail1"
             android:layout_width="180dp"
             android:layout_height="40dp"
-            android:layout_below="@id/taskView"
+            android:layout_below="@+id/editZip1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/editPhone1"
+            android:inputType="text"
+            android:hint="E-mail" />
+        <EditText
+            android:id="@+id/editTopic1"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/taskView1"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:inputType="text"
-            android:text="Emne" />
+            android:hint="Emne" />
         <EditText
-            android:id="@+id/editDescription"
+            android:id="@+id/editDescription1"
             android:layout_width="match_parent"
             android:layout_height="160dp"
-            android:layout_below="@id/editTopic"
+            android:layout_below="@id/editTopic1"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
-            android:inputType="text"
-            android:text="Beskrivelse"
-            tools:lines="10" />
+            android:inputType="textMultiLine"
+            android:hint="Beskrivelse"
+            tools:maxLines="10" />
         <EditText
-            android:id="@+id/editPrice"
+            android:id="@+id/editPrice1"
             android:layout_width="180dp"
             android:layout_height="40dp"
-            android:layout_below="@id/editDescription"
+            android:layout_below="@id/editDescription1"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="15dp"
             android:inputType="numberDecimal"
-            android:text="Pris" />
+            android:hint="Pris" />
         <Button
-            android:id="@+id/addTaskBtn"
+            android:id="@+id/addTaskBtn1"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_below="@+id/editDescription"
+            android:layout_below="@+id/editDescription1"
             android:layout_marginLeft="120dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="40dp"
-            android:layout_toRightOf="@+id/editPrice"
+            android:layout_toRightOf="@+id/editPrice1"
             android:text="+"
             android:background="@color/colorRed"
             android:textColor="@android:color/white"
             android:textSize="24sp"
             />
     </RelativeLayout>
+</ScrollView>
     </RelativeLayout>
 

@@ -16,8 +16,6 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import static com.example.anthonsteiness.handyjuralayout.R.layout.activity_create_task;
-
 /**
  * Created by jibba_000 on 22-05-2017.
  */
@@ -28,7 +26,7 @@ public class CreateTaskActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private TextView customerView;
-    private EditText editName, editAdress, editCity, editZip, editPhone;
+    private EditText editName, editAddress, editCity, editZip, editPhone;
     private TextView taskView;
     private EditText editTopic, editDescription, editPrice;
     private Button addTaskBtn;
@@ -61,20 +59,19 @@ public class CreateTaskActivity extends AppCompatActivity {
         if (firebaseAuth.getCurrentUser() != null)
         {
             // The Firebase is logged in
-
         }
 
-        customerView = (TextView) findViewById(R.id.customerView);
-        editName = (EditText) findViewById(R.id.editName);
-        editAdress = (EditText) findViewById(R.id.editAdress);
-        editCity = (EditText) findViewById(R.id.editCity);
-        editZip = (EditText) findViewById(R.id.editZip);
-        editPhone = (EditText) findViewById(R.id.editPhone);
-        taskView = (TextView) findViewById(R.id.taskView);
-        editTopic = (EditText) findViewById(R.id.editTopic);
-        editDescription = (EditText) findViewById(R.id.editDescription);
-        editPrice = (EditText) findViewById(R.id.editPrice);
-        addTaskBtn = (Button) findViewById(R.id.addTaskBtn);
+        customerView = (TextView) findViewById(R.id.customerView1);
+        editName = (EditText) findViewById(R.id.editName1);
+        editAddress = (EditText) findViewById(R.id.editAddress1);
+        editCity = (EditText) findViewById(R.id.editCity1);
+        editZip = (EditText) findViewById(R.id.editZip1);
+        editPhone = (EditText) findViewById(R.id.editPhone1);
+        taskView = (TextView) findViewById(R.id.taskView1);
+        editTopic = (EditText) findViewById(R.id.editTopic1);
+        editDescription = (EditText) findViewById(R.id.editDescription1);
+        editPrice = (EditText) findViewById(R.id.editPrice1);
+        addTaskBtn = (Button) findViewById(R.id.addTaskBtn1);
 
 // Everything here is from app_bar class -----------------
         searchBtn = (ImageButton) findViewById(R.id.searchbtn);
@@ -93,10 +90,12 @@ public class CreateTaskActivity extends AppCompatActivity {
         checkScreenReso();
     }
 
-    private View.OnClickListener buttonClickListener = new View.OnClickListener() {
-
+    private View.OnClickListener buttonClickListener = new View.OnClickListener()
+    {
         @Override
-        public void onClick(View v) {
+        public void onClick(View view)
+        {
+
 
         }
     };
