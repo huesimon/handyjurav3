@@ -61,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
         if (firebaseAuth.getCurrentUser() != null)
         {
             // The Firebase is already logged in to
+
+            finish();
+            startActivity(new Intent(MainActivity.this, MyMenuActivity.class));
         }
         mAuthListener = new FirebaseAuth.AuthStateListener()
         {
@@ -103,9 +106,9 @@ public class MainActivity extends AppCompatActivity {
         adapter = ArrayAdapter.createFromResource(this, R.array.settingSelection, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         helpDropDown.setAdapter(adapter);
-
         //helpDropDown.setOnItemClickListener(dropDownListener);
         helpDropDown.setOnItemSelectedListener(dropDownListener);
+        titleBar.setText(title);
 
         checkScreenReso();
 
