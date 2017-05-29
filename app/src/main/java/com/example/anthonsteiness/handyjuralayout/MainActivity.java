@@ -80,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
         {
             // The Firebase is already logged in to
 
+
+
             fbUser = firebaseAuth.getCurrentUser();
             userID = fbUser.getUid();
 
@@ -122,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
+
 
         }
 
