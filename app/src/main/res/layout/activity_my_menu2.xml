@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.anthonsteiness.handyjuralayout.MyMenuActivity">
+    tools:context="com.example.anthonsteiness.handyjuralayout.MyMenu2Activity">
 
     <include layout="@layout/app_bar"
         android:id="@+id/action_bar"/>
@@ -18,13 +18,13 @@
         android:id="@+id/relativeLayout">
 
         <Button
-            android:id="@+id/btn1"
+            android:id="@+id/btn11"
             android:layout_width="182dp"
             android:layout_height="150dp"
             android:scaleType="centerInside"
-            android:layout_above="@+id/btn3"
-            android:layout_alignLeft="@+id/btn3"
-            android:layout_alignStart="@+id/btn3"
+            android:layout_above="@+id/btn33"
+            android:layout_alignLeft="@+id/btn33"
+            android:layout_alignStart="@+id/btn33"
             android:background="@color/colorPrimary"
             android:layout_marginBottom="10dp"
             android:textAllCaps="false"
@@ -35,13 +35,13 @@
             android:textSize="25dp"/>/>
 
         <Button
-            android:id="@+id/btn2"
+            android:id="@+id/btn22"
             android:layout_width="182dp"
             android:layout_height="150dp"
             android:scaleType="centerInside"
-            android:layout_above="@+id/btn4"
-            android:layout_alignLeft="@+id/btn4"
-            android:layout_alignStart="@+id/btn4"
+            android:layout_above="@+id/btn44"
+            android:layout_alignLeft="@+id/btn44"
+            android:layout_alignStart="@+id/btn44"
             android:background="@color/colorPrimary"
             android:layout_marginBottom="10dp"
             android:textAllCaps="false"
@@ -51,7 +51,7 @@
             android:textSize="25dp"/>/>
 
         <Button
-            android:id="@+id/btn3"
+            android:id="@+id/btn33"
             android:layout_width="182dp"
             android:layout_height="150dp"
             android:layout_centerHorizontal="true"
@@ -71,7 +71,7 @@
             android:textSize="25dp"/>/>
 
         <Button
-            android:id="@+id/btn4"
+            android:id="@+id/btn44"
             android:layout_width="182dp"
             android:layout_height="150dp"
             android:layout_centerHorizontal="true"
@@ -89,13 +89,13 @@
             android:textSize="25dp"/>/>
 
         <Button
-            android:id="@+id/btn5"
+            android:id="@+id/btn55"
             android:layout_width="182dp"
             android:layout_height="150dp"
             android:scaleType="centerInside"
-            android:layout_below="@+id/btn3"
-            android:layout_alignLeft="@+id/btn3"
-            android:layout_alignStart="@+id/btn3"
+            android:layout_below="@+id/btn33"
+            android:layout_alignLeft="@+id/btn33"
+            android:layout_alignStart="@+id/btn33"
             android:background="@color/colorDarkGrey"
             android:layout_marginTop="10dp"
             android:textAllCaps="false"
@@ -105,13 +105,13 @@
             android:textSize="25dp"/>
 
         <Button
-            android:id="@+id/btn6"
+            android:id="@+id/btn66"
             android:layout_width="182dp"
             android:layout_height="150dp"
             android:scaleType="centerInside"
-            android:layout_below="@+id/btn4"
-            android:layout_alignLeft="@+id/btn4"
-            android:layout_alignStart="@+id/btn4"
+            android:layout_below="@+id/btn44"
+            android:layout_alignLeft="@+id/btn44"
+            android:layout_alignStart="@+id/btn44"
             android:background="@color/colorRed"
             android:layout_marginTop="10dp"
             android:textAllCaps="false"
