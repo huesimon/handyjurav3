@@ -14,6 +14,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import static com.example.anthonsteiness.handyjuralayout.R.layout.activity_create_task;
 
 /**
@@ -24,6 +26,7 @@ public class CreateTaskActivity extends AppCompatActivity {
 
     private String title = "Opret opgave";
 
+    private FirebaseAuth firebaseAuth;
     private TextView customerView;
     private EditText editName, editAdress, editCity, editZip, editPhone;
     private TextView taskView;
@@ -51,6 +54,15 @@ public class CreateTaskActivity extends AppCompatActivity {
 
         height = getWindowManager().getDefaultDisplay().getHeight();
         width = getWindowManager().getDefaultDisplay().getWidth();
+
+        // Firebase declaration
+        firebaseAuth = FirebaseAuth.getInstance();
+        // Check if Firebase is already logged in
+        if (firebaseAuth.getCurrentUser() != null)
+        {
+            // The Firebase is logged in
+
+        }
 
         customerView = (TextView) findViewById(R.id.customerView);
         editName = (EditText) findViewById(R.id.editName);
