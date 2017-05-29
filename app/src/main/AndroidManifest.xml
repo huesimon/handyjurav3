@@ -20,21 +20,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".RegisterActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".UserInfoActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".MyMenuActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".AddWorkerActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".WorkersActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".CreateTaskActivity"
-            android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".UserInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MyMenuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddWorkerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WorkersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CreateTaskActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ContractActivity"></activity>
     </application>
 
 </manifest>
