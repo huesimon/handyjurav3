@@ -107,7 +107,7 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/editPhone1"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:hint="E-mail" />
         <EditText
             android:id="@+id/editTopic1"
@@ -137,20 +137,17 @@
             android:layout_marginTop="15dp"
             android:inputType="numberDecimal"
             android:hint="Pris" />
+
         <Button
             android:id="@+id/addTaskBtn1"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_below="@+id/editDescription1"
-            android:layout_marginLeft="120dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="40dp"
-            android:layout_toRightOf="@+id/editPrice1"
-            android:text="+"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/editPrice1"
             android:background="@color/colorRed"
+            android:text="Opret opgave"
             android:textColor="@android:color/white"
             android:textSize="24sp"
-            />
+            android:layout_marginTop="15dp"/>
     </RelativeLayout>
 </ScrollView>
     </RelativeLayout>

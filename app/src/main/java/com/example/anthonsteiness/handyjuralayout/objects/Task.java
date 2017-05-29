@@ -8,18 +8,18 @@ public class Task {
     private String name;
     private String address;
     private String city;
-    private int zipCode;
-    private int phone;
+    private String zipCode;
+    private String phone;
     private String email;
     private String topic;
     private String description;
     private double price;
 
-    public Task(){
+    public Task() {
 
     }
 
-    public Task(String name, String address, String city, int zipCode, int phone, String email, String topic, String description, double price) {
+    public Task(String name, String address, String city, String zipCode, String phone, String email, String topic, String description, double price) {
         this.name = name;
         this.address = address;
         this.city = city;
@@ -55,19 +55,19 @@ public class Task {
         this.city = city;
     }
 
-    public int getZipCode() {
+    public String getZipCode() {
         return zipCode;
     }
 
-    public void setZipCode(int zipCode) {
+    public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

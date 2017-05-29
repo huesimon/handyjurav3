@@ -11,10 +11,15 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.anthonsteiness.handyjuralayout.objects.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * Created by jibba_000 on 22-05-2017.
@@ -24,9 +29,8 @@ public class CreateTaskActivity extends AppCompatActivity {
 
     private String title = "Opret opgave";
 
-    private FirebaseAuth firebaseAuth;
     private TextView customerView;
-    private EditText editName, editAddress, editCity, editZip, editPhone;
+    private EditText editName, editAddress, editCity, editZip, editPhone, editEmail;
     private TextView taskView;
     private EditText editTopic, editDescription, editPrice;
     private Button addTaskBtn;
@@ -45,6 +49,15 @@ public class CreateTaskActivity extends AppCompatActivity {
     private EditText searchBar;
     private String saveSearch = "";
 
+    //Firebase related
+    private FirebaseDatabase mFirebaseDatabase;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference myRootRef;
+    private DatabaseReference myChildRef;
+    private String userID;
+    private FirebaseUser fbUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +73,14 @@ public class CreateTaskActivity extends AppCompatActivity {
         {
             // The Firebase is logged in
         }
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        fbUser = user;
+        userID = user.getUid();
+
+        myRootRef = mFirebaseDatabase.getReference();
+        myChildRef = mFirebaseDatabase.getReference(userID);
+
 
         customerView = (TextView) findViewById(R.id.customerView1);
         editName = (EditText) findViewById(R.id.editName1);
@@ -67,11 +88,13 @@ public class CreateTaskActivity extends AppCompatActivity {
         editCity = (EditText) findViewById(R.id.editCity1);
         editZip = (EditText) findViewById(R.id.editZip1);
         editPhone = (EditText) findViewById(R.id.editPhone1);
+        editEmail = (EditText) findViewById(R.id.editEmail1);
         taskView = (TextView) findViewById(R.id.taskView1);
         editTopic = (EditText) findViewById(R.id.editTopic1);
         editDescription = (EditText) findViewById(R.id.editDescription1);
         editPrice = (EditText) findViewById(R.id.editPrice1);
         addTaskBtn = (Button) findViewById(R.id.addTaskBtn1);
+        addTaskBtn.setOnClickListener(buttonClickListener);
 
 // Everything here is from app_bar class -----------------
         searchBtn = (ImageButton) findViewById(R.id.searchbtn);
@@ -95,10 +118,45 @@ public class CreateTaskActivity extends AppCompatActivity {
         @Override
         public void onClick(View view)
         {
-
+            switch(view.getId()){
+                case R.id.addTaskBtn1:
+                    createTask();
+                    break;
+            }
 
         }
     };
+
+    private void createTask(){
+
+        //lav metode der tjekker at felter ikke er tomme, undgå crash
+
+        String cName = editName.getText().toString().trim();
+        String cAddress = editAddress.getText().toString().trim();
+        String cCity = editCity.getText().toString().trim();
+        String cZip = editZip.getText().toString().trim();
+        String cPhone = editPhone.getText().toString().trim();
+        String cEmail = editEmail.getText().toString().trim();
+        String taskTopic = editTopic.getText().toString().trim();
+        String taskDescription = editDescription.getText().toString().trim();
+        double taskPrice = Double.parseDouble(editPrice.getText().toString().trim());
+
+        Task task = new Task();
+        task.setName(cName);
+        task.setAddress(cAddress);
+        task.setCity(cCity);
+        task.setZipCode(cZip);
+        task.setPhone(cPhone);
+        task.setEmail(cEmail);
+        task.setTopic(taskTopic);
+        task.setDescription(taskDescription);
+        task.setPrice(taskPrice);
+
+        myChildRef.child("Tasks").child(myChildRef.push().getKey()).setValue(task);
+
+        toastMessage(cName, true);
+
+    }
 
     private void checkScreenReso() {
         if (height >= 1790) {
