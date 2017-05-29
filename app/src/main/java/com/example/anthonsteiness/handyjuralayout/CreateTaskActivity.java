@@ -1,5 +1,6 @@
 package com.example.anthonsteiness.handyjuralayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -154,7 +155,10 @@ public class CreateTaskActivity extends AppCompatActivity {
 
         myChildRef.child("Tasks").child(myChildRef.push().getKey()).setValue(task);
 
-        toastMessage(cName, true);
+        finish();
+        startActivity(new Intent(CreateTaskActivity.this, MyMenuActivity.class));
+
+        //toastMessage(cName, true);
 
     }
 
