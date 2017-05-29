@@ -2,6 +2,7 @@ package com.example.anthonsteiness.handyjuralayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +17,13 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.example.anthonsteiness.handyjuralayout.objects.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
 
 /**
  * Created by jibba_000 on 22-05-2017.
@@ -50,12 +53,14 @@ public class CreateTaskActivity extends AppCompatActivity {
     private EditText searchBar;
     private String saveSearch = "";
 
+
     //Firebase related
     private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference myRootRef;
     private DatabaseReference myChildRef;
+   
     private String userID;
     private FirebaseUser fbUser;
 
@@ -97,7 +102,30 @@ public class CreateTaskActivity extends AppCompatActivity {
         addTaskBtn = (Button) findViewById(R.id.addTaskBtn1);
         addTaskBtn.setOnClickListener(buttonClickListener);
 
-// Everything here is from app_bar class -----------------
+        // Fierbase declaration stuff
+        firebaseAuth = FirebaseAuth.getInstance();
+        // Check if Firebase is already logged in to
+        if (firebaseAuth.getCurrentUser() != null)
+        {
+            // The Firebase is logged in to
+        }
+        mAuthListener = new FirebaseAuth.AuthStateListener()
+        {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth)
+            {
+                if (firebaseAuth.getCurrentUser() != null)
+                {
+                    // The Firebase is logged in to
+                }
+                else
+                {
+                    // Could display not signed in. But might cause toasting issues...
+                }
+            }
+        };
+
+        // Everything here is from app_bar class -----------------
         searchBtn = (ImageButton) findViewById(R.id.searchbtn);
         searchBtn.setOnClickListener(buttonClickListener);
 
@@ -206,28 +234,41 @@ public class CreateTaskActivity extends AppCompatActivity {
         }
     }
     // This is the drop down menu with Help, Settings and About page buttons ----------------------------------
-    private AdapterView.OnItemSelectedListener dropDownListener = new AdapterView.OnItemSelectedListener() {
+    private AdapterView.OnItemSelectedListener dropDownListener = new AdapterView.OnItemSelectedListener()
+    {
         @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            String help = "Help";
-            String settings = "Settings";
-            String about = "About";
-            //String userInfo = "User Info";
-            String signOut = "Sign Out";
-            String defaultItem = "Select one";
-            if (parent.getItemAtPosition(position).equals(help)) {
-                toastMessage(help + " selected", true);
-            } else if (parent.getItemAtPosition(position).equals(settings)) {
-                toastMessage(settings + " selected", true);
-            } else if (parent.getItemAtPosition(position).equals(about)) {
-                toastMessage(about + " selected", true);
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+        {
+            String help = "Hjælp";
+            String settings = "Indstillinger";
+            String about = "Om";
+            String signOut = "Log ud";
+            String defaultItem = "Vælg en";
+            if (parent.getItemAtPosition(position).equals(help))
+            {
+                toastMessage(help + " valgt", true);
             }
-
+            else if (parent.getItemAtPosition(position).equals(settings))
+            {
+                toastMessage(settings + " valgt", true);
+            }
+            else if (parent.getItemAtPosition(position).equals(about))
+            {
+                toastMessage(about + " valgt", true);
+            }
+            else if (parent.getItemAtPosition(position).equals(defaultItem))
+            {
+                // This is the default "Select One"
+                //toastMessage("Du valgte en", true);
+            }
+            else if (parent.getItemAtPosition(position).equals(signOut))
+            {
+                firebaseAuth.signOut();
+                toastMessage("Du er nu logget ud", true);
+            }
         }
-
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
-
         }
     };
 }
