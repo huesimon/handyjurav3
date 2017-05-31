@@ -41,6 +41,11 @@
         <activity
             android:name=".CreateTaskActivity"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".ContractActivity"
+                  android:screenOrientation="portrait">
+      </activity>
+
         <activity android:name=".MyMenu2Activity"
             android:screenOrientation="portrait" />
     </application>
