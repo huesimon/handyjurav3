@@ -239,7 +239,7 @@ public class AddWorkerActivity extends AppCompatActivity {
         if (height>=1790)
         {
             // For 5.2" screen
-
+            // Test commit
 
             if (height>=1800)
             {
@@ -297,37 +297,23 @@ public class AddWorkerActivity extends AppCompatActivity {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
         {
-            String help = "Help";
-            String settings = "Settings";
-            String about = "About";
-            //String userInfo = "User Info";
-            String signOut = "Sign Out";
-            String defaultItem = "Select one";
+            String help = "Hjælp";
+            String settings = "Indstillinger";
+            String about = "Om";
+            String signOut = "Log ud";
+            String defaultItem = "Vælg en";
             if (parent.getItemAtPosition(position).equals(help))
             {
-                toastMessage(help + " selected", true);
+                toastMessage(help + " valgt", true);
             }
             else if (parent.getItemAtPosition(position).equals(settings))
             {
-                toastMessage(settings + " selected", true);
+                toastMessage(settings + " valgt", true);
             }
             else if (parent.getItemAtPosition(position).equals(about))
             {
-                toastMessage(about + " selected", true);
+                toastMessage(about + " valgt", true);
             }
-//            else if (parent.getItemAtPosition(position).equals(userInfo))
-//            {
-//                // Open user information activity.
-//                if (firebaseAuth.getCurrentUser() != null)
-//                {
-//                    // The Firebase is already logged in to
-//                    startActivity(new Intent(RegisterActivity.this, UserInfoActivity.class));
-//                }
-//                else
-//                {
-//                    toastMessage("Please login to access this", true);
-//                }
-//            }
             else if (parent.getItemAtPosition(position).equals(signOut))
             {
                 if (firebaseAuth.getCurrentUser() != null)
@@ -343,7 +329,7 @@ public class AddWorkerActivity extends AppCompatActivity {
             else if (parent.getItemAtPosition(position).equals(defaultItem))
             {
                 // This is the default "Select One"
-                //Toast.makeText(MainActivity.this, "Default selected", Toast.LENGTH_SHORT).show();
+                //toastMessage("Du valgte en", true);
             }
         }
 

@@ -1,6 +1,5 @@
 package com.example.anthonsteiness.handyjuralayout;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -20,12 +19,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.anthonsteiness.handyjuralayout.objects.BossUser;
+import com.example.anthonsteiness.handyjuralayout.objects.RegularUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     // Anthon's Commit test 18-05-2017 10:28
     // Anthon's Commit test 20-05-2017 13:10
+    // Anthon's Commit test 26-05-2017 00:17
 
     String title = "HandyJura";
 
@@ -46,22 +53,81 @@ public class MainActivity extends AppCompatActivity {
     EditText searchBar;
 
     // Firebase stuff
+    private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private ProgressDialog progressDialog;
+    private DatabaseReference myUserIDRef;
+    private String userID;
+    private FirebaseUser fbUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Fierbase declaration stuff
+        // Firebase declaration stuff
         firebaseAuth = FirebaseAuth.getInstance();
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+
+        //mFirebaseDatabase = FirebaseDatabase.getInstance();
+        //myRootRef = mFirebaseDatabase.getReference();
+        //myUserIDRef = mFirebaseDatabase.getReference(userID);
+
+
         // Check if Firebase is already logged in to
         if (firebaseAuth.getCurrentUser() != null)
         {
             // The Firebase is already logged in to
+
+
+
+            fbUser = firebaseAuth.getCurrentUser();
+            userID = fbUser.getUid();
+
+            myUserIDRef = mFirebaseDatabase.getReference(userID);
+
+            myUserIDRef.addValueEventListener(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    //showData(dataSnapshot);
+                    for (DataSnapshot ds : dataSnapshot.getChildren())
+                    {
+                        RegularUser regUser = new RegularUser();
+
+                        regUser = ds.getValue(RegularUser.class);
+
+                        boolean check = regUser.isRegUser();
+                        if (!check)
+                        {
+                            // this is the BossUser
+                            //toastMessage("check = false");
+
+                            finish();
+                            startActivity(new Intent(MainActivity.this, MyMenuActivity.class));
+                        }
+                        else
+                        {
+                            // This is the RegularUser
+                            finish();
+                            startActivity(new Intent(MainActivity.this, MyMenu2Activity.class));
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+
+                }
+            });
+
+
         }
+
         mAuthListener = new FirebaseAuth.AuthStateListener()
         {
             @Override
@@ -79,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        progressDialog = new ProgressDialog(this);
+
 
         loginBtn = (Button) findViewById(R.id.loginBtn);
         registerBtn = (Button) findViewById(R.id.registerBtn);
@@ -106,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
         //helpDropDown.setOnItemClickListener(dropDownListener);
         helpDropDown.setOnItemSelectedListener(dropDownListener);
+        titleBar.setText(title);
 
         checkScreenReso();
 
@@ -244,46 +311,39 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
         {
-            String help = "Help";
-            String settings = "Settings";
-            String about = "About";
-            String userInfo = "User Info";
-            String signOut = "Sign Out";
-            String defaultItem = "Select one";
+            String help = "Hjælp";
+            String settings = "Indstillinger";
+            String about = "Om";
+            String signOut = "Log ud";
+            String defaultItem = "Vælg en";
             if (parent.getItemAtPosition(position).equals(help))
             {
-                toastMessage(help + " selected");
+                toastMessage(help + " valgt");
             }
             else if (parent.getItemAtPosition(position).equals(settings))
             {
-                toastMessage(settings + " selected");
+                toastMessage(settings + " valgt");
             }
             else if (parent.getItemAtPosition(position).equals(about))
             {
-                toastMessage(about + " selected");
+                toastMessage(about + " valgt");
             }
             else if (parent.getItemAtPosition(position).equals(defaultItem))
             {
                 // This is the default "Select One"
-                //Toast.makeText(MainActivity.this, "Default selected", Toast.LENGTH_SHORT).show();
-            }
-            else if (parent.getItemAtPosition(position).equals(userInfo))
-            {
-                // Open user information activity.
-                if (firebaseAuth.getCurrentUser() != null)
-                {
-                    // The Firebase is already logged in to
-                    startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
-                }
-                else
-                {
-                    toastMessage("Please login to access this");
-                }
+                //toastMessage("Du valgte en");
             }
             else if (parent.getItemAtPosition(position).equals(signOut))
             {
-                firebaseAuth.signOut();
-                toastMessage("Successfully signed out");
+                if (firebaseAuth.getCurrentUser() != null)
+                {
+                    firebaseAuth.signOut();
+                    toastMessage("Du er nu logget ud");
+                }
+                else
+                {
+                    toastMessage("Du er ikke logget ind");
+                }
             }
         }
         @Override
