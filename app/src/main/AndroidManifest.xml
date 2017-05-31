@@ -39,6 +39,12 @@
             android:name=".WorkersActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".TaskViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TaskViewActivity_w"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".CreateTaskActivity"
             android:screenOrientation="portrait" />
 
