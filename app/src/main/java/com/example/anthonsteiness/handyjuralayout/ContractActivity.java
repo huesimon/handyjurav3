@@ -5,19 +5,32 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.anthonsteiness.handyjuralayout.objects.RegularUser;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.List;
 
 public class ContractActivity extends AppCompatActivity {
 
     EditText cName, cPhone, cEmail, cZip, date;
     Button contract_createButton;
+    ListView listView;
+
+    List<Tasks> taskList;
+    List<String> stringArray;
 
     //FIREBASE
     private FirebaseDatabase mFirebaseDatabase;
@@ -26,6 +39,7 @@ public class ContractActivity extends AppCompatActivity {
     private DatabaseReference myRootRef;
     private DatabaseReference myUserIDRef;
     private DatabaseReference myContractRef;
+    private DatabaseReference myTasktRef;
     private DatabaseReference myBossIDRef;
     private String bossID;
     private String userID;
@@ -62,6 +76,7 @@ public class ContractActivity extends AppCompatActivity {
         myRootRef = mFirebaseDatabase.getReference();
         myUserIDRef = mFirebaseDatabase.getReference(userID);
         myContractRef = mFirebaseDatabase.getReference(userID + "/Contracts");
+        myTasktRef = mFirebaseDatabase.getReference(userID + "/Tasks");
 
         mAuthListener = new FirebaseAuth.AuthStateListener()
         {
@@ -80,11 +95,52 @@ public class ContractActivity extends AppCompatActivity {
                 // ...
             }
         };
+        myTasktRef.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                showData(dataSnapshot);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+
+            }
+        });
+
 
 
 
 
     }
+    private void showData(DataSnapshot dataSnapshot)
+    {
+        // For loop to iterate through all the snapshots of the database
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+            Task task = ds.getValue(Task.class);
+            // This arrayList is made for later usage
+            // At some point we want the users to be clickable. And we might need all the users
+            // information to show when clicked.
+            // And the users are added the same time as the String name. (This is thoughts. don't know if possible)
+            taskList.add(task);
+
+            String str = task.getName();
+            stringArray.add(str);
+
+        }
+
+        ArrayAdapter adapter = new ArrayAdapter(ContractActivity.this, android.R.layout.simple_list_item_1, stringArray);
+        listView.setAdapter(adapter);
+    }
+
+
+    
+    
+
     private View.OnClickListener buttonClickListener = new View.OnClickListener()
     {
         @Override
@@ -104,3 +160,5 @@ public class ContractActivity extends AppCompatActivity {
         }
     };
 }
+
+
