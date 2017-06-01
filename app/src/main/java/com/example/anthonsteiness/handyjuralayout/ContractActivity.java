@@ -1,6 +1,7 @@
 package com.example.anthonsteiness.handyjuralayout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,7 +13,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.anthonsteiness.handyjuralayout.objects.RegularUser;
-import com.google.android.gms.tasks.Tasks;
+import com.example.anthonsteiness.handyjuralayout.objects.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,7 +30,7 @@ public class ContractActivity extends AppCompatActivity {
     Button contract_createButton;
     ListView listView;
 
-    List<Tasks> taskList;
+    List<Task> taskList;
     List<String> stringArray;
 
     //FIREBASE
@@ -122,14 +123,7 @@ public class ContractActivity extends AppCompatActivity {
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
             Task task = ds.getValue(Task.class);
-            // This arrayList is made for later usage
-            // At some point we want the users to be clickable. And we might need all the users
-            // information to show when clicked.
-            // And the users are added the same time as the String name. (This is thoughts. don't know if possible)
-            taskList.add(task);
 
-            String str = task.getName();
-            stringArray.add(str);
 
         }
 
@@ -138,7 +132,7 @@ public class ContractActivity extends AppCompatActivity {
     }
 
 
-    
+
     
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener()
@@ -150,11 +144,13 @@ public class ContractActivity extends AppCompatActivity {
             switch(view.getId())
             {
                 case R.id.contract_createButton:
-                    Context context = getApplicationContext();
+                   Context context = getApplicationContext();
                     CharSequence text = "Hello toast!";
                     int duration = Toast.LENGTH_SHORT;
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
+                    finish();
+                    startActivity(new Intent(ContractActivity.this, AddWorkerActivity.class));
                     break;
             }
         }
