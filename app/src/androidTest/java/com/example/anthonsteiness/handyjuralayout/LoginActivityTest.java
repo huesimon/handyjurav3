@@ -1,8 +1,10 @@
 package com.example.anthonsteiness.handyjuralayout;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.Button;
 import android.widget.TextView;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -28,5 +30,11 @@ public class LoginActivityTest  extends ActivityInstrumentationTestCase2<LoginAc
         TextView textView = (TextView) activity.findViewById(R.id.forgotPassText);
         assertNotNull(textView);
 
+    }
+
+    @Test
+    public void testLoginButtonNotNull(){
+        Button button = (Button) activity.findViewById(R.id.loginBtn2) ;
+        assertNotNull(button);
     }
 }
