@@ -17,10 +17,10 @@
     </string-array>
 
     <string-array name="settingSelection">
-        <item>Select one</item>
-        <item>Help</item>
-        <item>Settings</item>
-        <item>About</item>
-        <item>Sign Out</item>
+        <item>Vælg en</item>
+        <item>Hjælp</item>
+        <item>Indstillinger</item>
+        <item>Om</item>
+        <item>Log ud</item>
     </string-array>
 </resources>

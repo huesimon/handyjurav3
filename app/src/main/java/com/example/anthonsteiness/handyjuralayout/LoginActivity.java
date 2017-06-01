@@ -17,10 +17,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.anthonsteiness.handyjuralayout.objects.RegularUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,7 +41,11 @@ public class LoginActivity extends AppCompatActivity {
     ViewGroup.MarginLayoutParams marginParams;
 
     // Firebase stuff
+    private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference myUserIDRef;
+    private String userID;
+    private FirebaseUser fbUser;
     private ProgressDialog progressDialog;
 
     // Buttons and stuff from app_bar class
@@ -57,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             // The Firebase is already logged in to
 
         }
+
 
         progressDialog = new ProgressDialog(this);
 
@@ -91,7 +103,76 @@ public class LoginActivity extends AppCompatActivity {
         titleBar.setText("HandyJura");
 
         checkScreenReso();
+
+        firebaseAuth.addAuthStateListener(mAuthListener);
+
     }
+
+    // This listens for any change made in Authentication. The code is run every time the user logs out or in.
+    private FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener()
+    {
+        @Override
+        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth)
+        {
+            if (firebaseAuth.getCurrentUser() != null)
+            {
+                //toastMessage("Signed in with " + fbUser.getEmail());
+
+                // This is to store the info off the user that is logged in
+                fbUser = firebaseAuth.getCurrentUser();
+                userID = fbUser.getUid();
+                // This is to instanziate the Database reference. This is done here because, it's only now it is possible.
+                mFirebaseDatabase = FirebaseDatabase.getInstance();
+                myUserIDRef = mFirebaseDatabase.getReference(userID);
+
+                // This is the Listener for the Database reference to the UserID
+                myUserIDRef.addValueEventListener(new ValueEventListener()
+                {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot)
+                    {
+                        // This runs through every snapshot of the data under this reference.
+                        for (DataSnapshot ds : dataSnapshot.getChildren())
+                        {
+                            RegularUser regUser = new RegularUser();
+
+                            // Capturing the stored Data, and saves it in a new RegularUser
+                            regUser = ds.getValue(RegularUser.class);
+
+                            // To check if the RegularUser = true or false.
+                            boolean check = regUser.isRegUser();
+                            if (!check)
+                            {
+                                // this is the BossUser
+                                //toastMessage("check = false");
+
+                                finish();
+                                startActivity(new Intent(LoginActivity.this, MyMenuActivity.class));
+                            }
+                            else
+                            {
+                                // This is the RegularUser
+                                finish();
+                                startActivity(new Intent(LoginActivity.this, MyMenu2Activity.class));
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError)
+                    {
+
+                    }
+                });
+
+            } else
+            {
+
+                //toastMessage("Not signed in");
+            }
+        }
+    };
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener()
     {
@@ -111,39 +192,6 @@ public class LoginActivity extends AppCompatActivity {
                 case R.id.searchbtn:
                     toastMessage("Nothing to search for here...");
                     break;
-            }
-        }
-    };
-
-    private View.OnFocusChangeListener focusOnMail = new View.OnFocusChangeListener()
-    {
-      @Override
-        public void onFocusChange(View view, boolean hasFocus)
-      {
-          if (hasFocus)
-          {
-              mailText.setHint("");
-          }
-          else
-          {
-              mailText.setHint("Email Address");
-              //test simon commit
-          }
-      }
-    };
-
-    private View.OnFocusChangeListener focusOnPass = new View.OnFocusChangeListener()
-    {
-        @Override
-        public void onFocusChange(View view, boolean hasFocus)
-        {
-            if (hasFocus)
-            {
-                passText.setHint("");
-            }
-            else
-            {
-                passText.setHint("Password");
             }
         }
     };
@@ -175,9 +223,7 @@ public class LoginActivity extends AppCompatActivity {
                             //toastMessage("User login successful");
 
                             // Finish the LoginActivity and start up the MyFrontPageActivity (Not made yet) instead of main
-                            finish();
-                            //startActivity(new Intent(LoginActivity.this, MyMenuActivity.class));
-                            startActivity(new Intent(LoginActivity.this, MyMenuActivity.class));
+                            // This is done in the firebase auth listener. Because we need to check the logged in users UserType, stored in the Database.
                         }
                         else
                         {
@@ -187,6 +233,8 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
 
     private void checkScreenReso()
     {
@@ -219,8 +267,8 @@ public class LoginActivity extends AppCompatActivity {
                         {
                             // For 10" Screen
                             marginParams.topMargin = 1380;
+                            //marginParams.height = 400; -- This works
                             loginBtn2.setLayoutParams(marginParams);
-                            //loginBtn2.setHeight(400); -- IT WONT CHANGE FOR SOME REASON!?!?
                         }
                     }
                 }
@@ -236,52 +284,79 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    private View.OnFocusChangeListener focusOnMail = new View.OnFocusChangeListener()
+    {
+        @Override
+        public void onFocusChange(View view, boolean hasFocus)
+        {
+            if (hasFocus)
+            {
+                mailText.setHint("");
+            }
+            else
+            {
+                mailText.setHint("Email Address");
+                //test simon commit
+            }
+        }
+    };
+
+    private View.OnFocusChangeListener focusOnPass = new View.OnFocusChangeListener()
+    {
+        @Override
+        public void onFocusChange(View view, boolean hasFocus)
+        {
+            if (hasFocus)
+            {
+                passText.setHint("");
+            }
+            else
+            {
+                passText.setHint("Password");
+            }
+        }
+    };
+
+
     // This is the drop down menu with Help, Settings and About page buttons ----------------------------------
     private AdapterView.OnItemSelectedListener dropDownListener = new AdapterView.OnItemSelectedListener()
     {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
         {
-            String help = "Help";
-            String settings = "Settings";
-            String about = "About";
-            //String userInfo = "User Info";
-            String signOut = "Sign Out";
-            String defaultItem = "Select one";
+            String help = "Hjælp";
+            String settings = "Indstillinger";
+            String about = "Om";
+            String signOut = "Log ud";
+            String defaultItem = "Vælg en";
             if (parent.getItemAtPosition(position).equals(help))
             {
-                toastMessage(help + " selected");
+                toastMessage(help + " valgt");
             }
             else if (parent.getItemAtPosition(position).equals(settings))
             {
-                toastMessage(settings + " selected");
+                toastMessage(settings + " valgt");
             }
             else if (parent.getItemAtPosition(position).equals(about))
             {
-                toastMessage(about + " selected");
+                toastMessage(about + " valgt");
             }
             else if (parent.getItemAtPosition(position).equals(defaultItem))
             {
                 // This is the default "Select One"
-                //Toast.makeText(MainActivity.this, "Default selected", Toast.LENGTH_SHORT).show();
+                //toastMessage("Du valgte en");
             }
-//            else if (parent.getItemAtPosition(position).equals(userInfo))
-//            {
-//                // Open user information activity.
-//                if (firebaseAuth.getCurrentUser() != null)
-//                {
-//                    // The Firebase is already logged in to
-//                    startActivity(new Intent(LoginActivity.this, UserInfoActivity.class));
-//                }
-//                else
-//                {
-//                    toastMessage("Please login to access this");
-//                }
-//            }
             else if (parent.getItemAtPosition(position).equals(signOut))
             {
-                firebaseAuth.signOut();
-                toastMessage("Successfully signed out");
+                if (firebaseAuth.getCurrentUser() != null)
+                {
+                    firebaseAuth.signOut();
+                    toastMessage("Du er nu logget ud");
+                }
+                else
+                {
+                    toastMessage("Du er ikke logget ind");
+                }
             }
         }
         @Override

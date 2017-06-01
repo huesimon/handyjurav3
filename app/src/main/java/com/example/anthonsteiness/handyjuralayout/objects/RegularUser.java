@@ -12,7 +12,7 @@ public class RegularUser
     // If this is true, the userType is a RegularUser.
     // This is for later, we'll need to make it so it open a different MyMenuActivity (This userType cannot add coworkers)
     // It will also need to open a different UserInfoActivity (This will be easier than checking userType every time)
-    private boolean userType;
+    private boolean regUser;
 
     public RegularUser()
     {
@@ -25,15 +25,15 @@ public class RegularUser
         this.email = email;
         this.userID = userID;
         this.bossUserID = bossUserID;
-        userType = check;
+        regUser = check;
     }
 
-    public void setUserType(boolean userType) {
-        this.userType = userType;
+    public boolean isRegUser() {
+        return regUser;
     }
 
-    public boolean isUserType() {
-        return userType;
+    public void setRegUser(boolean regUser) {
+        this.regUser = regUser;
     }
 
     public void setBossUserID(String bossUserID) {
