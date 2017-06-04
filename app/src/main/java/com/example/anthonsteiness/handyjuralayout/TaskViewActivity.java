@@ -165,8 +165,19 @@ public class TaskViewActivity extends AppCompatActivity
             // And the users are added the same time as the String name. (This is thoughts. don't know if possible)
             taskList.add(task);
 
+            // taskStirng will be the final string shown on the TaskViewActivity
+            String taskString;
+
+            //Getting data from the object
             String str = task.getName();
-            stringArray.add(str);
+            String task_address = task.getAddress();
+            String task_topic = task.getTopic();
+            String task_des = task.getDescription();
+            //String deadline? ikke sikker på hvordan vi kan lave en knap der viser status / deadline :(((
+
+            //Final string being declared
+            taskString = "Name: " + str + "\nAddress :" + task_address + "\nTopic: " + task_topic + "\nDescription: " + task_des;
+            stringArray.add(taskString);
 
         }
 
