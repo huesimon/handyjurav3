@@ -1,7 +1,11 @@
 package com.example.anthonsteiness.handyjuralayout;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -19,10 +24,15 @@ import android.widget.Toast;
 
 
 import com.example.anthonsteiness.handyjuralayout.objects.Task;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
 
 
 /**
@@ -41,8 +51,18 @@ public class CreateTaskActivity extends AppCompatActivity {
     private RelativeLayout relativeLayout;
     private int height;
     private int width;
+    private Button camerabtn;
+    private ImageView picture1;
+    //camera code
+    private static int camReqCode =1;
+    //camera Storage reference
+    private StorageReference picStorage;
+    //picture1 progressDialog
+    private ProgressDialog picDialog;
+
 
     ViewGroup.MarginLayoutParams marginParams;
+
 
     // Buttons and stuff from app_bar class
     private ImageButton searchBtn;
@@ -88,6 +108,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         myChildRef = mFirebaseDatabase.getReference(userID);
 
 
+
         customerView = (TextView) findViewById(R.id.customerView1);
         editName = (EditText) findViewById(R.id.editName1);
         editAddress = (EditText) findViewById(R.id.editAddress1);
@@ -101,6 +122,22 @@ public class CreateTaskActivity extends AppCompatActivity {
         editPrice = (EditText) findViewById(R.id.editPrice1);
         addTaskBtn = (Button) findViewById(R.id.addTaskBtn1);
         addTaskBtn.setOnClickListener(buttonClickListener);
+        camerabtn =(Button) findViewById(R.id.billedeBtn);
+        picture1= (ImageView)findViewById(R.id.billedIV);
+        //progress dialog uploading image
+        picDialog = new ProgressDialog(this);
+
+
+        //open camera
+        camerabtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            Intent camIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File file= getFile();
+                camIntent.putExtra(MediaStore.EXTRA_OUTPUT, getFile());
+                startActivityForResult(camIntent,camReqCode);
+            }
+        });
 
         // Fierbase declaration stuff
         firebaseAuth = FirebaseAuth.getInstance();
@@ -125,6 +162,8 @@ public class CreateTaskActivity extends AppCompatActivity {
             }
         };
 
+
+
         // Everything here is from app_bar class -----------------
         searchBtn = (ImageButton) findViewById(R.id.searchbtn);
         searchBtn.setOnClickListener(buttonClickListener);
@@ -140,7 +179,16 @@ public class CreateTaskActivity extends AppCompatActivity {
         titleBar.setText("Opret Opgave");
 
         checkScreenReso();
+
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+        picture1.setImageBitmap(bitmap);
+        }
+
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener()
     {
@@ -169,6 +217,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         String taskTopic = editTopic.getText().toString().trim();
         String taskDescription = editDescription.getText().toString().trim();
         double taskPrice = Double.parseDouble(editPrice.getText().toString().trim());
+        ImageView picture= picture1;
 
         Task task = new Task();
         task.setName(cName);
@@ -180,6 +229,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         task.setTopic(taskTopic);
         task.setDescription(taskDescription);
         task.setPrice(taskPrice);
+        task.setImage(picture);
 
         myChildRef.child("Tasks").child(myChildRef.push().getKey()).setValue(task);
 
@@ -270,5 +320,16 @@ public class CreateTaskActivity extends AppCompatActivity {
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
         }
+
+
     };
+    private File getFile(){
+        File folder = new File("data/Hammernemt");
+        if(!folder.exists()){
+            folder.mkdir();
+        }
+        File image_file= new File(folder,"cam_image.jpg");
+        return image_file;
+    }
+
 }
