@@ -37,4 +37,7 @@ public class LoginActivityTest  extends ActivityInstrumentationTestCase2<LoginAc
         Button button = (Button) activity.findViewById(R.id.loginBtn2) ;
         assertNotNull(button);
     }
+
+
+
 }
