@@ -43,7 +43,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TaskActivityTest {
+public class InstrumentedLoginTest {
 
     private String mEmailString;
     private String mPasswordString;
