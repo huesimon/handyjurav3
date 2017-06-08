@@ -27,6 +27,8 @@ public class LoginActivityTest  extends ActivityInstrumentationTestCase2<LoginAc
     }
     @Test
     public void testTextViewNotNull(){
+        //Test Anders
+        //Checks if the textView is shown on the activity / view
         TextView textView = (TextView) activity.findViewById(R.id.forgotPassText);
         assertNotNull(textView);
 
@@ -34,6 +36,8 @@ public class LoginActivityTest  extends ActivityInstrumentationTestCase2<LoginAc
 
     @Test
     public void testLoginButtonNotNull(){
+        // Test Anders
+        //Checks if the button is shown on the activity / view
         Button button = (Button) activity.findViewById(R.id.loginBtn2) ;
         assertNotNull(button);
     }

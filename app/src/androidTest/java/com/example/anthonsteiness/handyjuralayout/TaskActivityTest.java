@@ -66,14 +66,12 @@ public class TaskActivityTest {
 
     @Test
     public void checkTextInput() throws InterruptedException {
-      
+      // Test af Anthon
         // Type text
         onView(withId(R.id.editEmail))
                 .perform(typeText(mEmailString), closeSoftKeyboard());
         onView(withId(R.id.editPassword))
                 .perform(typeText(mPasswordString), closeSoftKeyboard());
-
-
         Thread.sleep(2000);
 
         // Check that the text was changed.
@@ -86,6 +84,7 @@ public class TaskActivityTest {
         Thread.sleep(5000);
     }
     @Test
+    //Test af Jonas
     public void clickLogin() throws InterruptedException {
         // Type text and then press the button.
         onView(withId(R.id.editEmail))
@@ -96,15 +95,11 @@ public class TaskActivityTest {
         Thread.sleep(5000);
     }
 
-    @Test
-    public void TestCreateTask(){
-
-    }
 
 
     @Ignore
-    public void testButton() {
-
+    public void testActivityIsOpen() {
+//Test af Simon
         Instrumentation.ActivityMonitor activityMonitor = getInstrumentation()
                 .addMonitor(MyMenuActivity.class.getName(), null, false);
 
