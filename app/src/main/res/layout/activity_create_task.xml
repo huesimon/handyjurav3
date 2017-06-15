@@ -153,10 +153,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tilføj Billede"
-            android:layout_alignBaseline="@+id/editPrice1"
             android:layout_alignBottom="@+id/editPrice1"
             android:layout_toRightOf="@+id/billedIV"
-            android:layout_toEndOf="@+id/billedIV" />
+            android:layout_toEndOf="@+id/billedIV"
+            android:layout_alignTop="@+id/editPrice1" />
 
         <Button
             android:id="@+id/addTaskBtn1"
@@ -167,9 +167,16 @@
             android:text="Opret opgave"
             android:textColor="@android:color/white"
             android:textSize="24sp"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="35dp"/>
+        <TextView
+            android:id="@+id/urlTextview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </RelativeLayout>
 </ScrollView>
+
+
 
 </RelativeLayout>
 
