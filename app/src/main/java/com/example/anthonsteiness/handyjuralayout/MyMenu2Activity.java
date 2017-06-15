@@ -142,7 +142,8 @@ public class MyMenu2Activity extends AppCompatActivity
                     startActivity(new Intent(MyMenu2Activity.this, WorkersActivity.class));
                     break;
                 case R.id.btn44: // Contracts Button
-                    // This button opens up a page that should display all the different Contract templates.
+                    // This button opens up a page that should display all the different Contract templates
+                    startActivity(new Intent(MyMenu2Activity.this, ContractActivity.class));
                     break;
                 case R.id.btn55: // User Info Button
                     // Open user information activity.

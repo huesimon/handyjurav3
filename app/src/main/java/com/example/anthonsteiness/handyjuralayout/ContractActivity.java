@@ -1,160 +1,64 @@
 package com.example.anthonsteiness.handyjuralayout;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import com.example.anthonsteiness.handyjuralayout.objects.RegularUser;
-import com.example.anthonsteiness.handyjuralayout.objects.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.List;
 
 public class ContractActivity extends AppCompatActivity {
 
-    EditText cName, cPhone, cEmail, cZip, date;
-    Button contract_createButton;
-    ListView listView;
-
-    List<Task> taskList;
-    List<String> stringArray;
-
-    //FIREBASE
-    private FirebaseDatabase mFirebaseDatabase;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private DatabaseReference myRootRef;
-    private DatabaseReference myUserIDRef;
-    private DatabaseReference myContractRef;
-    private DatabaseReference myTasktRef;
-    private DatabaseReference myBossIDRef;
-    private String bossID;
-    private String userID;
-    private FirebaseUser fbUser;
-
-
-
+    Button slutBtn;
+    Button aftaleBtn;
+    Button stdBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contract);
 
-        cName = (EditText) findViewById(R.id.cName);
-        contract_createButton = (Button) findViewById(R.id.contract_createButton);
-        contract_createButton.setOnClickListener(buttonClickListener);
+        slutBtn = (Button) findViewById(R.id.btnSlutseddel);
+        aftaleBtn = (Button) findViewById(R.id.btnAftaleseddel);
+        stdBtn = (Button) findViewById(R.id.btnStandardByggeri);
 
+        slutBtn.setOnClickListener(new View.OnClickListener() {
+                                       @Override
+                                       public void onClick(View v) {
+                                           String pdf = "https://firebasestorage.googleapis.com/v0/b/handyjura-cdde0.appspot.com/o/Contracts%2FSlutseddel_bil.pdf?alt=media&token=c3c51e93-b180-4892-becd-dcec08c00c89";
+                                           //String doc = "http://docs.google.com/viewer?url=";
+                                           Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf));
+                                           startActivity(browserIntent);
+                                       }
 
+                                   }
+        );
 
-        // Firebase declaration stuff
-        firebaseAuth = FirebaseAuth.getInstance();
-        // Check if Firebase is already logged in to
-        if (firebaseAuth.getCurrentUser() != null)
-        {
-            // The Firebase is logged in to
+        aftaleBtn.setOnClickListener(new View.OnClickListener() {
+                                         @Override
+                                         public void onClick(View v) {
+                                             String pdf = "https://firebasestorage.googleapis.com/v0/b/handyjura-cdde0.appspot.com/o/Contracts%2FAftaleseddel.pdf?alt=media&token=6bf50bd4-8f52-4693-87fc-9657283dd780";
+                                             //String doc = "http://docs.google.com/viewer?url=";
+                                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf));
+                                             startActivity(browserIntent);
+                                         }
 
-        }
+                                     }
+        );
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        fbUser = user;
-        userID = user.getUid();
+        stdBtn.setOnClickListener(new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View v) {
+                                          String pdf = "https://firebasestorage.googleapis.com/v0/b/handyjura-cdde0.appspot.com/o/Contracts%2FStandardkontrakt_byggeri.pdf?alt=media&token=2c8660d1-8651-4aa7-b637-e612159b9572";
+                                          //String doc = "http://docs.google.com/viewer?url=";
+                                          Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf));
+                                          startActivity(browserIntent);
+                                      }
 
-        myRootRef = mFirebaseDatabase.getReference();
-        myUserIDRef = mFirebaseDatabase.getReference(userID);
-        myContractRef = mFirebaseDatabase.getReference(userID + "/Contracts");
-        myTasktRef = mFirebaseDatabase.getReference(userID + "/Tasks");
-
-        mAuthListener = new FirebaseAuth.AuthStateListener()
-        {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    //Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    //toastMessage("Successfully signed in using: " + user.getEmail());
-                } else {
-                    // User is signed out
-                    //Log.d(TAG, "onAuthStateChanged:signed_out");
-                    //toastMessage("Successfully signed out from: " + user.getEmail());
-                }
-                // ...
-            }
-        };
-        myTasktRef.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                showData(dataSnapshot);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-
-            }
-        });
-
-
-
-
+                                  }
+        );
 
     }
-    private void showData(DataSnapshot dataSnapshot)
-    {
-        // For loop to iterate through all the snapshots of the database
-        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-
-            Task task = ds.getValue(Task.class);
 
 
-        }
-
-        ArrayAdapter adapter = new ArrayAdapter(ContractActivity.this, android.R.layout.simple_list_item_1, stringArray);
-        listView.setAdapter(adapter);
-    }
-
-
-
-    
-
-    private View.OnClickListener buttonClickListener = new View.OnClickListener()
-    {
-        @Override
-        public void onClick(View view)
-        {
-
-            switch(view.getId())
-            {
-                case R.id.contract_createButton:
-                   Context context = getApplicationContext();
-                    CharSequence text = "Hello toast!";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                    finish();
-                    startActivity(new Intent(ContractActivity.this, AddWorkerActivity.class));
-                    break;
-            }
-        }
-    };
 }
-
-
