@@ -1,7 +1,11 @@
 package com.example.anthonsteiness.handyjuralayout;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -19,10 +24,18 @@ import android.widget.Toast;
 
 
 import com.example.anthonsteiness.handyjuralayout.objects.Task;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.UUID;
 
 
 /**
@@ -41,8 +54,20 @@ public class CreateTaskActivity extends AppCompatActivity {
     private RelativeLayout relativeLayout;
     private int height;
     private int width;
+    private Button camerabtn;
+    private ImageView picture1;
+    //camera code
+    private static int camReqCode =1;
+    //camera Storage reference
+    private StorageReference picStorage;
+    //picture1 progressDialog
+    private ProgressDialog picDialog;
+    private TextView downloadUrl;
+    private Button uploadBtn;
+
 
     ViewGroup.MarginLayoutParams marginParams;
+
 
     // Buttons and stuff from app_bar class
     private ImageButton searchBtn;
@@ -60,7 +85,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference myRootRef;
     private DatabaseReference myChildRef;
-   
+    private FirebaseStorage mStorage = FirebaseStorage.getInstance();
     private String userID;
     private FirebaseUser fbUser;
 
@@ -68,6 +93,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_task);
+
 
         height = getWindowManager().getDefaultDisplay().getHeight();
         width = getWindowManager().getDefaultDisplay().getWidth();
@@ -88,6 +114,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         myChildRef = mFirebaseDatabase.getReference(userID);
 
 
+
         customerView = (TextView) findViewById(R.id.customerView1);
         editName = (EditText) findViewById(R.id.editName1);
         editAddress = (EditText) findViewById(R.id.editAddress1);
@@ -101,6 +128,26 @@ public class CreateTaskActivity extends AppCompatActivity {
         editPrice = (EditText) findViewById(R.id.editPrice1);
         addTaskBtn = (Button) findViewById(R.id.addTaskBtn1);
         addTaskBtn.setOnClickListener(buttonClickListener);
+        camerabtn =(Button) findViewById(R.id.billedeBtn);
+        picture1= (ImageView)findViewById(R.id.billedIV);
+        downloadUrl= (TextView) findViewById(R.id.urlTextview);
+        uploadBtn = (Button)findViewById(R.id.uploadButton);
+        //progress dialog uploading image
+        picDialog = new ProgressDialog(this);
+
+
+        //open camera
+        camerabtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            Intent camIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+
+                startActivityForResult(camIntent,camReqCode);
+
+            }
+        });
+
 
         // Fierbase declaration stuff
         firebaseAuth = FirebaseAuth.getInstance();
@@ -125,6 +172,8 @@ public class CreateTaskActivity extends AppCompatActivity {
             }
         };
 
+
+
         // Everything here is from app_bar class -----------------
         searchBtn = (ImageButton) findViewById(R.id.searchbtn);
         searchBtn.setOnClickListener(buttonClickListener);
@@ -140,7 +189,33 @@ public class CreateTaskActivity extends AppCompatActivity {
         titleBar.setText("Opret Opgave");
 
         checkScreenReso();
+
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
+        byte[] data1 = baos.toByteArray();
+        String path = "Photos/"+UUID.randomUUID()+".png";
+        final StorageReference picstorage = mStorage.getReference(path);
+        UploadTask uploadTask = picstorage.putBytes(data1);
+        picture1.setImageBitmap(bitmap);
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                downloadUrl.setText(picstorage.toString());
+            }
+
+        });
+
+
+        }
+
+
+
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener()
     {
@@ -156,6 +231,9 @@ public class CreateTaskActivity extends AppCompatActivity {
         }
     };
 
+
+
+
     private void createTask(){
 
         //lav metode der tjekker at felter ikke er tomme, undgå crash
@@ -169,6 +247,8 @@ public class CreateTaskActivity extends AppCompatActivity {
         String taskTopic = editTopic.getText().toString().trim();
         String taskDescription = editDescription.getText().toString().trim();
         double taskPrice = Double.parseDouble(editPrice.getText().toString().trim());
+        String url = downloadUrl.getText().toString().trim();
+
 
         Task task = new Task();
         task.setName(cName);
@@ -180,6 +260,8 @@ public class CreateTaskActivity extends AppCompatActivity {
         task.setTopic(taskTopic);
         task.setDescription(taskDescription);
         task.setPrice(taskPrice);
+        task.setDownloadUrl(url);
+        ;
 
         myChildRef.child("Tasks").child(myChildRef.push().getKey()).setValue(task);
 
@@ -270,5 +352,9 @@ public class CreateTaskActivity extends AppCompatActivity {
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
         }
+
+
     };
+
+
 }
