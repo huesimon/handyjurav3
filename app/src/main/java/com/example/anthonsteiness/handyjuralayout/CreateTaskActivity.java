@@ -63,7 +63,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     //picture1 progressDialog
     private ProgressDialog picDialog;
     private TextView downloadUrl;
-    private Button uploadBtn;
+
 
 
     ViewGroup.MarginLayoutParams marginParams;
@@ -131,7 +131,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         camerabtn =(Button) findViewById(R.id.billedeBtn);
         picture1= (ImageView)findViewById(R.id.billedIV);
         downloadUrl= (TextView) findViewById(R.id.urlTextview);
-        uploadBtn = (Button)findViewById(R.id.uploadButton);
+
         //progress dialog uploading image
         picDialog = new ProgressDialog(this);
 
