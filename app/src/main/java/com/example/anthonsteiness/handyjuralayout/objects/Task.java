@@ -1,5 +1,7 @@
 package com.example.anthonsteiness.handyjuralayout.objects;
 
+import android.widget.ImageView;
+
 /**
  * Created by jibba_000 on 29-05-2017.
  */
@@ -14,12 +16,13 @@ public class Task {
     private String topic;
     private String description;
     private double price;
+    private ImageView picture;
 
     public Task() {
 
     }
 
-    public Task(String name, String address, String city, String zipCode, String phone, String email, String topic, String description, double price) {
+    public Task(String name, String address, String city, String zipCode, String phone, String email, String topic, String description, double price,ImageView picture) {
         this.name = name;
         this.address = address;
         this.city = city;
@@ -29,6 +32,7 @@ public class Task {
         this.topic = topic;
         this.description = description;
         this.price = price;
+        this.picture = picture;
     }
 
     public String getName() {
@@ -102,4 +106,10 @@ public class Task {
     public void setPrice(double price) {
         this.price = price;
     }
+
+    public ImageView getImage(){return picture;}
+
+    public void setImage(ImageView picture){this.picture = picture;}
+
+
 }
