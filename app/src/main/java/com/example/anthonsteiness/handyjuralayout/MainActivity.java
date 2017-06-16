@@ -377,40 +377,4 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-
-//    private void userLogin()
-//    {
-//        String email = "AuthUser@Authmail.com";
-//        String pass  = "123456";
-//
-//        if((TextUtils.isEmpty(email)) || (TextUtils.isEmpty(pass)))
-//        {
-//            // Email or Password empty
-//            Toast.makeText(MainActivity.this, "Please enter valid values in text fields", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        // If EditText not empty it comes to here
-//        progressDialog.setMessage("Checking user information...");
-//        progressDialog.show();
-//
-//        firebaseAuth.signInWithEmailAndPassword(email, pass)
-//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        progressDialog.dismiss();
-//                        if (task.isSuccessful())
-//                        {
-//                            // The login is successful
-//                            Toast.makeText(MainActivity.this, "User Login successful", Toast.LENGTH_SHORT).show();
-//                        }
-//                        else
-//                        {
-//                            // Not successful
-//                            Toast.makeText(MainActivity.this, "User not found", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//    }
-
 }

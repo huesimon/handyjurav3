@@ -30,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class WorkersActivity extends AppCompatActivity
@@ -149,6 +151,28 @@ public class WorkersActivity extends AppCompatActivity
         titleBar.setText(title);
     }
 
+
+
+
+    private View.OnClickListener buttonClickListener = new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View view)
+        {
+
+            switch(view.getId())
+            {
+                case R.id.searchbtn:
+                    toastMessage("Search function not yet implemented..");
+                    break;
+                case R.id.addWorkerBtn:
+                    //Gotta finish this activity for now. As the user gets logged out.
+                    finish();
+                    startActivity(new Intent(WorkersActivity.this, AddWorkerActivity.class));
+            }
+        }
+    };
+
     // This shows the workers no matter if the userType is regular or boss.
     // this get the datasnapshot when called. So it depends on the Datasnapshot from the ValueEventListener.
     private void showData(DataSnapshot dataSnapshot)
@@ -171,29 +195,12 @@ public class WorkersActivity extends AppCompatActivity
 
         }
 
+        // Sorts the stringArray so the names are alphabetical sorted in ascending order.
+        Collections.sort(stringArray);
+
         ArrayAdapter adapter = new ArrayAdapter(WorkersActivity.this, android.R.layout.simple_list_item_1, stringArray);
         listView.setAdapter(adapter);
     }
-
-
-    private View.OnClickListener buttonClickListener = new View.OnClickListener()
-    {
-        @Override
-        public void onClick(View view)
-        {
-
-            switch(view.getId())
-            {
-                case R.id.searchbtn:
-                    toastMessage("Search function not yet implemented..");
-                    break;
-                case R.id.addWorkerBtn:
-                    //Gotta finish this activity for now. As the user gets logged out.
-                    finish();
-                    startActivity(new Intent(WorkersActivity.this, AddWorkerActivity.class));
-            }
-        }
-    };
 
 
     // Method to check the users information.
