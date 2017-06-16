@@ -23,7 +23,7 @@ public class MyMenuActivity extends AppCompatActivity
 {
     private String title = "Min Menu";
 
-    private Button tasksBtn, makeTaskBtn, coworkersBtn, addCoworkerBtn, userInfoBtn, signOutBtn;
+    private Button tasksBtn, makeTaskBtn, coworkersBtn, contractBtn, userInfoBtn, signOutBtn;
     private int height;
     private int width;
     private String str;
@@ -81,7 +81,7 @@ public class MyMenuActivity extends AppCompatActivity
         tasksBtn = (Button) findViewById(R.id.btn1);
         makeTaskBtn = (Button) findViewById(R.id.btn2);
         coworkersBtn = (Button) findViewById(R.id.btn3);
-        addCoworkerBtn = (Button) findViewById(R.id.btn4);
+        contractBtn = (Button) findViewById(R.id.btn4);
         userInfoBtn = (Button) findViewById(R.id.btn5);
         signOutBtn = (Button) findViewById(R.id.btn6);
         relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
@@ -90,14 +90,14 @@ public class MyMenuActivity extends AppCompatActivity
         tasksBtn.setOnClickListener(buttonClickListener);
         makeTaskBtn.setOnClickListener(buttonClickListener);
         coworkersBtn.setOnClickListener(buttonClickListener);
-        addCoworkerBtn.setOnClickListener(buttonClickListener);
+        contractBtn.setOnClickListener(buttonClickListener);
         userInfoBtn.setOnClickListener(buttonClickListener);
         signOutBtn.setOnClickListener(buttonClickListener);
 
         btn1Params = (ViewGroup.MarginLayoutParams) tasksBtn.getLayoutParams();
         btn2Params = (ViewGroup.MarginLayoutParams) makeTaskBtn.getLayoutParams();
         btn3Params = (ViewGroup.MarginLayoutParams) coworkersBtn.getLayoutParams();
-        btn4Params = (ViewGroup.MarginLayoutParams) addCoworkerBtn.getLayoutParams();
+        btn4Params = (ViewGroup.MarginLayoutParams) contractBtn.getLayoutParams();
         btn5Params = (ViewGroup.MarginLayoutParams) userInfoBtn.getLayoutParams();
         btn6Params = (ViewGroup.MarginLayoutParams) signOutBtn.getLayoutParams();
 
@@ -162,6 +162,7 @@ public class MyMenuActivity extends AppCompatActivity
                     // The answer to that is YES. So remember this for later usage.
                     break;
                 case R.id.btn1: // Tasks button
+                    startActivity(new Intent(MyMenuActivity.this, TaskViewActivity.class));
                     break;
                 case R.id.btn2: // Add task Button
                     startActivity(new Intent(MyMenuActivity.this, CreateTaskActivity.class));
@@ -170,9 +171,7 @@ public class MyMenuActivity extends AppCompatActivity
                     startActivity(new Intent(MyMenuActivity.this, WorkersActivity.class));
                     break;
                 case R.id.btn4: // Contracts Button
-                    // This Activity is finished because right now, you are logged out when registering new users.
-                    //finish();
-                    //startActivity(new Intent(MyMenuActivity.this, AddWorkerActivity.class));
+                    startActivity(new Intent(MyMenuActivity.this, ContractActivity.class));
                     break;
                 case R.id.btn5: // User Info Button
                     // Open user information activity.
@@ -334,7 +333,7 @@ public class MyMenuActivity extends AppCompatActivity
         btn4Params.rightMargin = sides;
         btn4Params.height = btnHeight;
         btn4Params.width = btnWidth;
-        addCoworkerBtn.setLayoutParams(btn4Params);
+        contractBtn.setLayoutParams(btn4Params);
 
         btn5Params.height = btnHeight;
         btn5Params.width = btnWidth;

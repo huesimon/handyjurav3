@@ -18,7 +18,7 @@ tools:context="com.example.anthonsteiness.handyjuralayout.LoginActivity">
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/editEmail"
+        android:id="@+id/editEmail1"
         android:layout_marginTop="75dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"

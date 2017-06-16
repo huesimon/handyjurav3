@@ -90,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
         mEmailRepeat = (EditText) findViewById(R.id.editEmailRegRepeat);
         mPass = (EditText) findViewById(R.id.editPasswordReg);
         mPassRepeat = (EditText) findViewById(R.id.editPasswordRegRepeat);
-        mName = (EditText) findViewById(R.id.editName);
+        mName = (EditText) findViewById(R.id.editName1);
         mCVR = (EditText) findViewById(R.id.editCVR);
 
         regBtn = (Button) findViewById(R.id.registerBtn2);
