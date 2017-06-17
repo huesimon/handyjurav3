@@ -1,11 +1,14 @@
 package com.example.anthonsteiness.handyjuralayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -137,9 +140,7 @@ public class SearchActivity extends AppCompatActivity {
         if (firebaseAuth.getCurrentUser() != null)
         {
             // The Firebase is logged in to
-
         }
-
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         fbUser = user;
@@ -150,12 +151,7 @@ public class SearchActivity extends AppCompatActivity {
         myRegUserRef = mFirebaseDatabase.getReference(userID + "/RegularUsers");
         myTaskRef = mFirebaseDatabase.getReference(userID + "/Tasks");
 
-        //myRegUserRef = mFirebaseDatabase.getReference(userID + "/RegularUsers");
-
-        //toastMessage("" + regUserType);
         checkUserType();
-        //showInformation(regUserType);
-
 
         // Everything here is from app_bar class -----------------
         searchBtn = (ImageButton) findViewById(R.id.searchbtn);
@@ -171,6 +167,8 @@ public class SearchActivity extends AppCompatActivity {
         helpDropDown.setOnItemSelectedListener(dropDownListener);
         // Setting the title of this specific page.
         titleBar.setText(title);
+        titleBar.setClickable(true);
+        titleBar.setOnClickListener(buttonClickListener);
 
     }
 
@@ -183,33 +181,23 @@ public class SearchActivity extends AppCompatActivity {
             switch(view.getId())
             {
                 case R.id.searchbtn:
-                    //toastMessage("Search function not yet implemented..");
+                    search(view);
                     break;
-
+                case R.id.titleBar:
+                    search(view);
+                    break;
             }
         }
     };
 
-
-
-
-    // Method to check the users information.
-    // If RegularUser = true.
-    //
-    // if RegularUser = false
-    //
     private void checkUserType()
     {
 
         myUserIDRef.addValueEventListener(new ValueEventListener()
         {
-//            int i;
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-//                for (DataSnapshot ds : dataSnapshot.getChildren())
-//                {
-//                    i++;
                     RegularUser regUser = new RegularUser();
 
                     regUser = dataSnapshot.getValue(RegularUser.class);
@@ -220,10 +208,6 @@ public class SearchActivity extends AppCompatActivity {
                     {
 
                         // this is the BossUser
-
-                        //bossID = regUser.getUserID();
-                        //toastMessage("This is test, this is bossUser \n" + bossID);
-
                         myRegUserRef.addValueEventListener(new ValueEventListener()
                         {
                             @Override
@@ -260,107 +244,84 @@ public class SearchActivity extends AppCompatActivity {
                     else
                     {
                         // This is the RegularUser
+                        bossID = regUser.getBossUserID();
+                        toastMessage("This is test, this is RegUser \n" + bossID);
 
+                        myBossIDRef = mFirebaseDatabase.getReference(bossID + "/RegularUsers");
 
-                            bossID = regUser.getBossUserID();
-
-                            toastMessage("This is test, this is RegUser \n" + bossID);
-
-                            myBossIDRef = mFirebaseDatabase.getReference(bossID + "/RegularUsers");
-
-                            myBossIDRef.addValueEventListener(new ValueEventListener()
+                        myBossIDRef.addValueEventListener(new ValueEventListener()
+                        {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot)
                             {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot)
-                                {
-                                    showUsers(dataSnapshot);
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError)
-                                {
-
-                                }
-                            });
-
-
-                            myTaskRef.addValueEventListener(new ValueEventListener()
+                                showUsers(dataSnapshot);
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError)
                             {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot)
-                                {
-                                    showTasks(dataSnapshot);
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError)
-                                {
-
-                                }
-                            });
-                        }
-                }
+                            }
+                        });
 
 
+                        myTaskRef.addValueEventListener(new ValueEventListener()
+                        {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot)
+                            {
+                                showTasks(dataSnapshot);
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError)
+                            {
 
-
-//            }
+                            }
+                        });
+                    }
+            }
 
             @Override
             public void onCancelled(DatabaseError databaseError)
             {
-
             }
         });
     }
 
     private void showAllTasks(DataSnapshot dataSnapshot)
     {
-
-            //toastMessage(workerIDList.get(i));
-            myWorkerRef = mFirebaseDatabase.getReference(workerIDList.get(i) + "/Tasks");
-
-            myWorkerRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot)
+        //toastMessage(workerIDList.get(i));
+        myWorkerRef = mFirebaseDatabase.getReference(workerIDList.get(i) + "/Tasks");
+        myWorkerRef.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                for (DataSnapshot ds : dataSnapshot.getChildren())
                 {
-                    for (DataSnapshot ds : dataSnapshot.getChildren())
+                    Task task = new Task();
+                    task = ds.getValue(Task.class);
+                    taskList2.add(task);
+                }
+                for (Task task : taskList2)
+                {
+                    String str = task.getName();
+                    if (str.matches("(?i).*" + saveSearch +".*"))
                     {
-                        Task task = new Task();
-                        task = ds.getValue(Task.class);
-
-                        taskList2.add(task);
-
-                        //toastMessage(task.getName());
-
+                        //toastMessage("Keep: " + str);
+                        searchArray3.add("Opgave: " + str);
+                        //toastMessage("add " + regUser.getFullName() + " too resultList");
+                        taskResults2.add(task);
                     }
-
-                    for (Task task : taskList2)
-                    {
-                        String str = task.getName();
-
-                        if (str.matches("(?i).*" + saveSearch +".*"))
-                        {
-                            //toastMessage("Keep: " + str);
-                            searchArray3.add("Opgave: " + str);
-                            //toastMessage("add " + regUser.getFullName() + " too resultList");
-                            taskResults2.add(task);
-                        }
-
-                    }
+                }
                     ArrayAdapter adapter = new ArrayAdapter(SearchActivity.this, android.R.layout.simple_list_item_1, searchArray3);
                     listViewTaskResults2.setAdapter(adapter);
                 }
-
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-
+                public void onCancelled(DatabaseError databaseError)
+                {
                 }
-            });
-
-            i++;
-        }
-
+        });
+        i++;
+    }
 
     // This shall both get the name of the user working on this task, but also the name of the customor.
     // This shall also get email like the showUsers method needs to get email. We need method to check inputtype in onCreate.
@@ -370,33 +331,21 @@ public class SearchActivity extends AppCompatActivity {
         stringArray2.clear();
         // For loop to iterate through all the snapshots of the database
         for (DataSnapshot ds : datasnapshot.getChildren()) {
-
             Task task = ds.getValue(Task.class);
-
             taskList.add(task);
-
         }
-
         for (Task task : taskList)
         {
             String str = task.getName();
-
             if (str.matches("(?i).*" + saveSearch +".*"))
             {
-                //toastMessage("Keep: " + str);
                 searchArray2.add("Opgave: " + str);
-                //toastMessage("add " + regUser.getFullName() + " too resultList");
                 taskResults.add(task);
-                //toastMessage(str);
             }
-
         }
-
-
         ArrayAdapter adapter = new ArrayAdapter(SearchActivity.this, android.R.layout.simple_list_item_1, searchArray2);
         listViewTaskResults.setAdapter(adapter);
     }
-
 
     // This needs to have implicated so that it checks if the text is an email, instead of name.
     // We might wanna make a method in the onCreate to check the SearchText, if it's a name, email, phonenumber etc.
@@ -405,17 +354,13 @@ public class SearchActivity extends AppCompatActivity {
         userList.clear();
         stringArray.clear();
         // For loop to iterate through all the snapshots of the database
-        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-
+        for (DataSnapshot ds : dataSnapshot.getChildren())
+        {
             RegularUser regUser = ds.getValue(RegularUser.class);
-
             userList.add(regUser);
-
             String str = regUser.getFullName();
             stringArray.add(str);
-
         }
-
         // This for loop removes anything after a space. So in this case, it removes last name.
         // Probably not the best, but for now. If the user only typed in first name.
         // Now I can compare the searchText with the names, and see if anything matches.
@@ -423,17 +368,12 @@ public class SearchActivity extends AppCompatActivity {
         {
             String str = stringArray.get(i);
             RegularUser regUser = userList.get(i);
-
             if (str.matches("(?i).*" + saveSearch +".*"))
             {
-                //toastMessage("TESTEREERE");
                 searchArray.add("Medarbejder: " + str);
                 userResults.add(regUser);
             }
-
         }
-
-
         ArrayAdapter adapter = new ArrayAdapter(SearchActivity.this, android.R.layout.simple_list_item_1, searchArray);
         listViewSearchResults.setAdapter(adapter);
 
@@ -445,13 +385,11 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-
     private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener()
     {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
-
             RegularUser testUser = userResults.get(position);
             dialogEvent(view, testUser.getEmail(), testUser.getFullName());
         }
@@ -486,6 +424,57 @@ public class SearchActivity extends AppCompatActivity {
             dialogEvent(view, text, title123);
         }
     };
+
+    // Method for searchBar (NOT NEEDED HERE, SAVED FOR LATER USAGE)
+    private void setTitle(View view)
+    {
+        if (!titleBar.getText().equals(title))
+        {
+            saveSearch = searchBar.getText().toString().trim();
+            searchBar.setHint("");
+            searchBar.setText("");
+            titleBar.setText(title);
+            searchBar.setInputType(InputType.TYPE_NULL);
+
+            InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    private void search(View view) {
+        // This is where the search functionality is gonna be.
+        if (!titleBar.getText().equals(title))
+        {
+            if (!searchBar.getText().toString().trim().equals(""))
+            {
+                finish();
+                Intent intent = new Intent(SearchActivity.this, SearchActivity.class);
+                intent.putExtra("searchText", searchBar.getText().toString().trim());
+                intent.putExtra("userType", regUserType);
+                startActivity(intent);
+            }
+            else
+            {
+                setTitle(view);
+            }
+
+        }
+        // This is where it shows the search bar at first.
+        else
+        {
+            searchBar.setHint("Søg...");
+            titleBar.setText("");
+            searchBar.setInputType(InputType.TYPE_CLASS_TEXT);
+
+            if (!saveSearch.equals(""))
+            {
+                searchBar.setText(saveSearch);
+            }
+
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(searchBar, InputMethodManager.SHOW_IMPLICIT);
+        }
+    }
 
     private void dialogEvent(View view, String mail, String name)
     {

@@ -365,6 +365,7 @@ public class MyMenuActivity extends AppCompatActivity
                 intent.putExtra("searchText", searchBar.getText().toString().trim());
                 intent.putExtra("userType", userType);
                 startActivity(intent);
+                setTitle(view);
             }
             else
             {
