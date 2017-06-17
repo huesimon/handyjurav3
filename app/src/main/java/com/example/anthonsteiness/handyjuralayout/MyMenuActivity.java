@@ -1,11 +1,14 @@
 package com.example.anthonsteiness.handyjuralayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -134,44 +137,28 @@ public class MyMenuActivity extends AppCompatActivity
             switch(view.getId())
             {
                 case R.id.searchbtn:
-                    //Toast.makeText(MainActivity.this, "This is the search button", Toast.LENGTH_SHORT).show();
-                    /*
-                    This is the method to make the SearchField show and accessable.
-                    But as there is nothing to search for on this activity I decided to comment it out for now.
-                    if (!titleBar.getText().equals(title))
-                    {
-                        setTitle(view);
-                    }
-                    else
-                    {
-                        searchBar.setHint("Search");
-                        titleBar.setText("");
-                        searchBar.setInputType(InputType.TYPE_CLASS_TEXT);
-
-                        if (!saveSearch.equals(""))
-                        {
-                            searchBar.setText(saveSearch);
-                        }
-
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(searchBar, InputMethodManager.SHOW_IMPLICIT);
-                    }*/
+                    search(view);
                     break;
                 case R.id.relativeLayout:
                     // I made this clickable to test if I could hide the searchBar when this was clicked.
                     // The answer to that is YES. So remember this for later usage.
+                    setTitle(view);
                     break;
                 case R.id.btn1: // Tasks button
                     startActivity(new Intent(MyMenuActivity.this, TaskViewActivity.class));
+                    setTitle(view);
                     break;
                 case R.id.btn2: // Add task Button
                     startActivity(new Intent(MyMenuActivity.this, CreateTaskActivity.class));
+                    setTitle(view);
                     break;
                 case R.id.btn3: // Workers button
                     startActivity(new Intent(MyMenuActivity.this, WorkersActivity.class));
+                    setTitle(view);
                     break;
                 case R.id.btn4: // Contracts Button
                     startActivity(new Intent(MyMenuActivity.this, ContractActivity.class));
+                    setTitle(view);
                     break;
                 case R.id.btn5: // User Info Button
                     // Open user information activity.
@@ -184,6 +171,7 @@ public class MyMenuActivity extends AppCompatActivity
                     {
                         toastMessage("Please login to access this");
                     }
+                    setTitle(view);
                     break;
                 case R.id.btn6: // Sign Out Button
                     if (firebaseAuth.getCurrentUser() != null)
@@ -198,6 +186,8 @@ public class MyMenuActivity extends AppCompatActivity
             }
         }
     };
+
+
 
     // This is the drop down menu with Help, Settings and About page buttons ----------------------------------
     private AdapterView.OnItemSelectedListener dropDownListener = new AdapterView.OnItemSelectedListener()
@@ -346,15 +336,51 @@ public class MyMenuActivity extends AppCompatActivity
     }
 
     // Method for searchBar (NOT NEEDED HERE, SAVED FOR LATER USAGE)
-    /*private void setTitle(View view)
+    private void setTitle(View view)
     {
-        saveSearch = searchBar.getText().toString().trim();
-        searchBar.setHint("");
-        searchBar.setText("");
-        titleBar.setText(title);
-        searchBar.setInputType(InputType.TYPE_NULL);
+        if (!titleBar.getText().equals(title))
+        {
+            saveSearch = searchBar.getText().toString().trim();
+            searchBar.setHint("");
+            searchBar.setText("");
+            titleBar.setText(title);
+            searchBar.setInputType(InputType.TYPE_NULL);
 
-        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }*/
+            InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    private void search(View view) {
+        // This is where the search functionality is gonna be.
+        if (!titleBar.getText().equals(title))
+        {
+            if (!searchBar.getText().toString().trim().equals(""))
+            {
+                Intent intent = new Intent(MyMenuActivity.this, SearchActivity.class);
+                intent.putExtra("searchText", searchBar.getText().toString().trim());
+                startActivity(intent);
+            }
+            else
+            {
+                setTitle(view);
+            }
+
+        }
+        // This is where it shows the search bar at first.
+        else
+        {
+                searchBar.setHint("Søg...");
+                titleBar.setText("");
+                searchBar.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                if (!saveSearch.equals(""))
+                {
+                    searchBar.setText(saveSearch);
+                }
+
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(searchBar, InputMethodManager.SHOW_IMPLICIT);
+        }
+    }
 }

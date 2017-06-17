@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                         {
                             // This is the RegularUser
                             finish();
-                            startActivity(new Intent(MainActivity.this, MyMenu2Activity.class));
+                            startActivity(new Intent(MainActivity.this, MyMenuActivity.class));
                         }
 
                     }

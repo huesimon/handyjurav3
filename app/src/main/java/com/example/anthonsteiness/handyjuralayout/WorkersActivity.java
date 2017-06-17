@@ -196,7 +196,10 @@ public class WorkersActivity extends AppCompatActivity
         }
 
         // Sorts the stringArray so the names are alphabetical sorted in ascending order.
-        Collections.sort(stringArray);
+        // This is commented out because it does not change the position of the Users in the arrayList,
+        // So when clicked, the information does not match.
+        //Collections.sort(stringArray);
+
 
         ArrayAdapter adapter = new ArrayAdapter(WorkersActivity.this, android.R.layout.simple_list_item_1, stringArray);
         listView.setAdapter(adapter);
@@ -216,6 +219,12 @@ public class WorkersActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot)
             {
 
+                //RegularUser regUser = new RegularUser();
+
+                //regUser = dataSnapshot.getValue(RegularUser.class);
+
+                //boolean check = regUser.isRegUser();
+
                 for (DataSnapshot ds : dataSnapshot.getChildren())
                 {
                     RegularUser regUser = new RegularUser();
@@ -226,6 +235,8 @@ public class WorkersActivity extends AppCompatActivity
                     if (!check)
                     {
                         // this is the BossUser
+
+                        //toastMessage("This is test, this is bossUser");
 
                         myRegUserRef.addValueEventListener(new ValueEventListener()
                         {
@@ -253,6 +264,8 @@ public class WorkersActivity extends AppCompatActivity
 
                         bossID = regUser.getBossUserID();
                         myBossIDRef = mFirebaseDatabase.getReference(bossID + "/RegularUsers");
+
+                        //toastMessage("This is test, this is regUser");
 
                         myBossIDRef.addValueEventListener(new ValueEventListener() {
                             @Override

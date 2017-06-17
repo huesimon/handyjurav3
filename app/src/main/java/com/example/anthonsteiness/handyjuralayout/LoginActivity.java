@@ -153,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                             {
                                 // This is the RegularUser
                                 finish();
-                                startActivity(new Intent(LoginActivity.this, MyMenu2Activity.class));
+                                startActivity(new Intent(LoginActivity.this, MyMenuActivity.class));
                             }
 
                         }

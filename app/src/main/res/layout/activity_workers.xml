@@ -40,4 +40,5 @@
         android:id="@+id/listViewCoworkers"
         android:layout_below="@id/textViewCoworkers">
     </ListView>
+
 </RelativeLayout>

@@ -43,18 +43,15 @@
             android:name=".TaskViewActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".TaskViewActivity_w"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".CreateTaskActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ContractActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MyMenu2Activity"
             android:screenOrientation="portrait" />
-
+        <activity android:name=".SearchActivity"></activity>
     </application>
 
 </manifest>

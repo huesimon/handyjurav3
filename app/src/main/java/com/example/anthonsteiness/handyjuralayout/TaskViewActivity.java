@@ -79,6 +79,7 @@ public class TaskViewActivity extends AppCompatActivity
         width = getWindowManager().getDefaultDisplay().getWidth();
 
         textView = (TextView) findViewById(R.id.textViewCoworkers);
+        textView.setText("Opgaver");
         listView = (ListView) findViewById(R.id.listViewCoworkers);
         listView.setOnItemClickListener(itemClickListener);
         addWorkerBtn = (ImageButton) findViewById(R.id.addWorkerBtn);
@@ -254,17 +255,18 @@ public class TaskViewActivity extends AppCompatActivity
                         marginParams.width = 0;
                         addWorkerBtn.setLayoutParams(marginParams);
 
-                        bossID = regUser.getBossUserID();
-                        myBossIDRef = mFirebaseDatabase.getReference(bossID + "/RegularUsers");
-
-                        myBossIDRef.addValueEventListener(new ValueEventListener() {
+                        myTaskRef.addValueEventListener(new ValueEventListener()
+                        {
                             @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                             //   showData(dataSnapshot);
+                            public void onDataChange(DataSnapshot dataSnapshot)
+                            {
+                                showData(dataSnapshot);
+
                             }
 
                             @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                            public void onCancelled(DatabaseError databaseError)
+                            {
 
                             }
                         });
@@ -292,20 +294,27 @@ public class TaskViewActivity extends AppCompatActivity
             //{
                 //toastMessage(testUser.getFullName());
             //}
-            Task testTask = taskList.get(position);
-            dialogEvent(view, testTask.getEmail(), testTask.getName());
+            Task task = taskList.get(position);
+            String title = task.getTopic();
+            String message = "Kunde: " + task.getName() + ", " + task.getPhone() + ", " + task.getEmail()
+                    + "\nOpgave: " + task.getTopic()
+                    + "\nOpgave Beskrivelse: " + task.getDescription()
+                    + "\nPris: " + task.getPrice()
+                    + "\nAdresse: " + task.getAddress()
+                    + "\nBy: " + task.getCity() + ", " + task.getZipCode();
+            dialogEvent(view, message, title);
            // RegularUser testUser = userList.get(position);
           //  dialogEvent(view, testUser.getEmail(), testUser.getFullName());
         }
     };
 
-    private void dialogEvent(View view, String mail, String name)
+    private void dialogEvent(View view, String message, String title)
     {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(TaskViewActivity.this);
-        alertDialog.setMessage(mail).setCancelable(true);
+        alertDialog.setMessage(message).setCancelable(true);
 
         AlertDialog alert = alertDialog.create();
-        alert.setTitle(name);
+        alert.setTitle(title);
         alert.show();
     }
 
