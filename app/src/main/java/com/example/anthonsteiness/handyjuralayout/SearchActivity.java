@@ -103,7 +103,9 @@ public class SearchActivity extends AppCompatActivity {
         listViewSearchResults = (ListView) findViewById(R.id.listViewSearchResults);
         listViewSearchResults.setOnItemClickListener(itemClickListener);
         listViewTaskResults = (ListView) findViewById(R.id.listViewTaskResults);
+        listViewTaskResults.setOnItemClickListener(itemClickListener2);
         listViewTaskResults2 = (ListView) findViewById(R.id.listViewTaskResults2);
+        listViewTaskResults2.setOnItemClickListener(itemClickListener3);
         textViewWorkersTasks = (TextView) findViewById(R.id.othersTasksGreyArea);
 
         // Hides the "Medarbejderes opgaver" textView.
@@ -449,13 +451,39 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
-            //for (RegularUser testUser : userList)
-            //{
-            //toastMessage(testUser.getFullName());
-            //}
 
             RegularUser testUser = userResults.get(position);
             dialogEvent(view, testUser.getEmail(), testUser.getFullName());
+        }
+    };
+
+    private AdapterView.OnItemClickListener itemClickListener2 = new AdapterView.OnItemClickListener()
+    {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+        {
+            Task testTask = taskResults.get(position);
+            String title123 = testTask.getTopic();
+            String text = "Opgave Beskrivelse:\n" + testTask.getDescription()
+                    + "\nAdresse: " + testTask.getAddress() + ", " + testTask.getZipCode() + ", " + testTask.getCity()
+                    + "\nPris: " + testTask.getPrice()
+                    + "\nKunde: " + testTask.getName() + ", " + testTask.getPhone() + ", " + testTask.getEmail();
+            dialogEvent(view, text, title123);
+        }
+    };
+
+    private AdapterView.OnItemClickListener itemClickListener3 = new AdapterView.OnItemClickListener()
+    {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+        {
+            Task testTask = taskResults2.get(position);
+            String title123 = testTask.getTopic();
+            String text = "Opgave Beskrivelse:\n" + testTask.getDescription()
+                    + "\nAdresse: " + testTask.getAddress() + ", " + testTask.getZipCode() + ", " + testTask.getCity()
+                    + "\nPris: " + testTask.getPrice()
+                    + "\nKunde: " + testTask.getName() + ", " + testTask.getPhone() + ", " + testTask.getEmail();
+            dialogEvent(view, text, title123);
         }
     };
 
