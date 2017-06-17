@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -147,13 +148,17 @@ public class LoginActivity extends AppCompatActivity {
                                 //toastMessage("check = false");
 
                                 finish();
-                                startActivity(new Intent(LoginActivity.this, MyMenuActivity.class));
+                                Intent intent = new Intent(LoginActivity.this, MyMenuActivity.class);
+                                intent.putExtra("userType", check);
+                                startActivity(intent);
                             }
                             else
                             {
                                 // This is the RegularUser
                                 finish();
-                                startActivity(new Intent(LoginActivity.this, MyMenuActivity.class));
+                                Intent intent = new Intent(LoginActivity.this, MyMenuActivity.class);
+                                intent.putExtra("userType", check);
+                                startActivity(intent);
                             }
 
                         }

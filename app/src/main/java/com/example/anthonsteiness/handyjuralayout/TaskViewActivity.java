@@ -131,6 +131,21 @@ public class TaskViewActivity extends AppCompatActivity
 
        checkUserType();
 
+//        myTaskRef.addValueEventListener(new ValueEventListener()
+//        {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot)
+//            {
+//                showData(dataSnapshot);
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError)
+//            {
+//
+//            }
+//        });
 
 
         // Everything here is from app_bar class -----------------
@@ -201,7 +216,7 @@ public class TaskViewActivity extends AppCompatActivity
                 case R.id.addWorkerBtn:
                     //Gotta finish this activity for now. As the user gets logged out.
                     finish();
-                    startActivity(new Intent(TaskViewActivity.this, AddWorkerActivity.class));
+                    startActivity(new Intent(TaskViewActivity.this, CreateTaskActivity.class));
             }
         }
     };
@@ -230,6 +245,28 @@ public class TaskViewActivity extends AppCompatActivity
                     if (!check)
                     {
                         // this is the BossUser
+
+                        // Here we need to make it so the Boss goes through all his RegUsers and saves their userID in a List.
+                        // When we have the list we need a for loop to go through every userID.
+                        // And then change the myTaskRef to something like
+//                         for (String str : userIDArray)
+//                         {
+//                         myTaskRef = mFirebaseDatabase.getReference(userID + "/Tasks");
+//                         myTaskRef.addValueEventListener(new ValueEventListener()
+//                         {
+//                              @Overridde
+//                             public void onDataChange(DataSnapshot dataSnapshot)
+//                             {
+//                                  taskArray.add(dataSnapshot.getValue(Task.class)
+//
+//                             }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError)
+//                        {
+//
+//                        }
+//                    });
 
                         myTaskRef.addValueEventListener(new ValueEventListener()
                         {

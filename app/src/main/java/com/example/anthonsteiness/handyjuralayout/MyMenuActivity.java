@@ -45,6 +45,7 @@ public class MyMenuActivity extends AppCompatActivity
     // Firebase stuff
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private boolean userType;
 
 
     @Override
@@ -52,6 +53,9 @@ public class MyMenuActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_menu);
+
+        Intent intent = getIntent();
+        userType = intent.getExtras().getBoolean("userType");
 
         height = getWindowManager().getDefaultDisplay().getHeight();
         width = getWindowManager().getDefaultDisplay().getWidth();
@@ -359,6 +363,7 @@ public class MyMenuActivity extends AppCompatActivity
             {
                 Intent intent = new Intent(MyMenuActivity.this, SearchActivity.class);
                 intent.putExtra("searchText", searchBar.getText().toString().trim());
+                intent.putExtra("userType", userType);
                 startActivity(intent);
             }
             else

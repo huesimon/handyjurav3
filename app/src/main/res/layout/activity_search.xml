@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/textViewSearchText"
-        android:text="SearchText?"
+        android:text="Søgning: Der skete en fejl."
         android:layout_below="@+id/action_bar"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -22,11 +22,58 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/usersGreyArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/textViewSearchText"
+        android:text="  Brugere"
+        android:textSize="16dp"
+        android:textColor="@android:color/white"
+        android:background="@color/colorDarkGrey"/>
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/listViewSearchResults"
-        android:layout_below="@id/textViewSearchText">
+        android:layout_below="@id/usersGreyArea">
+    </ListView>
+
+    <TextView
+        android:id="@+id/myTasksGreyArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/listViewSearchResults"
+        android:text="  Mine Opgaver"
+        android:textSize="16dp"
+        android:textColor="@android:color/white"
+        android:background="@color/colorDarkGrey"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewTaskResults"
+        android:layout_below="@id/myTasksGreyArea">
+    </ListView>
+
+    <TextView
+        android:id="@+id/othersTasksGreyArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/listViewTaskResults"
+        android:text="  Medarbejderes Opgaver"
+        android:textSize="16dp"
+        android:textColor="@android:color/white"
+        android:background="@color/colorDarkGrey"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewTaskResults2"
+        android:layout_below="@id/othersTasksGreyArea">
     </ListView>
 
 </RelativeLayout>

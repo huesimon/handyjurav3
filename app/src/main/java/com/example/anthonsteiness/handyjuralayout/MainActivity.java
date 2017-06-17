@@ -106,13 +106,17 @@ public class MainActivity extends AppCompatActivity {
                             //toastMessage("check = false");
 
                             finish();
-                            startActivity(new Intent(MainActivity.this, MyMenuActivity.class));
+                            Intent intent = new Intent(MainActivity.this, MyMenuActivity.class);
+                            intent.putExtra("userType", check);
+                            startActivity(intent);
                         }
                         else
                         {
                             // This is the RegularUser
                             finish();
-                            startActivity(new Intent(MainActivity.this, MyMenuActivity.class));
+                            Intent intent = new Intent(MainActivity.this, MyMenuActivity.class);
+                            intent.putExtra("userType", check);
+                            startActivity(intent);
                         }
 
                     }

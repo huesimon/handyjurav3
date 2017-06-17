@@ -261,6 +261,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         task.setDescription(taskDescription);
         task.setPrice(taskPrice);
         task.setDownloadUrl(url);
+        task.setWorkerID(userID);
         ;
 
         myChildRef.child("Tasks").child(myChildRef.push().getKey()).setValue(task);

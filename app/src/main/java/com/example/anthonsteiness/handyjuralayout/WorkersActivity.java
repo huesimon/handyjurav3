@@ -232,6 +232,7 @@ public class WorkersActivity extends AppCompatActivity
                     regUser = ds.getValue(RegularUser.class);
 
                     boolean check = regUser.isRegUser();
+
                     if (!check)
                     {
                         // this is the BossUser
