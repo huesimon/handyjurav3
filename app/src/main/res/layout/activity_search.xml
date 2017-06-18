@@ -10,6 +10,15 @@
     <include layout="@layout/app_bar"
         android:id="@+id/action_bar"/>
 
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollableLayout"
+        android:layout_below="@+id/action_bar">
+
+
     <TextView
         android:id="@+id/textViewSearchText"
         android:text="Søgning: Der skete en fejl."
@@ -23,13 +32,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+
     <TextView
         android:id="@+id/usersGreyArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_below="@id/textViewSearchText"
-        android:text="  Brugere"
+        android:text="  Medarbejdere"
         android:textSize="16dp"
         android:textColor="@android:color/white"
         android:background="@color/colorDarkGrey"/>
@@ -40,6 +50,8 @@
         android:id="@+id/listViewSearchResults"
         android:layout_below="@id/usersGreyArea">
     </ListView>
+
+
 
     <TextView
         android:id="@+id/myTasksGreyArea"
@@ -76,5 +88,10 @@
         android:id="@+id/listViewTaskResults2"
         android:layout_below="@id/othersTasksGreyArea">
     </ListView>
+
+
+    </RelativeLayout>
+
+
 
 </RelativeLayout>

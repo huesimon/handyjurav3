@@ -70,6 +70,7 @@ public class SearchActivity extends AppCompatActivity {
     List<String> workerIDList;
     boolean check;
     int i;
+    String str;
 
     // Firebase stuff
     private FirebaseDatabase mFirebaseDatabase;
@@ -332,11 +333,26 @@ public class SearchActivity extends AppCompatActivity {
                 }
                 for (Task task : taskList2)
                 {
-                    String str = task.getName();
+                    if (saveSearch.contains("@"))
+                    {
+                        // Searching for mails
+                        str = task.getEmail();
+                        str += ", " + task.getTopic();
+                    }
+                    else if (!saveSearch.contains(".*\\d+.*"))
+                    {
+                        // Search does contain numbers, might be address, phone or zipcode.
+                        // This might not be the case to be honest, I don't really know what this does exactly. But it works.
+                        str = task.getZipCode();
+                        str += ", " + task.getAddress();
+                        str += ", " + task.getPhone();
+
+                    }
+
                     if (str.matches("(?i).*" + saveSearch +".*"))
                     {
                         //toastMessage("Keep: " + str);
-                        searchArray3.add("Opgave: " + str);
+                        searchArray3.add(str);
                         //toastMessage("add " + regUser.getFullName() + " too resultList");
                         taskResults2.add(task);
                     }
@@ -357,7 +373,7 @@ public class SearchActivity extends AppCompatActivity {
     private void showTasks(DataSnapshot datasnapshot)
     {
         taskList.clear();
-        stringArray2.clear();
+        //stringArray2.clear();
         // For loop to iterate through all the snapshots of the database
         for (DataSnapshot ds : datasnapshot.getChildren()) {
             Task task = ds.getValue(Task.class);
@@ -365,10 +381,24 @@ public class SearchActivity extends AppCompatActivity {
         }
         for (Task task : taskList)
         {
-            String str = task.getName();
+            if (saveSearch.contains("@"))
+            {
+                // Searching for mails
+                str = task.getEmail();
+                str += ", " + task.getTopic();
+            }
+            else if (!saveSearch.contains(".*\\d+.*"))
+            {
+                // Search does contain numbers, might be address, phone or zipcode.
+                // This might not be the case to be honest, I don't really know what this does exactly. But it works.
+                str = task.getZipCode();
+                str += ", " + task.getAddress();
+                str += ", " + task.getPhone();
+
+            }
             if (str.matches("(?i).*" + saveSearch +".*"))
             {
-                searchArray2.add("Opgave: " + str);
+                searchArray2.add(str);
                 taskResults.add(task);
             }
         }
@@ -387,22 +417,29 @@ public class SearchActivity extends AppCompatActivity {
         {
             RegularUser regUser = ds.getValue(RegularUser.class);
             userList.add(regUser);
-            String str = regUser.getFullName();
-            stringArray.add(str);
+            //String str = regUser.getFullName();
+            //stringArray.add(str);
         }
-        // This for loop removes anything after a space. So in this case, it removes last name.
-        // Probably not the best, but for now. If the user only typed in first name.
-        // Now I can compare the searchText with the names, and see if anything matches.
-        for (int i = 0; i < stringArray.size(); i++)
+
+        for (int j = 0; j < userList.size(); j++)
         {
-            String str = stringArray.get(i);
-            RegularUser regUser = userList.get(i);
+            if (saveSearch.contains("@"))
+            {
+                str = userList.get(j).getEmail();
+                str += ", " + userList.get(j).getFullName();
+            }
+            else if (!saveSearch.contains(".*\\d+.*"))
+            {
+                str = userList.get(j).getFullName();
+            }
+
             if (str.matches("(?i).*" + saveSearch +".*"))
             {
-                searchArray.add("Medarbejder: " + str);
-                userResults.add(regUser);
+                searchArray.add(str);
+                userResults.add(userList.get(j));
             }
         }
+
         ArrayAdapter adapter = new ArrayAdapter(SearchActivity.this, android.R.layout.simple_list_item_1, searchArray);
         listViewSearchResults.setAdapter(adapter);
 
