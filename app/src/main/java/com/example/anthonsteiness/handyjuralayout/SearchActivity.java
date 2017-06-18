@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ public class SearchActivity extends AppCompatActivity {
     private ListView listViewTaskResults;
     private ListView listViewTaskResults2;
     private TextView textViewWorkersTasks;
+    RelativeLayout relativeSearchBG;
 
     List<RegularUser> userList;
     List<String> stringArray;
@@ -91,6 +93,7 @@ public class SearchActivity extends AppCompatActivity {
     ArrayAdapter<CharSequence> adapter2;
     TextView titleBar;
     EditText searchBar;
+    RelativeLayout relativeAppBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +113,13 @@ public class SearchActivity extends AppCompatActivity {
         listViewTaskResults2 = (ListView) findViewById(R.id.listViewTaskResults2);
         listViewTaskResults2.setOnItemClickListener(itemClickListener3);
         textViewWorkersTasks = (TextView) findViewById(R.id.othersTasksGreyArea);
+
+        textViewSearchText.setClickable(true);
+        textViewSearchText.setOnClickListener(buttonClickListener);
+
+        relativeSearchBG = (RelativeLayout) findViewById(R.id.relativeSearchBG);
+        relativeSearchBG.setClickable(true);
+        relativeSearchBG.setOnClickListener(buttonClickListener);
 
         // Hides the "Medarbejderes opgaver" textView.
         if (regUserType == true)
@@ -170,6 +180,10 @@ public class SearchActivity extends AppCompatActivity {
         titleBar.setClickable(true);
         titleBar.setOnClickListener(buttonClickListener);
 
+        relativeAppBar = (RelativeLayout) findViewById(R.id.relativeAppBar);
+        relativeAppBar.setClickable(true);
+        relativeAppBar.setOnClickListener(buttonClickListener);
+
     }
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener()
@@ -185,6 +199,21 @@ public class SearchActivity extends AppCompatActivity {
                     break;
                 case R.id.titleBar:
                     search(view);
+                    break;
+                case R.id.relativeAppBar:
+                    search(view);
+                    break;
+                case R.id.textViewSearchText:
+                    if (!titleBar.getText().equals(title))
+                    {
+                        setTitle(view);
+                    }
+                    break;
+                case R.id.relativeSearchBG:
+                    if (!titleBar.getText().equals(title))
+                    {
+                        setTitle(view);
+                    }
                     break;
             }
         }
@@ -245,7 +274,7 @@ public class SearchActivity extends AppCompatActivity {
                     {
                         // This is the RegularUser
                         bossID = regUser.getBossUserID();
-                        toastMessage("This is test, this is RegUser \n" + bossID);
+                        //toastMessage("This is test, this is RegUser \n" + bossID);
 
                         myBossIDRef = mFirebaseDatabase.getReference(bossID + "/RegularUsers");
 
