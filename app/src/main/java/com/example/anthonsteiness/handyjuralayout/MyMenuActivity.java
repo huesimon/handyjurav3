@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MyMenuActivity extends AppCompatActivity
 {
+    // Im gonna write a comment right here. Because I can't commit the change of the Icon and Name of the app.
     private String title = "Min Menu";
 
     private Button tasksBtn, makeTaskBtn, coworkersBtn, contractBtn, userInfoBtn, signOutBtn;
