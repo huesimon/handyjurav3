@@ -10,7 +10,7 @@
         android:id="@+id/action_bar"/>
 
     <TextView
-        android:id="@+id/task_TextView"
+        android:id="@+id/taskView_TextView"
         android:text="Opgaver"
         android:layout_below="@+id/action_bar"
         android:textSize="25sp"
@@ -23,12 +23,12 @@
         android:layout_height="wrap_content" />
 
     <ImageButton
-        android:id="@+id/addWorkerBtn"
+        android:id="@+id/taskView_addTaskBtn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginRight="10dp"
         android:layout_below="@+id/action_bar"
-        android:layout_alignRight="@+id/task_TextView"
+        android:layout_alignRight="@+id/taskView_TextView"
         android:background="@android:color/transparent"
         android:src="@drawable/addbtnblue"
         android:scaleType="centerInside"/>
@@ -37,7 +37,7 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/task_listViewTasks"
-        android:layout_below="@id/task_TextView">
+        android:id="@+id/taskView_listViewTasks"
+        android:layout_below="@id/taskView_TextView">
     </ListView>
 </RelativeLayout>

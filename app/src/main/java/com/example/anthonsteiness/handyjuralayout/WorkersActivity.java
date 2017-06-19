@@ -30,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class WorkersActivity extends AppCompatActivity
@@ -149,6 +151,28 @@ public class WorkersActivity extends AppCompatActivity
         titleBar.setText(title);
     }
 
+
+
+
+    private View.OnClickListener buttonClickListener = new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View view)
+        {
+
+            switch(view.getId())
+            {
+                case R.id.searchbtn:
+                    toastMessage("Search function not yet implemented..");
+                    break;
+                case R.id.addWorkerBtn:
+                    //Gotta finish this activity for now. As the user gets logged out.
+                    finish();
+                    startActivity(new Intent(WorkersActivity.this, AddWorkerActivity.class));
+            }
+        }
+    };
+
     // This shows the workers no matter if the userType is regular or boss.
     // this get the datasnapshot when called. So it depends on the Datasnapshot from the ValueEventListener.
     private void showData(DataSnapshot dataSnapshot)
@@ -171,29 +195,15 @@ public class WorkersActivity extends AppCompatActivity
 
         }
 
+        // Sorts the stringArray so the names are alphabetical sorted in ascending order.
+        // This is commented out because it does not change the position of the Users in the arrayList,
+        // So when clicked, the information does not match.
+        //Collections.sort(stringArray);
+
+
         ArrayAdapter adapter = new ArrayAdapter(WorkersActivity.this, android.R.layout.simple_list_item_1, stringArray);
         listView.setAdapter(adapter);
     }
-
-
-    private View.OnClickListener buttonClickListener = new View.OnClickListener()
-    {
-        @Override
-        public void onClick(View view)
-        {
-
-            switch(view.getId())
-            {
-                case R.id.searchbtn:
-                    toastMessage("Search function not yet implemented..");
-                    break;
-                case R.id.addWorkerBtn:
-                    //Gotta finish this activity for now. As the user gets logged out.
-                    finish();
-                    startActivity(new Intent(WorkersActivity.this, AddWorkerActivity.class));
-            }
-        }
-    };
 
 
     // Method to check the users information.
@@ -209,6 +219,12 @@ public class WorkersActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot)
             {
 
+                //RegularUser regUser = new RegularUser();
+
+                //regUser = dataSnapshot.getValue(RegularUser.class);
+
+                //boolean check = regUser.isRegUser();
+
                 for (DataSnapshot ds : dataSnapshot.getChildren())
                 {
                     RegularUser regUser = new RegularUser();
@@ -216,9 +232,12 @@ public class WorkersActivity extends AppCompatActivity
                     regUser = ds.getValue(RegularUser.class);
 
                     boolean check = regUser.isRegUser();
+
                     if (!check)
                     {
                         // this is the BossUser
+
+                        //toastMessage("This is test, this is bossUser");
 
                         myRegUserRef.addValueEventListener(new ValueEventListener()
                         {
@@ -246,6 +265,8 @@ public class WorkersActivity extends AppCompatActivity
 
                         bossID = regUser.getBossUserID();
                         myBossIDRef = mFirebaseDatabase.getReference(bossID + "/RegularUsers");
+
+                        //toastMessage("This is test, this is regUser");
 
                         myBossIDRef.addValueEventListener(new ValueEventListener() {
                             @Override

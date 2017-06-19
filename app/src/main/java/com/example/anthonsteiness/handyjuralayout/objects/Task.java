@@ -18,12 +18,14 @@ public class Task {
     private double price;
     private String downloadUrl;
 
+    private String workerID;
+
 
     public Task() {
 
     }
 
-    public Task(String name, String address, String city, String zipCode, String phone, String email, String topic, String description, double price,String downloadUrl) {
+    public Task(String name, String address, String city, String zipCode, String phone, String email, String topic, String description, double price,String downloadUrl, String workerID) {
         this.name = name;
         this.address = address;
         this.city = city;
@@ -34,7 +36,15 @@ public class Task {
         this.description = description;
         this.price = price;
         this.downloadUrl=downloadUrl;
+        this.workerID = workerID;
+    }
 
+    public String getWorkerID() {
+        return workerID;
+    }
+
+    public void setWorkerID(String workerID) {
+        this.workerID = workerID;
     }
 
     public String getName() {
