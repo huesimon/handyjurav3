@@ -261,6 +261,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         task.setDescription(taskDescription);
         task.setPrice(taskPrice);
         task.setDownloadUrl(url);
+        task.setWorkerID(userID);
         ;
 
         myChildRef.child("Tasks").child(myChildRef.push().getKey()).setValue(task);
@@ -292,7 +293,6 @@ public class CreateTaskActivity extends AppCompatActivity {
                         if (height >= 2460) {
                             // For 10" Screen
 
-                            //loginBtn2.setHeight(400); -- IT WONT CHANGE FOR SOME REASON!?!?
                         }
                     }
                 }

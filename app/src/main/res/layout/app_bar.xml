@@ -5,6 +5,7 @@
     android:background="@color/colorPrimary">
 
     <RelativeLayout
+        android:id="@+id/relativeAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
