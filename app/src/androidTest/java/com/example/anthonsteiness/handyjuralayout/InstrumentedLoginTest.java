@@ -68,14 +68,14 @@ public class InstrumentedLoginTest {
     public void checkTextInput() throws InterruptedException {
       // Test af Anthon
         // Type text
-        onView(withId(R.id.editEmail))
+        onView(withId(R.id.editEmail1))
                 .perform(typeText(mEmailString), closeSoftKeyboard());
         onView(withId(R.id.editPassword))
                 .perform(typeText(mPasswordString), closeSoftKeyboard());
         Thread.sleep(2000);
 
         // Check that the text was changed.
-        onView(withId(R.id.editEmail))
+        onView(withId(R.id.editEmail1))
                 .check(matches(withText(mEmailString)));
         // Check that the text was changed.
         onView(withId(R.id.editPassword))
@@ -87,7 +87,7 @@ public class InstrumentedLoginTest {
     //Test af Jonas
     public void clickLogin() throws InterruptedException {
         // Type text and then press the button.
-        onView(withId(R.id.editEmail))
+        onView(withId(R.id.editEmail1))
                 .perform(typeText(mEmailString), closeSoftKeyboard());
         onView(withId(R.id.editPassword))
                 .perform(typeText(mPasswordString), closeSoftKeyboard());
@@ -97,7 +97,7 @@ public class InstrumentedLoginTest {
 
 
 
-    @Ignore
+    @Test
     public void testActivityIsOpen() {
 //Test af Simon
         Instrumentation.ActivityMonitor activityMonitor = getInstrumentation()
