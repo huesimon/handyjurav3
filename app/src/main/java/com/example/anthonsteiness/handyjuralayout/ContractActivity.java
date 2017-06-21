@@ -26,7 +26,7 @@ public class ContractActivity extends AppCompatActivity {
                                        @Override
                                        public void onClick(View v) {
                                            String pdf = "https://firebasestorage.googleapis.com/v0/b/handyjura-cdde0.appspot.com/o/Contracts%2FSlutseddel_bil.pdf?alt=media&token=c3c51e93-b180-4892-becd-dcec08c00c89";
-                                           //String doc = "http://docs.google.com/viewer?url=";
+                                           //Intent = startactivity, action view = displays the data to user, uri.parse = encodes to readable website and opens url in browser
                                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf));
                                            startActivity(browserIntent);
                                        }
@@ -38,7 +38,7 @@ public class ContractActivity extends AppCompatActivity {
                                          @Override
                                          public void onClick(View v) {
                                              String pdf = "https://firebasestorage.googleapis.com/v0/b/handyjura-cdde0.appspot.com/o/Contracts%2FAftaleseddel.pdf?alt=media&token=6bf50bd4-8f52-4693-87fc-9657283dd780";
-                                             //String doc = "http://docs.google.com/viewer?url=";
+                                             //Intent = startactivity, action view = displays the data to user, uri.parse = encodes to readable website and opens url in browser
                                              Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf));
                                              startActivity(browserIntent);
                                          }
@@ -50,7 +50,7 @@ public class ContractActivity extends AppCompatActivity {
                                       @Override
                                       public void onClick(View v) {
                                           String pdf = "https://firebasestorage.googleapis.com/v0/b/handyjura-cdde0.appspot.com/o/Contracts%2FStandardkontrakt_byggeri.pdf?alt=media&token=2c8660d1-8651-4aa7-b637-e612159b9572";
-                                          //String doc = "http://docs.google.com/viewer?url=";
+                                          //Intent = startactivity, action view = displays the data to user, uri.parse = encodes to readable website and opens url in browser
                                           Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf));
                                           startActivity(browserIntent);
                                       }
