@@ -37,8 +37,9 @@ public class TaskViewActivity extends AppCompatActivity
 
     private String title = "Opgaver";
 
-    TextView textView;
+    TextView textView, textView2, textView3;
     ListView listView;
+    ListView listView2;
     ImageButton addTaskBtn;
     ViewGroup.MarginLayoutParams marginParams;
     private int height, width;
@@ -51,6 +52,8 @@ public class TaskViewActivity extends AppCompatActivity
     private DatabaseReference myUserIDRef;
     private DatabaseReference myTaskRef;
     private DatabaseReference myBossIDRef;
+    private DatabaseReference myRegUserRef;
+    private DatabaseReference myWorkerRef;
     private String bossID;
     private String userID;
     private FirebaseUser fbUser;
@@ -60,15 +63,22 @@ public class TaskViewActivity extends AppCompatActivity
     //private TextView nameView, emailView, branchView, cvrView;
 
     // Buttons and stuff from app_bar class
-    ImageButton searchBtn;
-    Spinner helpDropDown;
-    ArrayAdapter<CharSequence> adapter2;
-    TextView titleBar;
-    EditText searchBar;
+    private ImageButton searchBtn;
+    private Spinner helpDropDown;
+    private ArrayAdapter<CharSequence> adapter2;
+    private TextView titleBar;
+    private EditText searchBar;
 
 
-    List<Task> taskList;
-    List<String> stringArray;
+    private List<Task> taskList;
+    private List<String> stringArray;
+
+    private List<RegularUser> userList;
+    private List<String> workerIDList;
+
+    private int i;
+    private List<Task> taskList2;
+    private List<String> stringArray2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -91,9 +101,22 @@ public class TaskViewActivity extends AppCompatActivity
         addTaskBtn = (ImageButton) findViewById(R.id.addWorkerBtn);
         addTaskBtn.setOnClickListener(buttonClickListener);
         marginParams = (ViewGroup.MarginLayoutParams) addTaskBtn.getLayoutParams();
+        textView2 = (TextView) findViewById(R.id.myTasksGreyArea);
+        textView3 = (TextView) findViewById(R.id.myUsersTasksGreyArea);
+        textView2.setClickable(true);
+        textView3.setClickable(true);
+        textView2.setOnClickListener(buttonClickListener);
+        textView3.setOnClickListener(buttonClickListener);
+
+        listView2 = (ListView) findViewById(R.id.listViewCoworkersTasks);
+        listView2.setOnItemClickListener(itemClickListener2);
 
         taskList = new ArrayList<>();
         stringArray = new ArrayList<>();
+        userList = new ArrayList<>();
+        workerIDList = new ArrayList<>();
+        taskList2 = new ArrayList<>();
+        stringArray2 = new ArrayList<>();
 
         // Firebase declaration stuff
         firebaseAuth = FirebaseAuth.getInstance();
@@ -114,6 +137,8 @@ public class TaskViewActivity extends AppCompatActivity
         myRootRef = mFirebaseDatabase.getReference();
         myUserIDRef = mFirebaseDatabase.getReference(userID);
         myTaskRef = mFirebaseDatabase.getReference(userID + "/Tasks");
+        myRegUserRef = mFirebaseDatabase.getReference(userID + "/RegularUsers");
+        myBossIDRef = mFirebaseDatabase.getReference(bossID + "/RegularUsers");
 
         mAuthListener = new FirebaseAuth.AuthStateListener()
         {
@@ -136,23 +161,6 @@ public class TaskViewActivity extends AppCompatActivity
 
 
        checkUserType();
-
-//        myTaskRef.addValueEventListener(new ValueEventListener()
-//        {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot)
-//            {
-//                showData(dataSnapshot);
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError)
-//            {
-//
-//            }
-//        });
-
 
         // Everything here is from app_bar class -----------------
         searchBtn = (ImageButton) findViewById(R.id.searchbtn);
@@ -187,24 +195,70 @@ public class TaskViewActivity extends AppCompatActivity
             // And the users are added the same time as the String name. (This is thoughts. don't know if possible)
             taskList.add(task);
 
-            // taskStirng will be the final string shown on the TaskViewActivity
-            String taskString;
-
-            //Getting data from the object
-            String str = task.getName();
-            String task_address = task.getAddress();
-            String task_topic = task.getTopic();
-            String task_des = task.getDescription();
-            //String deadline? ikke sikker på hvordan vi kan lave en knap der viser status / deadline :(((
-
-            //Final string being declared
-            taskString = "Name: " + str + "\nAddress :" + task_address + "\nTopic: " + task_topic + "\nDescription: " + task_des;
-            stringArray.add(taskString);
+            String str = "Opgave: " + task.getTopic();
+            str += "\nOpgave Beskrivelse: " + task.getDescription();
+            str += "\nAdresse: " + task.getAddress() + ", " + task.getZipCode() + " " + task.getCity();
+            stringArray.add(str);
 
         }
 
         ArrayAdapter adapter = new ArrayAdapter(TaskViewActivity.this, android.R.layout.simple_list_item_1, stringArray);
         listView.setAdapter(adapter);
+    }
+
+
+    private void showUsers(DataSnapshot dataSnapshot)
+    {
+            userList.clear();
+            // For loop to iterate through all the snapshots of the database
+            for (DataSnapshot ds : dataSnapshot.getChildren())
+            {
+                RegularUser regUser = ds.getValue(RegularUser.class);
+                userList.add(regUser);
+                //toastMessage("If I made it this far.. " + regUser.getFullName());
+            }
+
+            workerIDList.clear();
+            for (RegularUser user : userList)
+            {
+                workerIDList.add(user.getUserID());
+                //toastMessage("If I made it this far.. " + user.getUserID());
+            }
+    }
+
+    private void showAllTasks(DataSnapshot dataSnapshot)
+    {
+        //toastMessage(workerIDList.get(i));
+        for (String str : workerIDList)
+        {
+            myWorkerRef = mFirebaseDatabase.getReference(str + "/Tasks");
+            myWorkerRef.addValueEventListener(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    for (DataSnapshot ds : dataSnapshot.getChildren())
+                    {
+                        Task task = ds.getValue(Task.class);
+                        taskList2.add(task);
+
+                        String str = "Opgave: " + task.getTopic();
+                        str += "\nOpgave Beskrivelse: " + task.getDescription();
+                        str += "\nAdresse: " + task.getAddress() + ", " + task.getZipCode() + " " + task.getCity();
+                        stringArray2.add(str);
+                    }
+                    ArrayAdapter adapter = new ArrayAdapter(TaskViewActivity.this, android.R.layout.simple_list_item_1, stringArray2);
+                    listView2.setAdapter(adapter);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+
+                }
+            });
+        }
+
     }
 
 
@@ -230,103 +284,86 @@ public class TaskViewActivity extends AppCompatActivity
     };
 
 
-    // Method to check the users information.
-    // If RegularUser = true.
-    // Then set addWorkerBtn height and width = 0.
-    // addValueEventListener for myBossIDRef database reference so that the data from the bosses database can be shown for regUsers
-    // if RegularUser = false
-    // addValueEventListener for myTaskRef database reference. So that the data from the bosses databse can be shown
     private void checkUserType()
     {
-        myUserIDRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
+        if (!userType)
+        {
+            // this is the BossUser
+
+            myTaskRef.addValueEventListener(new ValueEventListener()
             {
-
-                for (DataSnapshot ds : dataSnapshot.getChildren())
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
                 {
-                    RegularUser regUser = new RegularUser();
-
-                    regUser = ds.getValue(RegularUser.class);
-
-                    boolean check = regUser.isRegUser();
-                    if (!check)
-                    {
-                        // this is the BossUser
-
-                        // Here we need to make it so the Boss goes through all his RegUsers and saves their userID in a List.
-                        // When we have the list we need a for loop to go through every userID.
-                        // And then change the myTaskRef to something like
-//                         for (String str : userIDArray)
-//                         {
-//                         myTaskRef = mFirebaseDatabase.getReference(userID + "/Tasks");
-//                         myTaskRef.addValueEventListener(new ValueEventListener()
-//                         {
-//                              @Overridde
-//                             public void onDataChange(DataSnapshot dataSnapshot)
-//                             {
-//                                  taskArray.add(dataSnapshot.getValue(Task.class)
-//
-//                             }
-//
-//                        @Override
-//                        public void onCancelled(DatabaseError databaseError)
-//                        {
-//
-//                        }
-//                    });
-
-                        myTaskRef.addValueEventListener(new ValueEventListener()
-                        {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot)
-                            {
-                                showData(dataSnapshot);
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError)
-                            {
-
-                            }
-                        });
-
-                    }
-                    else
-                    {
-                        // This is the RegularUser
-                        marginParams.height = 0;
-                        marginParams.width = 0;
-                        addTaskBtn.setLayoutParams(marginParams);
-
-                        myTaskRef.addValueEventListener(new ValueEventListener()
-                        {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot)
-                            {
-                                showData(dataSnapshot);
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError)
-                            {
-
-                            }
-                        });
-
-                    }
+                    showData(dataSnapshot);
 
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError)
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+
+                }
+            });
+
+            myRegUserRef.addValueEventListener(new ValueEventListener()
             {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    showUsers(dataSnapshot);
+                    //toastMessage("if i made it this far...");
+                    showAllTasks(dataSnapshot);
+                }
 
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+
+                }
+            });
+
+
+
+        }
+        else
+        {
+            // This is the RegularUser
+
+            myTaskRef.addValueEventListener(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    showData(dataSnapshot);
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+
+                }
+            });
+
+            myBossIDRef.addValueEventListener(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    showUsers(dataSnapshot);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+
+                }
+            });
+
+
+
+        }
     }
 
 
@@ -341,15 +378,30 @@ public class TaskViewActivity extends AppCompatActivity
             //}
             Task task = taskList.get(position);
             String title = task.getTopic();
-            String message = "Kunde: " + task.getName() + ", " + task.getPhone() + ", " + task.getEmail()
-                    + "\nOpgave: " + task.getTopic()
-                    + "\nOpgave Beskrivelse: " + task.getDescription()
+            String message = "Opgave Beskrivelse: " + task.getDescription()
                     + "\nPris: " + task.getPrice()
                     + "\nAdresse: " + task.getAddress()
-                    + "\nBy: " + task.getCity() + ", " + task.getZipCode();
+                    + "\nBy: " + task.getZipCode() + ", " + task.getCity()
+                    + "\nKunde: " + task.getName() + ", " + task.getPhone() + ", " + task.getEmail();
             dialogEvent(view, message, title);
            // RegularUser testUser = userList.get(position);
           //  dialogEvent(view, testUser.getEmail(), testUser.getFullName());
+        }
+    };
+    private AdapterView.OnItemClickListener itemClickListener2 = new AdapterView.OnItemClickListener()
+    {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+        {
+
+            Task task = taskList2.get(position);
+            String title = task.getTopic();
+            String message = "Opgave Beskrivelse: " + task.getDescription()
+                    + "\nPris: " + task.getPrice()
+                    + "\nAdresse: " + task.getAddress()
+                    + "\nBy: " + task.getZipCode() + ", " + task.getCity()
+                    + "\nKunde: " + task.getName() + ", " + task.getPhone() + ", " + task.getEmail();
+            dialogEvent(view, message, title);
         }
     };
 

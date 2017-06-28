@@ -33,12 +33,40 @@
         android:src="@drawable/addbtnblue"
         android:scaleType="centerInside"/>
 
+    <TextView
+        android:id="@+id/myTasksGreyArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/textViewCoworkers"
+        android:text="  Mine Opgaver"
+        android:textSize="16dp"
+        android:textColor="@android:color/white"
+        android:background="@color/colorDarkGrey"/>
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/listViewCoworkers"
-        android:layout_below="@id/textViewCoworkers">
+        android:layout_below="@id/myTasksGreyArea">
+    </ListView>
+
+    <TextView
+        android:id="@+id/myUsersTasksGreyArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/listViewCoworkers"
+        android:text="  Mine Medarbejderes Opgaver"
+        android:textSize="16dp"
+        android:textColor="@android:color/white"
+        android:background="@color/colorDarkGrey"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewCoworkersTasks"
+        android:layout_below="@id/myUsersTasksGreyArea">
     </ListView>
 
 </RelativeLayout>

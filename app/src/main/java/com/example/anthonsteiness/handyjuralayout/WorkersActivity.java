@@ -29,6 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,7 +42,7 @@ public class WorkersActivity extends AppCompatActivity
 
     private String title = "Medarbejdere";
 
-    TextView textView;
+    TextView textView, textView2, textView3;
     ListView listView;
     ImageButton addWorkerBtn;
     ViewGroup.MarginLayoutParams marginParams;
@@ -93,6 +95,13 @@ public class WorkersActivity extends AppCompatActivity
         addWorkerBtn = (ImageButton) findViewById(R.id.addWorkerBtn);
         addWorkerBtn.setOnClickListener(buttonClickListener);
         marginParams = (ViewGroup.MarginLayoutParams) addWorkerBtn.getLayoutParams();
+
+        textView2 = (TextView) findViewById(R.id.myTasksGreyArea);
+        textView3 = (TextView) findViewById(R.id.myUsersTasksGreyArea);
+        //textView2.setBackgroundColor(0);
+        //textView3.setBackgroundColor(0);
+        textView2.setHeight(0);
+        textView3.setHeight(0);
 
         userList = new ArrayList<>();
         stringArray = new ArrayList<>();

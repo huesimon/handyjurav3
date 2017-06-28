@@ -48,6 +48,7 @@ public class MyMenuActivity extends AppCompatActivity
     private FirebaseAuth.AuthStateListener mAuthListener;
     private boolean userType;
     private String bossID;
+    private String userID;
 
 
     @Override
@@ -59,6 +60,7 @@ public class MyMenuActivity extends AppCompatActivity
         Intent intent = getIntent();
         userType = intent.getExtras().getBoolean("userType");
         bossID = intent.getExtras().getString("bossID");
+        userID = intent.getExtras().getString("userID");
         //toastMessage(bossID);
 
         height = getWindowManager().getDefaultDisplay().getHeight();
@@ -156,6 +158,7 @@ public class MyMenuActivity extends AppCompatActivity
                     Intent intent = new Intent(MyMenuActivity.this, TaskViewActivity.class);
                     intent.putExtra("userType", userType);
                     intent.putExtra("bossID", bossID);
+                    intent.putExtra("userID", userID);
                     startActivity(intent);
                     setTitle(view);
                     break;
@@ -163,6 +166,7 @@ public class MyMenuActivity extends AppCompatActivity
                     Intent intent2 = new Intent(MyMenuActivity.this, CreateTaskActivity.class);
                     intent2.putExtra("bossID", bossID);
                     intent2.putExtra("userType", userType);
+                    intent2.putExtra("userID", userID);
                     startActivity(intent2);
                     setTitle(view);
                     break;
@@ -171,6 +175,7 @@ public class MyMenuActivity extends AppCompatActivity
                     Intent intent3 = new Intent(MyMenuActivity.this, WorkersActivity.class);
                     intent3.putExtra("userType", userType);
                     intent3.putExtra("bossID", bossID);
+                    intent3.putExtra("userID", userID);
                     startActivity(intent3);
                     setTitle(view);
                     break;
@@ -179,6 +184,7 @@ public class MyMenuActivity extends AppCompatActivity
                     Intent intent4 = new Intent(MyMenuActivity.this, ContractActivity.class);
                     intent4.putExtra("userType", userType);
                     intent4.putExtra("bossID", bossID);
+                    intent4.putExtra("userID", userID);
                     startActivity(intent4);
                     setTitle(view);
                     break;
@@ -187,6 +193,7 @@ public class MyMenuActivity extends AppCompatActivity
                     Intent intent5 = new Intent(MyMenuActivity.this, UserInfoActivity.class);
                     intent5.putExtra("userType", userType);
                     intent5.putExtra("bossID", bossID);
+                    intent5.putExtra("userID", userID);
                     startActivity(intent5);
                     setTitle(view);
                     break;
