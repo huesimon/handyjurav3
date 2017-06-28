@@ -36,6 +36,17 @@
             android:textColor="@android:color/white"
             android:textSize="24sp" />
 
+        <ImageButton
+            android:id="@+id/loadCustomerBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginRight="10dp"
+            android:layout_below="@+id/action_bar"
+            android:layout_alignRight="@+id/customerView1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/addbtnblue"
+            android:scaleType="centerInside"/>
+
         <EditText
             android:id="@+id/editName1"
             android:layout_width="180dp"
@@ -143,7 +154,7 @@
             android:id="@+id/billedIV"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:srcCompat="@drawable/addbtnblue"
+            android:background="@color/colorLightGrey"
             android:layout_below="@+id/editDescription1"
             android:layout_alignLeft="@+id/editEmail1"
             android:layout_alignStart="@+id/editEmail1" />

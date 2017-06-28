@@ -17,6 +17,7 @@ public class Task {
     private String description;
     private double price;
     private String downloadUrl;
+    private String taskID;
 
     private String workerID;
 
@@ -25,7 +26,7 @@ public class Task {
 
     }
 
-    public Task(String name, String address, String city, String zipCode, String phone, String email, String topic, String description, double price,String downloadUrl, String workerID) {
+    public Task(String name, String address, String city, String zipCode, String phone, String email, String topic, String description, double price,String downloadUrl, String workerID, String taskID) {
         this.name = name;
         this.address = address;
         this.city = city;
@@ -37,6 +38,15 @@ public class Task {
         this.price = price;
         this.downloadUrl=downloadUrl;
         this.workerID = workerID;
+        this.taskID = taskID;
+    }
+
+    public String getTaskID() {
+        return taskID;
+    }
+
+    public void setTaskID(String taskID) {
+        this.taskID = taskID;
     }
 
     public String getWorkerID() {

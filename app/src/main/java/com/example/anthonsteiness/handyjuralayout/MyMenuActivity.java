@@ -47,6 +47,7 @@ public class MyMenuActivity extends AppCompatActivity
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private boolean userType;
+    private String bossID;
 
 
     @Override
@@ -57,6 +58,8 @@ public class MyMenuActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         userType = intent.getExtras().getBoolean("userType");
+        bossID = intent.getExtras().getString("bossID");
+        //toastMessage(bossID);
 
         height = getWindowManager().getDefaultDisplay().getHeight();
         width = getWindowManager().getDefaultDisplay().getWidth();
@@ -150,32 +153,41 @@ public class MyMenuActivity extends AppCompatActivity
                     setTitle(view);
                     break;
                 case R.id.btn1: // Tasks button
-                    startActivity(new Intent(MyMenuActivity.this, TaskViewActivity.class));
+                    Intent intent = new Intent(MyMenuActivity.this, TaskViewActivity.class);
+                    intent.putExtra("userType", userType);
+                    intent.putExtra("bossID", bossID);
+                    startActivity(intent);
                     setTitle(view);
                     break;
                 case R.id.btn2: // Add task Button
-                    startActivity(new Intent(MyMenuActivity.this, CreateTaskActivity.class));
+                    Intent intent2 = new Intent(MyMenuActivity.this, CreateTaskActivity.class);
+                    intent2.putExtra("bossID", bossID);
+                    intent2.putExtra("userType", userType);
+                    startActivity(intent2);
                     setTitle(view);
                     break;
                 case R.id.btn3: // Workers button
-                    startActivity(new Intent(MyMenuActivity.this, WorkersActivity.class));
+                    //startActivity(new Intent(MyMenuActivity.this, WorkersActivity.class));
+                    Intent intent3 = new Intent(MyMenuActivity.this, WorkersActivity.class);
+                    intent3.putExtra("userType", userType);
+                    intent3.putExtra("bossID", bossID);
+                    startActivity(intent3);
                     setTitle(view);
                     break;
                 case R.id.btn4: // Contracts Button
-                    startActivity(new Intent(MyMenuActivity.this, ContractActivity.class));
+                    //startActivity(new Intent(MyMenuActivity.this, ContractActivity.class));
+                    Intent intent4 = new Intent(MyMenuActivity.this, ContractActivity.class);
+                    intent4.putExtra("userType", userType);
+                    intent4.putExtra("bossID", bossID);
+                    startActivity(intent4);
                     setTitle(view);
                     break;
                 case R.id.btn5: // User Info Button
                     // Open user information activity.
-                    if (firebaseAuth.getCurrentUser() != null)
-                    {
-                        // The Firebase is already logged in to
-                        startActivity(new Intent(MyMenuActivity.this, UserInfoActivity.class));
-                    }
-                    else
-                    {
-                        toastMessage("Please login to access this");
-                    }
+                    Intent intent5 = new Intent(MyMenuActivity.this, UserInfoActivity.class);
+                    intent5.putExtra("userType", userType);
+                    intent5.putExtra("bossID", bossID);
+                    startActivity(intent5);
                     setTitle(view);
                     break;
                 case R.id.btn6: // Sign Out Button
@@ -186,6 +198,12 @@ public class MyMenuActivity extends AppCompatActivity
                         finish();
                         startActivity(new Intent(MyMenuActivity.this, MainActivity.class));
                         toastMessage("Successfully signed out");
+                    }
+                    else
+                    {
+                        finish();
+                        startActivity(new Intent(MyMenuActivity.this, MainActivity.class));
+                        toastMessage("ERROR: You where already signed out.");
                     }
                     break;
             }

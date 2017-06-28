@@ -23,18 +23,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.anthonsteiness.handyjuralayout.objects.Customer;
+import com.example.anthonsteiness.handyjuralayout.objects.RegularUser;
 import com.example.anthonsteiness.handyjuralayout.objects.Task;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -55,6 +64,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     private int height;
     private int width;
     private Button camerabtn;
+    private ImageButton loadCustomerBtn;
     private ImageView picture1;
     //camera code
     private static int camReqCode =1;
@@ -62,7 +72,8 @@ public class CreateTaskActivity extends AppCompatActivity {
     private StorageReference picStorage;
     //picture1 progressDialog
     private ProgressDialog picDialog;
-    private TextView downloadUrl;
+    //private TextView downloadUrl;
+    private String pictureURL;
 
 
 
@@ -88,23 +99,34 @@ public class CreateTaskActivity extends AppCompatActivity {
     private FirebaseStorage mStorage = FirebaseStorage.getInstance();
     private String userID;
     private FirebaseUser fbUser;
+    private boolean userType;
+    private String bossID;
+
+    private DatabaseReference myCustomerRef;
+    private DatabaseReference myTestRef;
+    List<Customer> userList;
+    private String taskID;
+    private boolean checkCustomer;
+    private Customer testCustomer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_task);
 
-
         height = getWindowManager().getDefaultDisplay().getHeight();
         width = getWindowManager().getDefaultDisplay().getWidth();
 
+        // this is to check userType, and if it is true the bossID will not be null, but have an ID stored.
+        Intent intent = getIntent();
+        userType = intent.getExtras().getBoolean("userType");
+        bossID = intent.getExtras().getString("bossID");
+        //toastMessage(userType + " " + bossID, false);
+
+        userList = new ArrayList<>();
+
         // Firebase declaration
         firebaseAuth = FirebaseAuth.getInstance();
-        // Check if Firebase is already logged in
-        if (firebaseAuth.getCurrentUser() != null)
-        {
-            // The Firebase is logged in
-        }
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         fbUser = user;
@@ -113,7 +135,50 @@ public class CreateTaskActivity extends AppCompatActivity {
         myRootRef = mFirebaseDatabase.getReference();
         myChildRef = mFirebaseDatabase.getReference(userID);
 
+        // Checks usertype, and makes reference to Customer data under bosses userID.
+        if (userType == true)
+        {
+            // Regular User
+            myCustomerRef = mFirebaseDatabase.getReference(bossID + "/Customers");
+        }
+        else
+        {
+            // Boss User
+            myCustomerRef = mFirebaseDatabase.getReference(userID + "/Customers");
+        }
 
+        myCustomerRef.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                userList.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren())
+                {
+                    //Customer customer = ds.getValue(Customer.class);
+                    //toastMessage(customer.getFullName(),false);
+
+                    Customer cust = ds.child("CustomerInfo").getValue(Customer.class);
+                    //toastMessage(cust.getFullName() , false);
+                    userList.add(cust);
+                }
+
+                //for (Customer c : userList)
+               // {
+                    //toastMessage(c.getFullName(), true);
+                //}
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+
+            }
+        });
+
+        loadCustomerBtn = (ImageButton) findViewById(R.id.loadCustomerBtn);
+        loadCustomerBtn.setOnClickListener(buttonClickListener);
 
         customerView = (TextView) findViewById(R.id.customerView1);
         editName = (EditText) findViewById(R.id.editName1);
@@ -130,7 +195,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         addTaskBtn.setOnClickListener(buttonClickListener);
         camerabtn =(Button) findViewById(R.id.billedeBtn);
         picture1= (ImageView)findViewById(R.id.billedIV);
-        downloadUrl= (TextView) findViewById(R.id.urlTextview);
+        //downloadUrl= (TextView) findViewById(R.id.urlTextview);
 
         //progress dialog uploading image
         picDialog = new ProgressDialog(this);
@@ -206,7 +271,8 @@ public class CreateTaskActivity extends AppCompatActivity {
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                downloadUrl.setText(picstorage.toString());
+                //downloadUrl.setText(picstorage.toString());
+                pictureURL = picstorage.toString();
             }
 
         });
@@ -226,6 +292,9 @@ public class CreateTaskActivity extends AppCompatActivity {
                 case R.id.addTaskBtn1:
                     createTask();
                     break;
+                case R.id.loadCustomerBtn:
+                    //createCustomer();
+                    break;
             }
 
         }
@@ -233,6 +302,82 @@ public class CreateTaskActivity extends AppCompatActivity {
 
 
 
+    private void createCustomer()
+    {
+        // Method for saving the customer if his data does not already exist in myCustomerRef;
+
+        String cName = editName.getText().toString().trim();
+        String cAddress = editAddress.getText().toString().trim();
+        String cCity = editCity.getText().toString().trim();
+        String cZip = editZip.getText().toString().trim();
+        String cPhone = editPhone.getText().toString().trim();
+        String cEmail = editEmail.getText().toString().trim();
+
+        Customer customer = new Customer(cName, cPhone, cEmail, cAddress, cCity, cZip);
+        final String customerID = myCustomerRef.push().getKey();
+        customer.setCustomerID(customerID);
+
+        // This checks if the Customer already is in the Database. If so; not created, if not; created in database.
+        for (Customer cu : userList)
+        {
+            if (customer.equals(cu) == true)
+            {
+                //toastMessage("Customer is the same", true);
+                checkCustomer = true;
+                testCustomer = cu;
+                break;
+            }
+            else
+            {
+                //toastMessage("Customer not the same", true);
+                checkCustomer = false;
+            }
+        }
+
+        if (!checkCustomer) // false
+        {
+            myCustomerRef.child(customerID).child("CustomerInfo").setValue(customer);
+
+            if (userType == true)
+            {
+                // Regular user, needs to go under his bosses data
+                toastMessage("regular user", true);
+                myTestRef = mFirebaseDatabase.getReference(bossID + "/Customers/" + customerID);
+            }
+            else
+            {
+                // Boss user, needs to go under his own data
+                toastMessage("boss user", true);
+                myTestRef = mFirebaseDatabase.getReference(userID + "/Customers/" + customerID);
+            }
+
+            //myTestRef = mFirebaseDatabase.getReference(bossID + "/Customers/" + customerID);
+            myTestRef.child("Task " + myTestRef.push().getKey()).setValue(taskID);
+        }
+        else // true
+        {
+            if (userType == true)
+            {
+                // Regular user, needs to go under his bosses data
+                toastMessage("regular user", true);
+                myTestRef = mFirebaseDatabase.getReference(bossID + "/Customers/" + testCustomer.getCustomerID());
+            }
+            else
+            {
+                // Boss user, needs to go under his own data
+                toastMessage("boss user", true);
+                myTestRef = mFirebaseDatabase.getReference(userID + "/Customers/" + testCustomer.getCustomerID());
+            }
+
+
+            myTestRef.child("Task " + myTestRef.push().getKey()).setValue(taskID);
+        }
+
+        //myTestRef = mFirebaseDatabase.getReference(bossID + "/Customers/" + customerID);
+        //toastMessage("Test bossID=" + bossID,true);
+        //myTestRef.child("Task").setValue(taskID);
+
+    }
 
     private void createTask(){
 
@@ -247,8 +392,9 @@ public class CreateTaskActivity extends AppCompatActivity {
         String taskTopic = editTopic.getText().toString().trim();
         String taskDescription = editDescription.getText().toString().trim();
         double taskPrice = Double.parseDouble(editPrice.getText().toString().trim());
-        String url = downloadUrl.getText().toString().trim();
+        //String url = downloadUrl.getText().toString().trim();
 
+        taskID = myChildRef.push().getKey();
 
         Task task = new Task();
         task.setName(cName);
@@ -260,14 +406,19 @@ public class CreateTaskActivity extends AppCompatActivity {
         task.setTopic(taskTopic);
         task.setDescription(taskDescription);
         task.setPrice(taskPrice);
-        task.setDownloadUrl(url);
+        task.setDownloadUrl(pictureURL);
         task.setWorkerID(userID);
-        ;
+        task.setTaskID(taskID);
 
-        myChildRef.child("Tasks").child(myChildRef.push().getKey()).setValue(task);
+        myChildRef.child("Tasks").child(taskID).setValue(task);
 
-        finish();
-        startActivity(new Intent(CreateTaskActivity.this, MyMenuActivity.class));
+        //Customer customer = new Customer(cName, cPhone, cEmail, cAddress, cCity, cZip);
+
+        createCustomer();
+
+
+        //finish();
+        //startActivity(new Intent(CreateTaskActivity.this, MyMenuActivity.class));
 
         //toastMessage(cName, true);
 

@@ -57,6 +57,7 @@ public class WorkersActivity extends AppCompatActivity
     private String bossID;
     private String userID;
     private FirebaseUser fbUser;
+    private boolean userType;
 
     private Activity context;
     //private TextView nameView, emailView, branchView, cvrView;
@@ -77,6 +78,11 @@ public class WorkersActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workers);
+
+        Intent intent = getIntent();
+        userType = intent.getExtras().getBoolean("userType");
+        bossID = intent.getExtras().getString("bossID");
+        //toastMessage(userType + " " + bossID);
 
         height = getWindowManager().getDefaultDisplay().getHeight();
         width = getWindowManager().getDefaultDisplay().getWidth();
@@ -167,8 +173,10 @@ public class WorkersActivity extends AppCompatActivity
                     break;
                 case R.id.addWorkerBtn:
                     //Gotta finish this activity for now. As the user gets logged out.
-                    finish();
-                    startActivity(new Intent(WorkersActivity.this, AddWorkerActivity.class));
+                    Intent intent2 = new Intent(WorkersActivity.this, AddWorkerActivity.class);
+                    intent2.putExtra("bossID", bossID);
+                    intent2.putExtra("userType", userType);
+                    startActivity(intent2);
             }
         }
     };

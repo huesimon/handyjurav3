@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
                             finish();
                             Intent intent = new Intent(MainActivity.this, MyMenuActivity.class);
                             intent.putExtra("userType", check);
+                            intent.putExtra("bossID", regUser.getBossUserID());
                             startActivity(intent);
                         }
 

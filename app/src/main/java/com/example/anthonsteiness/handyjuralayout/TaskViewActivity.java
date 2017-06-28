@@ -39,7 +39,7 @@ public class TaskViewActivity extends AppCompatActivity
 
     TextView textView;
     ListView listView;
-    ImageButton addWorkerBtn;
+    ImageButton addTaskBtn;
     ViewGroup.MarginLayoutParams marginParams;
     private int height, width;
 
@@ -54,6 +54,7 @@ public class TaskViewActivity extends AppCompatActivity
     private String bossID;
     private String userID;
     private FirebaseUser fbUser;
+    private boolean userType;
 
     private Activity context;
     //private TextView nameView, emailView, branchView, cvrView;
@@ -75,6 +76,11 @@ public class TaskViewActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workers);
 
+        Intent intent = getIntent();
+        userType = intent.getExtras().getBoolean("userType");
+        bossID = intent.getExtras().getString("bossID");
+        //toastMessage(userType + " " + bossID);
+
         height = getWindowManager().getDefaultDisplay().getHeight();
         width = getWindowManager().getDefaultDisplay().getWidth();
 
@@ -82,9 +88,9 @@ public class TaskViewActivity extends AppCompatActivity
         textView.setText("Opgaver");
         listView = (ListView) findViewById(R.id.listViewCoworkers);
         listView.setOnItemClickListener(itemClickListener);
-        addWorkerBtn = (ImageButton) findViewById(R.id.addWorkerBtn);
-        addWorkerBtn.setOnClickListener(buttonClickListener);
-        marginParams = (ViewGroup.MarginLayoutParams) addWorkerBtn.getLayoutParams();
+        addTaskBtn = (ImageButton) findViewById(R.id.addWorkerBtn);
+        addTaskBtn.setOnClickListener(buttonClickListener);
+        marginParams = (ViewGroup.MarginLayoutParams) addTaskBtn.getLayoutParams();
 
         taskList = new ArrayList<>();
         stringArray = new ArrayList<>();
@@ -215,8 +221,10 @@ public class TaskViewActivity extends AppCompatActivity
                     break;
                 case R.id.addWorkerBtn:
                     //Gotta finish this activity for now. As the user gets logged out.
-                    finish();
-                    startActivity(new Intent(TaskViewActivity.this, CreateTaskActivity.class));
+                    Intent intent2 = new Intent(TaskViewActivity.this, CreateTaskActivity.class);
+                    intent2.putExtra("bossID", bossID);
+                    intent2.putExtra("userType", userType);
+                    startActivity(intent2);
             }
         }
     };
@@ -290,7 +298,7 @@ public class TaskViewActivity extends AppCompatActivity
                         // This is the RegularUser
                         marginParams.height = 0;
                         marginParams.width = 0;
-                        addWorkerBtn.setLayoutParams(marginParams);
+                        addTaskBtn.setLayoutParams(marginParams);
 
                         myTaskRef.addValueEventListener(new ValueEventListener()
                         {

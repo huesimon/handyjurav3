@@ -56,12 +56,19 @@ public class AddWorkerActivity extends AppCompatActivity {
     private DatabaseReference myChildRef;
     private String userID;
     private FirebaseUser fbUser;
+    private String bossID;
+    private boolean userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_worker);
+
+        Intent intent = getIntent();
+        userType = intent.getExtras().getBoolean("userType");
+        bossID = intent.getExtras().getString("bossID");
+        //toastMessage(userType + " " + bossID, true);
 
         height = getWindowManager().getDefaultDisplay().getHeight();
         width = getWindowManager().getDefaultDisplay().getWidth();

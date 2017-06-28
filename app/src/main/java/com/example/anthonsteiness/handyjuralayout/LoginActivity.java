@@ -158,6 +158,7 @@ public class LoginActivity extends AppCompatActivity {
                                 finish();
                                 Intent intent = new Intent(LoginActivity.this, MyMenuActivity.class);
                                 intent.putExtra("userType", check);
+                                intent.putExtra("bossID", regUser.getBossUserID());
                                 startActivity(intent);
                             }
 

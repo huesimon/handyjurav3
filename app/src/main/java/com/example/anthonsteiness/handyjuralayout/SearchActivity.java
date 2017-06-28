@@ -472,6 +472,7 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+
     private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener()
     {
         @Override

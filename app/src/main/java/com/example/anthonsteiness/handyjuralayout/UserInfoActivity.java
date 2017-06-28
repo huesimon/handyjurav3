@@ -45,6 +45,8 @@ public class UserInfoActivity extends AppCompatActivity
     private DatabaseReference myChildRef;
     private String userID;
     private FirebaseUser fbUser;
+    private String bossID;
+    private boolean userType;
 
     private Activity context;
     //private TextView nameView, emailView, branchView, cvrView;
@@ -61,6 +63,11 @@ public class UserInfoActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
+
+        Intent intent = getIntent();
+        userType = intent.getExtras().getBoolean("userType");
+        bossID = intent.getExtras().getString("bossID");
+        //toastMessage(userType + " " + bossID);
 
         textView = (TextView) findViewById(R.id.tvUserInfo);
         listView = (ListView) findViewById(R.id.listView);
