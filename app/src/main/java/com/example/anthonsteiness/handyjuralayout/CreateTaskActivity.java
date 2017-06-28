@@ -302,10 +302,8 @@ public class CreateTaskActivity extends AppCompatActivity {
 
 
 
-    private void createCustomer()
+    private void createCustomer(Task task)
     {
-        // Method for saving the customer if his data does not already exist in myCustomerRef;
-
         String cName = editName.getText().toString().trim();
         String cAddress = editAddress.getText().toString().trim();
         String cCity = editCity.getText().toString().trim();
@@ -317,7 +315,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         final String customerID = myCustomerRef.push().getKey();
         customer.setCustomerID(customerID);
 
-        // This checks if the Customer already is in the Database. If so; not created, if not; created in database.
+        // This checks if the Customer already is in the Database.
         for (Customer cu : userList)
         {
             if (customer.equals(cu) == true)
@@ -334,28 +332,31 @@ public class CreateTaskActivity extends AppCompatActivity {
             }
         }
 
-        if (!checkCustomer) // false
+        if (!checkCustomer) // false therefor not found in Database already.
         {
+            // And the Customer is created.
             myCustomerRef.child(customerID).child("CustomerInfo").setValue(customer);
 
+            // Checks if boss or regular user. And creates the right database reference acordingly.
             if (userType == true)
             {
                 // Regular user, needs to go under his bosses data
-                toastMessage("regular user", true);
+                //toastMessage("regular user", true);
                 myTestRef = mFirebaseDatabase.getReference(bossID + "/Customers/" + customerID);
             }
             else
             {
                 // Boss user, needs to go under his own data
-                toastMessage("boss user", true);
+                //toastMessage("boss user", true);
                 myTestRef = mFirebaseDatabase.getReference(userID + "/Customers/" + customerID);
             }
 
-            //myTestRef = mFirebaseDatabase.getReference(bossID + "/Customers/" + customerID);
-            myTestRef.child("Task " + myTestRef.push().getKey()).setValue(taskID);
+            // This saves a link to the task under the Customer
+            myTestRef.child("Tasks").child(task.getTaskID()).setValue(task);
         }
-        else // true
+        else // true therefor the Customer is already an old Customer, thus not needed to be created.
         {
+            // Checks if boss or regular user. And creates the right database reference acordingly.
             if (userType == true)
             {
                 // Regular user, needs to go under his bosses data
@@ -369,14 +370,9 @@ public class CreateTaskActivity extends AppCompatActivity {
                 myTestRef = mFirebaseDatabase.getReference(userID + "/Customers/" + testCustomer.getCustomerID());
             }
 
-
-            myTestRef.child("Task " + myTestRef.push().getKey()).setValue(taskID);
+            // This saves a link to the task under the Customer
+            myTestRef.child("Tasks").child(task.getTaskID()).setValue(task);
         }
-
-        //myTestRef = mFirebaseDatabase.getReference(bossID + "/Customers/" + customerID);
-        //toastMessage("Test bossID=" + bossID,true);
-        //myTestRef.child("Task").setValue(taskID);
-
     }
 
     private void createTask(){
@@ -414,7 +410,7 @@ public class CreateTaskActivity extends AppCompatActivity {
 
         //Customer customer = new Customer(cName, cPhone, cEmail, cAddress, cCity, cZip);
 
-        createCustomer();
+        createCustomer(task);
 
 
         //finish();
