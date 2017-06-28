@@ -32,7 +32,7 @@ public class UserInfoActivity extends AppCompatActivity
     // Commit test
     private static final String TAG = "UserInfoActivity";
 
-    private String title = "User Info";
+    private String title = "Min Info";
 
     TextView textView;
     ListView listView;

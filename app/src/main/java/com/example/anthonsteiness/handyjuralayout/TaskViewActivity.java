@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,6 +83,10 @@ public class TaskViewActivity extends AppCompatActivity
     private List<Task> taskList2;
     private List<String> stringArray2;
 
+    private ArrayAdapter<CharSequence> testAdapter;
+    RelativeLayout.LayoutParams lp, lp2;
+    private String desc;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -110,6 +117,9 @@ public class TaskViewActivity extends AppCompatActivity
 
         listView2 = (ListView) findViewById(R.id.listViewCoworkersTasks);
         listView2.setOnItemClickListener(itemClickListener2);
+
+        lp = (RelativeLayout.LayoutParams) listView.getLayoutParams();
+        lp2 = (RelativeLayout.LayoutParams) listView2.getLayoutParams();
 
         taskList = new ArrayList<>();
         stringArray = new ArrayList<>();
@@ -195,15 +205,27 @@ public class TaskViewActivity extends AppCompatActivity
             // And the users are added the same time as the String name. (This is thoughts. don't know if possible)
             taskList.add(task);
 
+            String description = task.getDescription();
+
+            if (task.getDescription().length() > 65)
+            {
+                desc = description.substring(0, 65);
+                desc += "...";
+            }
+            else
+            {
+                desc = description;
+            }
+
             String str = "Opgave: " + task.getTopic();
-            str += "\nOpgave Beskrivelse: " + task.getDescription();
+            str += "\nOpgave Beskrivelse: " + desc;
             str += "\nAdresse: " + task.getAddress() + ", " + task.getZipCode() + " " + task.getCity();
             stringArray.add(str);
 
         }
 
-        ArrayAdapter adapter = new ArrayAdapter(TaskViewActivity.this, android.R.layout.simple_list_item_1, stringArray);
-        listView.setAdapter(adapter);
+        testAdapter = new ArrayAdapter(TaskViewActivity.this, android.R.layout.simple_list_item_1, stringArray);
+        listView.setAdapter(testAdapter);
     }
 
 
@@ -242,8 +264,20 @@ public class TaskViewActivity extends AppCompatActivity
                         Task task = ds.getValue(Task.class);
                         taskList2.add(task);
 
+                        String description = task.getDescription();
+
+                        if (task.getDescription().length() > 65)
+                        {
+                            desc = description.substring(0, 65);
+                            desc += "...";
+                        }
+                        else
+                        {
+                            desc = description;
+                        }
+
                         String str = "Opgave: " + task.getTopic();
-                        str += "\nOpgave Beskrivelse: " + task.getDescription();
+                        str += "\nOpgave Beskrivelse: " + desc;
                         str += "\nAdresse: " + task.getAddress() + ", " + task.getZipCode() + " " + task.getCity();
                         stringArray2.add(str);
                     }
@@ -279,9 +313,51 @@ public class TaskViewActivity extends AppCompatActivity
                     intent2.putExtra("bossID", bossID);
                     intent2.putExtra("userType", userType);
                     startActivity(intent2);
+                    break;
+                case R.id.myTasksGreyArea:
+                    hideOrShowItems(1);
+                    break;
+                case R.id.myUsersTasksGreyArea:
+                    hideOrShowItems(2);
+                    break;
             }
         }
     };
+
+    private void hideOrShowItems(int number)
+    {
+        int test = 0;
+        if (number == 1)
+        {
+            // This is for ListView
+            if (lp.height > 275 || listView.getHeight() > 275)
+            {
+                lp.height = 272;
+            }
+            else
+            {
+                int j = taskList.size();
+                j = j * 272;
+                lp.height = j;
+            }
+            listView.setLayoutParams(lp);
+        }
+        else if (number == 2)
+        {
+            // This is for ListView2
+            if (lp2.height > 275 || listView2.getHeight() > 275)
+            {
+                lp2.height = 272;
+            }
+            else
+            {
+                int j = taskList2.size();
+                j = j * 272;
+                lp2.height = j;
+            }
+            listView2.setLayoutParams(lp2);
+        }
+    }
 
 
     private void checkUserType()

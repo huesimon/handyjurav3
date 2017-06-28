@@ -32,7 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 public class RegisterActivity extends AppCompatActivity {
     // This is a commit test 16-05-2017
 
-    String title = "HandyJura";
+    String title = "Registrer HammerNemt";
 
     Spinner branchDrop;
     TextView chosenBusiness;

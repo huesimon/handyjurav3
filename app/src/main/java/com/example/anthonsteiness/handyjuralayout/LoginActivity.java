@@ -32,12 +32,14 @@ import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
-    Button loginBtn2;
-    EditText mailText;
-    EditText passText;
-    TextView forgotText;
-    int height;
-    int width;
+    private String title = "Login HammerNemt";
+
+    private Button loginBtn2;
+    private EditText mailText;
+    private EditText passText;
+    private TextView forgotText;
+    private int height;
+    private int width;
 
     ViewGroup.MarginLayoutParams marginParams;
 
@@ -50,11 +52,11 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
 
     // Buttons and stuff from app_bar class
-    ImageButton searchBtn;
-    Spinner helpDropDown;
-    ArrayAdapter<CharSequence> adapter2;
-    TextView titleBar;
-    EditText searchBar;
+    private ImageButton searchBtn;
+    private Spinner helpDropDown;
+    private ArrayAdapter<CharSequence> adapter2;
+    private TextView titleBar;
+    private EditText searchBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         helpDropDown.setAdapter(adapter2);
         helpDropDown.setOnItemSelectedListener(dropDownListener);
-        titleBar.setText("HandyJura");
+        titleBar.setText(title);
 
         checkScreenReso();
 

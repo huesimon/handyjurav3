@@ -34,7 +34,7 @@ public class AddWorkerActivity extends AppCompatActivity {
 
     private static final String TAG = "AddWorkerActivity";
 
-    String title = "HandyJura";
+    String title = "Tilføj Medarbejder";
 
     EditText mEmail, mEmailRepeat, mPass, mPassRepeat, mName;
     Button regBtn;
