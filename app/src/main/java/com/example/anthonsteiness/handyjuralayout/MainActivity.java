@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Firebase declaration stuff
         firebaseAuth = FirebaseAuth.getInstance();
-
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
         //mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -84,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
 
             fbUser = firebaseAuth.getCurrentUser();
             userID = fbUser.getUid();
-
             myUserIDRef = mFirebaseDatabase.getReference(userID);
 
             myUserIDRef.addValueEventListener(new ValueEventListener()

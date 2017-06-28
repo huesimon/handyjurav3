@@ -338,15 +338,25 @@ public class SearchActivity extends AppCompatActivity {
                         // Searching for mails
                         str = task.getEmail();
                         str += ", " + task.getTopic();
+                        //toastMessage("Email");
                     }
-                    else if (!saveSearch.contains(".*\\d+.*"))
+                    else if (saveSearch.matches("[0-9]+"))
                     {
-                        // Search does contain numbers, might be address, phone or zipcode.
-                        // This might not be the case to be honest, I don't really know what this does exactly. But it works.
+                        //toastMessage("Only numbers!");
                         str = task.getZipCode();
-                        str += ", " + task.getAddress();
-                        str += ", " + task.getPhone();
-
+                        str += ", " + task.getCity();
+                    }
+                    else if (saveSearch.matches(".*\\d+.*"))
+                    {
+                        //toastMessage("Numbers + letters...");
+                        str = task.getAddress();
+                        str += ", " + task.getZipCode() + " " + task.getCity();
+                    }
+                    else if (!saveSearch.matches(".*\\d+.*"))
+                    {
+                        //toastMessage("Only letters...");
+                        str = task.getTopic();
+                        //str += ", " + task.getAddress();
                     }
 
                     if (str.matches("(?i).*" + saveSearch +".*"))
@@ -386,16 +396,27 @@ public class SearchActivity extends AppCompatActivity {
                 // Searching for mails
                 str = task.getEmail();
                 str += ", " + task.getTopic();
+                //toastMessage("Email");
             }
-            else if (!saveSearch.contains(".*\\d+.*"))
+            else if (saveSearch.matches("[0-9]+"))
             {
-                // Search does contain numbers, might be address, phone or zipcode.
-                // This might not be the case to be honest, I don't really know what this does exactly. But it works.
+                //toastMessage("Only numbers!");
                 str = task.getZipCode();
-                str += ", " + task.getAddress();
-                str += ", " + task.getPhone();
-
+                str += ", " + task.getCity();
             }
+            else if (saveSearch.matches(".*\\d+.*"))
+            {
+                //toastMessage("Numbers + letters...");
+                str = task.getAddress();
+                str += ", " + task.getZipCode() + " " + task.getCity();
+            }
+            else if (!saveSearch.matches(".*\\d+.*"))
+            {
+                //toastMessage("Only letters...");
+                str = task.getTopic();
+                //str += ", " + task.getAddress();
+            }
+
             if (str.matches("(?i).*" + saveSearch +".*"))
             {
                 searchArray2.add(str);
