@@ -30,9 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
-    // Anthon's Commit test 18-05-2017 10:28
-    // Anthon's Commit test 20-05-2017 13:10
-    // Anthon's Commit test 26-05-2017 00:17
+    // Vil lige commite de sidste ændringer og push til master.
 
     String title = "HammerNemt";
 
