@@ -2,7 +2,6 @@ package com.example.anthonsteiness.handyjuralayout;
 
 import android.content.Context;
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,8 +28,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,12 +36,17 @@ public class SearchActivity extends AppCompatActivity {
     private String title = "Søg";
 
     private TextView textViewSearchText;
-    private ListView listViewSearchResults;
+    private ListView listViewUserResults; // Result of users
     private String saveSearch;
-    private ListView listViewTaskResults;
-    private ListView listViewTaskResults2;
+    private ListView listViewTaskResults; // Result of own tasks
+    private ListView listViewTaskResults2; // Result of workers tasks
+
     private TextView textViewWorkersTasks;
+    private TextView textViewUsersGreyArea;
+    private TextView textViewMyTasksGreyArea;
+    private TextView textViewCustomersGreyArea;
     RelativeLayout relativeSearchBG;
+    RelativeLayout.LayoutParams userViewLP, taskViewLP, task2ViewLP;
 
     List<RegularUser> userList;
     List<String> stringArray;
@@ -70,7 +72,7 @@ public class SearchActivity extends AppCompatActivity {
     List<String> workerIDList;
     boolean check;
     int i;
-    String str;
+    //String str;
 
     // Firebase stuff
     private FirebaseDatabase mFirebaseDatabase;
@@ -107,13 +109,32 @@ public class SearchActivity extends AppCompatActivity {
 
         textViewSearchText = (TextView) findViewById(R.id.textViewSearchText);
         textViewSearchText.setText("Søgning: " + saveSearch);
-        listViewSearchResults = (ListView) findViewById(R.id.listViewSearchResults);
-        listViewSearchResults.setOnItemClickListener(itemClickListener);
+        listViewUserResults = (ListView) findViewById(R.id.listViewSearchResults);
+        listViewUserResults.setOnItemClickListener(itemClickListener);
         listViewTaskResults = (ListView) findViewById(R.id.listViewTaskResults);
         listViewTaskResults.setOnItemClickListener(itemClickListener2);
         listViewTaskResults2 = (ListView) findViewById(R.id.listViewTaskResults2);
         listViewTaskResults2.setOnItemClickListener(itemClickListener3);
-        textViewWorkersTasks = (TextView) findViewById(R.id.othersTasksGreyArea);
+
+        textViewUsersGreyArea = (TextView) findViewById(R.id.usersGreyArea);
+        textViewUsersGreyArea.setClickable(true);
+        textViewUsersGreyArea.setOnClickListener(buttonClickListener);
+
+        textViewMyTasksGreyArea = (TextView) findViewById(R.id.myTasksGreyArea);
+        textViewMyTasksGreyArea.setClickable(true);
+        textViewMyTasksGreyArea.setOnClickListener(buttonClickListener);
+
+        textViewWorkersTasks = (TextView) findViewById(R.id.workersTasksGreyArea);
+        textViewWorkersTasks.setClickable(true);
+        textViewWorkersTasks.setOnClickListener(buttonClickListener);
+
+        textViewCustomersGreyArea = (TextView) findViewById(R.id.customersGreyArea);
+        textViewCustomersGreyArea.setClickable(true);
+        textViewCustomersGreyArea.setOnClickListener(buttonClickListener);
+
+        userViewLP = (RelativeLayout.LayoutParams) listViewUserResults.getLayoutParams();
+        taskViewLP = (RelativeLayout.LayoutParams) listViewTaskResults.getLayoutParams();
+        task2ViewLP = (RelativeLayout.LayoutParams) listViewTaskResults2.getLayoutParams();
 
         textViewSearchText.setClickable(true);
         textViewSearchText.setOnClickListener(buttonClickListener);
@@ -126,6 +147,9 @@ public class SearchActivity extends AppCompatActivity {
         if (regUserType == true)
         {
             textViewWorkersTasks.setBackgroundColor(0);
+            textViewWorkersTasks.setClickable(false);
+            textViewCustomersGreyArea.setBackgroundColor(0);
+            textViewCustomersGreyArea.setClickable(false);
         }
 
         userList = new ArrayList<>();
@@ -215,6 +239,15 @@ public class SearchActivity extends AppCompatActivity {
                     {
                         setTitle(view);
                     }
+                    break;
+                case R.id.usersGreyArea:
+                    hideOrShowItems(1);
+                    break;
+                case R.id.myTasksGreyArea:
+                    hideOrShowItems(2);
+                    break;
+                case R.id.workersTasksGreyArea:
+                    hideOrShowItems(3);
                     break;
             }
         }
@@ -318,64 +351,89 @@ public class SearchActivity extends AppCompatActivity {
 
     private void showAllTasks(DataSnapshot dataSnapshot)
     {
-        //toastMessage(workerIDList.get(i));
-        myWorkerRef = mFirebaseDatabase.getReference(workerIDList.get(i) + "/Tasks");
-        myWorkerRef.addValueEventListener(new ValueEventListener()
+        for (String str : workerIDList)
         {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
+            myWorkerRef = mFirebaseDatabase.getReference(str + "/Tasks");
+            myWorkerRef.addValueEventListener(new ValueEventListener()
             {
-                for (DataSnapshot ds : dataSnapshot.getChildren())
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
                 {
-                    Task task = new Task();
-                    task = ds.getValue(Task.class);
-                    taskList2.add(task);
-                }
-                for (Task task : taskList2)
-                {
-                    if (saveSearch.contains("@"))
+                    taskList2.clear();
+                    for (DataSnapshot ds : dataSnapshot.getChildren())
                     {
-                        // Searching for mails
-                        str = task.getEmail();
-                        str += ", " + task.getTopic();
-                        //toastMessage("Email");
-                    }
-                    else if (saveSearch.matches("[0-9]+"))
-                    {
-                        //toastMessage("Only numbers!");
-                        str = task.getZipCode();
-                        str += ", " + task.getCity();
-                    }
-                    else if (saveSearch.matches(".*\\d+.*"))
-                    {
-                        //toastMessage("Numbers + letters...");
-                        str = task.getAddress();
-                        str += ", " + task.getZipCode() + " " + task.getCity();
-                    }
-                    else if (!saveSearch.matches(".*\\d+.*"))
-                    {
-                        //toastMessage("Only letters...");
-                        str = task.getTopic();
-                        //str += ", " + task.getAddress();
+                        Task task = ds.getValue(Task.class);
+                        taskList2.add(task);
                     }
 
-                    if (str.matches("(?i).*" + saveSearch +".*"))
+                    for (Task task : taskList2)
                     {
-                        //toastMessage("Keep: " + str);
-                        searchArray3.add(str);
-                        //toastMessage("add " + regUser.getFullName() + " too resultList");
-                        taskResults2.add(task);
+                        String string = "";
+                        if (saveSearch.contains("@"))
+                        {
+                            // Searching for mails
+                            string = task.getEmail();
+                            string += ", " + task.getTopic();
+                            //toastMessage("Email");
+                        }
+                        else if (saveSearch.matches("[0-9]+"))
+                        {
+                            //toastMessage("Only numbers!");
+                            string = task.getAddress();
+                            string += ", " + task.getZipCode();
+                            string += " " + task.getCity();
+                        }
+                        else if (saveSearch.matches(".*\\d+.*"))
+                        {
+                            //toastMessage("Numbers + letters...");
+                            string = task.getAddress();
+                            string += ", " + task.getZipCode() + " " + task.getCity();
+                        }
+                        else if (!saveSearch.matches(".*\\d+.*"))
+                        {
+                            //toastMessage("Only letters...");
+                            string = task.getTopic();
+                            string += ", " + task.getAddress() + ", " + task.getCity();
+                        }
+                        else
+                        {
+                            // this is to test, because this should never come...
+                            string = "THIS SHOULD NOT BE HERE";
+                        }
+
+                        if (string.matches("(?i).*" + saveSearch +".*"))
+                        {
+                            String description = task.getDescription();
+                            String desc = "";
+                            if (task.getDescription().length() > 65)
+                            {
+                                desc = description.substring(0, 65);
+                                desc += "...";
+                            }
+                            else
+                            {
+                                desc = description;
+                            }
+
+                            String tempStr = "Opgave: " + task.getTopic();
+                            tempStr += "\nOpgave Beskrivelse: " + desc;
+                            tempStr += "\nAdresse: " + task.getAddress() + ", " + task.getZipCode() + " " + task.getCity();
+                            searchArray3.add(tempStr);
+                            //toastMessage("add " + regUser.getFullName() + " too resultList");
+                            taskResults2.add(task);
+                        }
                     }
-                }
                     ArrayAdapter adapter = new ArrayAdapter(SearchActivity.this, android.R.layout.simple_list_item_1, searchArray3);
                     listViewTaskResults2.setAdapter(adapter);
                 }
+
                 @Override
                 public void onCancelled(DatabaseError databaseError)
                 {
+
                 }
-        });
-        i++;
+            });
+        }
     }
 
     // This shall both get the name of the user working on this task, but also the name of the customor.
@@ -391,35 +449,55 @@ public class SearchActivity extends AppCompatActivity {
         }
         for (Task task : taskList)
         {
+            String str = "";
             if (saveSearch.contains("@"))
             {
                 // Searching for mails
                 str = task.getEmail();
                 str += ", " + task.getTopic();
-                //toastMessage("Email");
+                //str += ", " + task.getWorkerMail();
             }
             else if (saveSearch.matches("[0-9]+"))
             {
                 //toastMessage("Only numbers!");
-                str = task.getZipCode();
+                str = task.getAddress();
+                str += ", " + task.getZipCode();
                 str += ", " + task.getCity();
+                str += ", " + task.getPhone();
             }
             else if (saveSearch.matches(".*\\d+.*"))
             {
                 //toastMessage("Numbers + letters...");
                 str = task.getAddress();
                 str += ", " + task.getZipCode() + " " + task.getCity();
+                str += ", " + task.getTopic();
             }
             else if (!saveSearch.matches(".*\\d+.*"))
             {
                 //toastMessage("Only letters...");
                 str = task.getTopic();
-                //str += ", " + task.getAddress();
+                str += ", " + task.getAddress() + ", " + task.getCity();
+                str += ", " + task.getName() + ", " + task.getEmail();
             }
 
             if (str.matches("(?i).*" + saveSearch +".*"))
             {
-                searchArray2.add(str);
+                String description = task.getDescription();
+                String desc = "";
+                if (task.getDescription().length() > 65)
+                {
+                    desc = description.substring(0, 65);
+                    desc += "...";
+                }
+                else
+                {
+                    desc = description;
+                }
+
+                String tempStr = "Opgave: " + task.getTopic();
+                tempStr += "\nOpgave Beskrivelse: " + desc;
+                tempStr += "\nAdresse: " + task.getAddress() + ", " + task.getZipCode() + " " + task.getCity();
+                searchArray2.add(tempStr);
                 taskResults.add(task);
             }
         }
@@ -444,6 +522,7 @@ public class SearchActivity extends AppCompatActivity {
 
         for (int j = 0; j < userList.size(); j++)
         {
+            String str = "";
             if (saveSearch.contains("@"))
             {
                 str = userList.get(j).getEmail();
@@ -462,7 +541,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         ArrayAdapter adapter = new ArrayAdapter(SearchActivity.this, android.R.layout.simple_list_item_1, searchArray);
-        listViewSearchResults.setAdapter(adapter);
+        listViewUserResults.setAdapter(adapter);
 
         workerIDList.clear();
         for (RegularUser user : userList)
@@ -472,6 +551,72 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+    private void hideOrShowItems(int number)
+    {
+        if (number == 1)
+        {
+            // This is gonna hide halfway, hide allway and show Workers
+            if (userViewLP.height > 172 || listViewUserResults.getHeight() > 172)
+            {
+                userViewLP.height = 169;
+            }
+            else if (userViewLP.height == 169)
+            {
+                userViewLP.height = 0;
+            }
+            else
+            {
+                int j = userResults.size();
+                j = j * 169;
+                userViewLP.height = j;
+            }
+            listViewUserResults.setLayoutParams(userViewLP);
+        }
+        else if (number == 2)
+        {
+            // This is gonna hide halfway, hide allway and show MyTasks
+            if (taskViewLP.height > 280 || listViewTaskResults.getHeight() > 280)
+            {
+                taskViewLP.height = 277;
+            }
+            else if (taskViewLP.height == 277)
+            {
+                // One item is showing, we wanna hide it all now.
+                taskViewLP.height = 0;
+            }
+            else
+            {
+                int j = taskResults.size();
+                j = j * 277;
+                taskViewLP.height = j;
+            }
+            listViewTaskResults.setLayoutParams(taskViewLP);
+        }
+        else if (number == 3)
+        {
+            // This is gonna hide halfway, hide allway and show MyWorkersTasks
+            if (task2ViewLP.height > 280 || listViewTaskResults2.getHeight() > 280)
+            {
+                task2ViewLP.height = 277;
+            }
+            else if (task2ViewLP.height == 277)
+            {
+                // One item is showing, we wanna hide it all now.
+                task2ViewLP.height = 0;
+            }
+            else
+            {
+                int j = taskResults2.size(); // Maybe taskResults2
+                j = j * 277;
+                task2ViewLP.height = j;
+            }
+            listViewTaskResults2.setLayoutParams(task2ViewLP);
+        }
+        else if (number == 4)
+        {
+            // this is gonna hide halfway, hide allway and show Customers
+        }
+    }
 
     private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener()
     {

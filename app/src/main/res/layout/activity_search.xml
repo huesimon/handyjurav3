@@ -51,8 +51,6 @@
         android:layout_below="@id/usersGreyArea">
     </ListView>
 
-
-
     <TextView
         android:id="@+id/myTasksGreyArea"
         android:layout_width="match_parent"
@@ -72,7 +70,7 @@
     </ListView>
 
     <TextView
-        android:id="@+id/othersTasksGreyArea"
+        android:id="@+id/workersTasksGreyArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -86,8 +84,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/listViewTaskResults2"
-        android:layout_below="@id/othersTasksGreyArea">
+        android:layout_below="@id/workersTasksGreyArea">
     </ListView>
+
+        <TextView
+            android:id="@+id/customersGreyArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/listViewTaskResults2"
+            android:text="  Kunder"
+            android:textSize="16dp"
+            android:textColor="@android:color/white"
+            android:background="@color/colorDarkGrey"/>
 
 
     </RelativeLayout>

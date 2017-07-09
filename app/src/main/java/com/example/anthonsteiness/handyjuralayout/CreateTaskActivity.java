@@ -104,7 +104,7 @@ public class CreateTaskActivity extends AppCompatActivity {
 
     private DatabaseReference myCustomerRef;
     private DatabaseReference myTestRef;
-    List<Customer> userList;
+    List<Customer> userList; // Maybe rename to customerList as this list contain all the customers.
     private String taskID;
     private boolean checkCustomer;
     private Customer testCustomer;
@@ -360,13 +360,13 @@ public class CreateTaskActivity extends AppCompatActivity {
             if (userType == true)
             {
                 // Regular user, needs to go under his bosses data
-                toastMessage("regular user", true);
+                //toastMessage("regular user", true);
                 myTestRef = mFirebaseDatabase.getReference(bossID + "/Customers/" + testCustomer.getCustomerID());
             }
             else
             {
                 // Boss user, needs to go under his own data
-                toastMessage("boss user", true);
+                //toastMessage("boss user", true);
                 myTestRef = mFirebaseDatabase.getReference(userID + "/Customers/" + testCustomer.getCustomerID());
             }
 
