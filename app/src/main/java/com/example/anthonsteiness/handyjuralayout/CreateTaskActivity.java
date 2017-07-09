@@ -56,7 +56,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     private String title = "Opret opgave";
 
     private TextView customerView;
-    private EditText editName, editAddress, editCity, editZip, editPhone, editEmail;
+    private EditText editName, editAddress, editCity, editZip, editPhone, editEmail, editStartDate, editDueDate;
     private TextView taskView;
     private EditText editTopic, editDescription, editPrice;
     private Button addTaskBtn;
@@ -196,6 +196,8 @@ public class CreateTaskActivity extends AppCompatActivity {
         camerabtn =(Button) findViewById(R.id.billedeBtn);
         picture1= (ImageView)findViewById(R.id.billedIV);
         //downloadUrl= (TextView) findViewById(R.id.urlTextview);
+        editStartDate = (EditText) findViewById(R.id.editStartDate1);
+        editDueDate = (EditText) findViewById(R.id.editDueDate1);
 
         //progress dialog uploading image
         picDialog = new ProgressDialog(this);
@@ -293,7 +295,8 @@ public class CreateTaskActivity extends AppCompatActivity {
                     createTask();
                     break;
                 case R.id.loadCustomerBtn:
-                    //createCustomer();
+                    // Show List View of Customers
+                    checkEmptyText();
                     break;
             }
 
@@ -375,50 +378,102 @@ public class CreateTaskActivity extends AppCompatActivity {
         }
     }
 
-    private void createTask(){
+    private void createTask()
+    {
+        if (!checkEmptyText())
+        {
+            // false - meaning no fields empty
+            String cName = editName.getText().toString().trim();
+            String cAddress = editAddress.getText().toString().trim();
+            String cCity = editCity.getText().toString().trim();
+            String cZip = editZip.getText().toString().trim();
+            String cPhone = editPhone.getText().toString().trim();
+            String cEmail = editEmail.getText().toString().trim();
+            String taskTopic = editTopic.getText().toString().trim();
+            String taskDescription = editDescription.getText().toString().trim();
+            String startDate = editStartDate.getText().toString().trim();
+            String dueDate = editDueDate.getText().toString().trim();
+            double taskPrice = 0.0;
 
-        //lav metode der tjekker at felter ikke er tomme, undgå crash
+            try
+            {
+                taskPrice = Double.parseDouble(editPrice.getText().toString());
+            } catch (final NumberFormatException e)
+            {
+                taskPrice = 0.0;
+            }
 
-        String cName = editName.getText().toString().trim();
-        String cAddress = editAddress.getText().toString().trim();
-        String cCity = editCity.getText().toString().trim();
-        String cZip = editZip.getText().toString().trim();
-        String cPhone = editPhone.getText().toString().trim();
-        String cEmail = editEmail.getText().toString().trim();
-        String taskTopic = editTopic.getText().toString().trim();
-        String taskDescription = editDescription.getText().toString().trim();
-        double taskPrice = Double.parseDouble(editPrice.getText().toString().trim());
-        //String url = downloadUrl.getText().toString().trim();
+            taskID = myChildRef.push().getKey();
 
-        taskID = myChildRef.push().getKey();
+            Task task = new Task();
+            task.setName(cName);
+            task.setAddress(cAddress);
+            task.setCity(cCity);
+            task.setZipCode(cZip);
+            task.setPhone(cPhone);
+            task.setEmail(cEmail);
+            task.setTopic(taskTopic);
+            task.setDescription(taskDescription);
+            task.setPrice(taskPrice);
+            task.setDownloadUrl(pictureURL);
+            task.setWorkerID(userID);
+            task.setTaskID(taskID);
+            task.setDueDate(dueDate);
+            task.setStartDate(startDate);
 
-        Task task = new Task();
-        task.setName(cName);
-        task.setAddress(cAddress);
-        task.setCity(cCity);
-        task.setZipCode(cZip);
-        task.setPhone(cPhone);
-        task.setEmail(cEmail);
-        task.setTopic(taskTopic);
-        task.setDescription(taskDescription);
-        task.setPrice(taskPrice);
-        task.setDownloadUrl(pictureURL);
-        task.setWorkerID(userID);
-        task.setTaskID(taskID);
-        task.setDueDate("10-10-2017");
+            myChildRef.child("Tasks").child(taskID).setValue(task);
 
-        myChildRef.child("Tasks").child(taskID).setValue(task);
+            createCustomer(task);
+        }
+        else
+        {
+            // true - meaning at least one field empty
+            toastMessage("ERROR: INFO MISSING", true);
+        }
 
-        //Customer customer = new Customer(cName, cPhone, cEmail, cAddress, cCity, cZip);
+    }
 
-        createCustomer(task);
+    private boolean checkEmptyText()
+    {
+        // This method is going to check every EditText field, if it is empty or not
+        // If just one field is empty, (only picture field is allowed to be empty)
+        // then it must say error and say where the error accured.
+        double taskPrice = 0.0;
 
+        try
+        {
+            taskPrice = Double.parseDouble(editPrice.getText().toString());
+        } catch (final NumberFormatException e)
+        {
+            taskPrice = 0.0;
+        }
 
-        //finish();
-        //startActivity(new Intent(CreateTaskActivity.this, MyMenuActivity.class));
+        boolean bool = true;
 
-        //toastMessage(cName, true);
+        if ((!(editName.length() > 0)) || (!(editAddress.length() > 0))
+                || (!(editCity.length() > 0)) || (!(editZip.length() > 0))
+                || (!(editPhone.length() > 0)) || (!(editEmail.length() > 0)))
+        {
+            toastMessage("Mangler information om kunden", false);
+            bool = true;
+        }
+        else
+        {
+            bool = false;
+        }
 
+        if (!(editTopic.length() > 0) || (!(editDescription.length() > 0))
+                || (!(editStartDate.length() > 0)) || (!(editDueDate.length() > 0)))
+        {
+            toastMessage("Mangler information om opgaven", false);
+            bool = true;
+        }
+        else
+        {
+            bool = false;
+        }
+
+        return bool;
     }
 
     private void checkScreenReso() {

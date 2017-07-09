@@ -12,7 +12,8 @@
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@+id/action_bar">
+    android:layout_below="@+id/action_bar"
+    android:id="@+id/scrollViewTest">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -150,39 +151,57 @@
             android:inputType="numberDecimal"
             android:hint="Pris" />
 
+        <EditText
+            android:id="@+id/editStartDate1"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/editDescription1"
+            android:layout_alignLeft="@+id/editEmail1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="0dp"
+            android:inputType="date"
+            android:hint="Start Dato (dd-mm-åååå)"
+            android:textSize="15dp"/>
+
+        <EditText
+            android:id="@+id/editDueDate1"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/editStartDate1"
+            android:layout_alignLeft="@+id/editEmail1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="0dp"
+            android:inputType="date"
+            android:hint="Slut Dato  (dd-mm-åååå)"
+            android:textSize="15dp"/>
+
         <ImageView
             android:id="@+id/billedIV"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@color/colorLightGrey"
-            android:layout_below="@+id/editDescription1"
-            android:layout_alignLeft="@+id/editEmail1"
-            android:layout_alignStart="@+id/editEmail1" />
+            android:layout_below="@+id/editPrice1"
+            android:layout_alignLeft="@+id/editPrice1"
+            android:layout_alignStart="@+id/editPrice1" />
 
         <Button
             android:id="@+id/billedeBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tilføj Billede"
-            android:layout_alignBottom="@+id/editPrice1"
+            android:text="Tilføj \nBillede"
             android:layout_toRightOf="@+id/billedIV"
             android:layout_toEndOf="@+id/billedIV"
-            android:layout_alignTop="@+id/editPrice1" />
+            android:layout_alignTop="@+id/billedIV" />
 
         <Button
             android:id="@+id/addTaskBtn1"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_below="@+id/editPrice1"
+            android:layout_below="@+id/billedIV"
             android:background="@color/colorRed"
             android:text="Opret opgave"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
-            android:layout_marginTop="35dp"/>
-        <TextView
-            android:id="@+id/urlTextview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:textSize="24sp" />
 
     </RelativeLayout>
 </ScrollView>

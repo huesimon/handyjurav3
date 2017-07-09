@@ -79,6 +79,7 @@ public class CustomerViewActivity extends AppCompatActivity
         userType = intent.getExtras().getBoolean("userType");
         bossID = intent.getExtras().getString("bossID");
         userID = intent.getExtras().getString("userID");
+        //toastMessage(userType + userID);
 
         height = getWindowManager().getDefaultDisplay().getHeight();
         width = getWindowManager().getDefaultDisplay().getWidth();
@@ -215,7 +216,7 @@ public class CustomerViewActivity extends AppCompatActivity
             header = customer.getFullName();
             body = "tlf.: " + customer.getPhoneNumber() + " Mail: " + customer.getEmail();
             body += "\nAdresse: " + customer.getAddress() + ", " + customer.getZipCode() + " " + customer.getCity();
-            //body += "\n" + customer.getCustomerID();
+            body += "\nOpgaver: ";
 
             final View view1 = view;
 
@@ -228,7 +229,7 @@ public class CustomerViewActivity extends AppCompatActivity
                     for (DataSnapshot ds : dataSnapshot.getChildren())
                     {
                         Task task = ds.getValue(Task.class);
-                        body += "\n" + task.getTopic();
+                        body += "\n- " + task.getTopic();
                     }
                     dialogEvent(view1, body, header);
                 }

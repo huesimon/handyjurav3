@@ -62,6 +62,7 @@ public class MyMenuActivity extends AppCompatActivity
         bossID = intent.getExtras().getString("bossID");
         userID = intent.getExtras().getString("userID");
         //toastMessage(bossID);
+        //toastMessage(userType + "");
 
         height = getWindowManager().getDefaultDisplay().getHeight();
         width = getWindowManager().getDefaultDisplay().getWidth();
@@ -99,6 +100,13 @@ public class MyMenuActivity extends AppCompatActivity
         signOutBtn = (Button) findViewById(R.id.btn6);
         relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
         relativeLayout.setOnClickListener(buttonClickListener);
+
+        if (userType != true)
+        {
+            makeTaskBtn.setText("Kunder");
+        }
+
+
 
         tasksBtn.setOnClickListener(buttonClickListener);
         makeTaskBtn.setOnClickListener(buttonClickListener);
