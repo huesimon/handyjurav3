@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
-    // Test....
 
     private String title = "Søg";
 

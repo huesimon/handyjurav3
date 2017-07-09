@@ -163,7 +163,7 @@ public class MyMenuActivity extends AppCompatActivity
                     setTitle(view);
                     break;
                 case R.id.btn2: // Add task Button
-                    Intent intent2 = new Intent(MyMenuActivity.this, CreateTaskActivity.class);
+                    Intent intent2 = new Intent(MyMenuActivity.this, CustomerViewActivity.class);
                     intent2.putExtra("bossID", bossID);
                     intent2.putExtra("userType", userType);
                     intent2.putExtra("userID", userID);

@@ -405,6 +405,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         task.setDownloadUrl(pictureURL);
         task.setWorkerID(userID);
         task.setTaskID(taskID);
+        task.setDueDate("10-10-2017");
 
         myChildRef.child("Tasks").child(taskID).setValue(task);
 

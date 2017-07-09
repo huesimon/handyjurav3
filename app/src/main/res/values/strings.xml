@@ -23,4 +23,5 @@
         <item>Om</item>
         <item>Log ud</item>
     </string-array>
+    <string name="title_activity_customer_view">CustomerViewActivity</string>
 </resources>
