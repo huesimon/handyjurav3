@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                         {
                             // this is the BossUser
                             //toastMessage("check = false");
-
+                            //toastMessage(check + regUser.getUserID());
                             finish();
                             Intent intent = new Intent(MainActivity.this, MyMenuActivity.class);
                             intent.putExtra("userType", check);

@@ -359,7 +359,6 @@ public class TaskViewActivity extends AppCompatActivity
         }
     }
 
-
     private void checkUserType()
     {
         if (!userType)

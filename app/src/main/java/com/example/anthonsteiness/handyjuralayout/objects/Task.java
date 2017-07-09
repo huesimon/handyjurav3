@@ -21,12 +21,13 @@ public class Task {
 
     private String workerID;
 
+    private String dueDate, startDate;
 
     public Task() {
 
     }
 
-    public Task(String name, String address, String city, String zipCode, String phone, String email, String topic, String description, double price,String downloadUrl, String workerID, String taskID) {
+    public Task(String name, String address, String city, String zipCode, String phone, String email, String topic, String description, double price,String downloadUrl, String workerID, String taskID, String dueDate, String startDate) {
         this.name = name;
         this.address = address;
         this.city = city;
@@ -39,7 +40,17 @@ public class Task {
         this.downloadUrl=downloadUrl;
         this.workerID = workerID;
         this.taskID = taskID;
+        this.dueDate = dueDate;
+        this.startDate = startDate;
     }
+
+    public String getStartDate() { return startDate; }
+
+    public void setStartDate(String startDate) { this.startDate = startDate; }
+
+    public String getDueDate() { return dueDate; }
+
+    public void setDueDate(String dueDate) { this.dueDate = dueDate; }
 
     public String getTaskID() {
         return taskID;

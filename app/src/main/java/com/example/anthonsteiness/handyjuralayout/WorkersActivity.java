@@ -186,6 +186,7 @@ public class WorkersActivity extends AppCompatActivity
                     intent2.putExtra("bossID", bossID);
                     intent2.putExtra("userType", userType);
                     startActivity(intent2);
+                    break;
             }
         }
     };

@@ -152,6 +152,7 @@ public class LoginActivity extends AppCompatActivity {
                                 finish();
                                 Intent intent = new Intent(LoginActivity.this, MyMenuActivity.class);
                                 intent.putExtra("userType", check);
+                                intent.putExtra("userID", regUser.getUserID());
                                 startActivity(intent);
                             }
                             else
@@ -160,6 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                                 finish();
                                 Intent intent = new Intent(LoginActivity.this, MyMenuActivity.class);
                                 intent.putExtra("userType", check);
+                                intent.putExtra("userID", regUser.getUserID());
                                 intent.putExtra("bossID", regUser.getBossUserID());
                                 startActivity(intent);
                             }
