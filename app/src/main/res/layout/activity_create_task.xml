@@ -9,6 +9,7 @@
     <include layout="@layout/app_bar"
         android:id="@+id/action_bar"
         />
+
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -45,7 +46,7 @@
             android:layout_below="@+id/action_bar"
             android:layout_alignRight="@+id/customerView1"
             android:background="@android:color/transparent"
-            android:src="@drawable/addbtnblue"
+            android:src="@drawable/addbtngreythree"
             android:scaleType="centerInside"/>
 
         <EditText
@@ -191,7 +192,7 @@
             android:text="Tilføj \nBillede"
             android:layout_toRightOf="@+id/billedIV"
             android:layout_toEndOf="@+id/billedIV"
-            android:layout_alignTop="@+id/billedIV" />
+            android:layout_alignBottom="@+id/billedIV" />
 
         <Button
             android:id="@+id/addTaskBtn1"
@@ -206,7 +207,16 @@
     </RelativeLayout>
 </ScrollView>
 
-
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewCustomers1"
+        android:background="@color/colorPrimary"
+        android:textAlignment="center"
+        android:layout_marginTop="1000dp"
+        android:layout_marginLeft="75dp"
+        android:layout_marginRight="75dp">
+    </ListView>
 
 </RelativeLayout>
 

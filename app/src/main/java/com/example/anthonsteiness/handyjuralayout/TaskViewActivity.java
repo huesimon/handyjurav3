@@ -447,7 +447,7 @@ public class TaskViewActivity extends AppCompatActivity
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
-            //for (RegularUser testUser : userList)
+            //for (RegularUser testUser : customerList)
             //{
                 //toastMessage(testUser.getFullName());
             //}
@@ -459,7 +459,7 @@ public class TaskViewActivity extends AppCompatActivity
                     + "\nBy: " + task.getZipCode() + ", " + task.getCity()
                     + "\nKunde: " + task.getName() + ", " + task.getPhone() + ", " + task.getEmail();
             dialogEvent(view, message, title);
-           // RegularUser testUser = userList.get(position);
+           // RegularUser testUser = customerList.get(position);
           //  dialogEvent(view, testUser.getEmail(), testUser.getFullName());
         }
     };
