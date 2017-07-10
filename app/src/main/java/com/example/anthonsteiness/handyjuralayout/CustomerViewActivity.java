@@ -224,7 +224,15 @@ public class CustomerViewActivity extends AppCompatActivity
 
             final View view1 = view;
 
-            customerTaskRef = mFirebaseDatabase.getReference(userID + "/Customers/" + customer.getCustomerID() + "/Tasks");
+            if (!userType)
+            {
+                customerTaskRef = mFirebaseDatabase.getReference(userID + "/Customers/" + customer.getCustomerID() + "/Tasks");
+            }
+            else
+            {
+                customerTaskRef = mFirebaseDatabase.getReference(bossID + "/Customers/" + customer.getCustomerID() + "/Tasks");
+            }
+
             customerTaskRef.addValueEventListener(new ValueEventListener()
             {
                 @Override

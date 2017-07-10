@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -49,6 +50,7 @@ public class SearchActivity extends AppCompatActivity {
     private TextView textViewCustomersGreyArea;
     RelativeLayout relativeSearchBG;
     RelativeLayout.LayoutParams userViewLP, taskViewLP, task2ViewLP;
+    ViewGroup.MarginLayoutParams marginParams;
 
     List<RegularUser> userList;
     List<String> stringArray;
@@ -125,6 +127,7 @@ public class SearchActivity extends AppCompatActivity {
         listViewTaskResults2 = (ListView) findViewById(R.id.listViewTaskResults2);
         listViewTaskResults2.setOnItemClickListener(itemClickListener3);
         listViewCustomerResults = (ListView) findViewById(R.id.listViewCustomerResults1);
+        listViewCustomerResults.setOnItemClickListener(itemClickListener4);
 
         textViewUsersGreyArea = (TextView) findViewById(R.id.usersGreyArea);
         textViewUsersGreyArea.setClickable(true);
@@ -158,8 +161,10 @@ public class SearchActivity extends AppCompatActivity {
         {
             textViewWorkersTasks.setBackgroundColor(0);
             textViewWorkersTasks.setClickable(false);
-            textViewCustomersGreyArea.setBackgroundColor(0);
-            textViewCustomersGreyArea.setClickable(false);
+            textViewWorkersTasks.setHeight(0);
+            marginParams = (ViewGroup.MarginLayoutParams) textViewWorkersTasks.getLayoutParams();
+            marginParams.topMargin = 0;
+            textViewWorkersTasks.setLayoutParams(marginParams);
         }
 
         userList = new ArrayList<>();
@@ -237,31 +242,28 @@ public class SearchActivity extends AppCompatActivity {
                     search(view);
                     break;
                 case R.id.titleBar:
-                    search(view);
+                    setSearch();
                     break;
                 case R.id.relativeAppBar:
-                    search(view);
+                    setSearch();
                     break;
                 case R.id.textViewSearchText:
-                    if (!titleBar.getText().equals(title))
-                    {
-                        setTitle(view);
-                    }
+                    setTitle(view);
                     break;
                 case R.id.relativeSearchBG:
-                    if (!titleBar.getText().equals(title))
-                    {
-                        setTitle(view);
-                    }
+                    setTitle(view);
                     break;
                 case R.id.usersGreyArea:
                     hideOrShowItems(1);
+                    setTitle(view);
                     break;
                 case R.id.myTasksGreyArea:
                     hideOrShowItems(2);
+                    setTitle(view);
                     break;
                 case R.id.workersTasksGreyArea:
                     hideOrShowItems(3);
+                    setTitle(view);
                     break;
             }
         }
@@ -350,6 +352,19 @@ public class SearchActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(DatabaseError databaseError)
                 {
+                }
+            });
+            myCustomerRef = mFirebaseDatabase.getReference(bossID + "/Customers");
+            myCustomerRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    showCustomers(dataSnapshot);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
                 }
             });
         }
@@ -593,7 +608,7 @@ public class SearchActivity extends AppCompatActivity {
 
             if (string.matches("(?i).*" + saveSearch +".*"))
             {
-                customerStringList.add(string);
+                customerStringList.add(c.getFullName() + ", " + c.getZipCode() + " " + c.getAddress());
                 customerResults.add(c);
             }
         }
@@ -610,7 +625,7 @@ public class SearchActivity extends AppCompatActivity {
             {
                 userViewLP.height = 0;
             }
-            else if (userViewLP.height == 0)
+            else if (userViewLP.height == 0 && listViewUserResults.getCount() > 0)
             {
                 userViewLP.height = 160;
             }
@@ -629,7 +644,7 @@ public class SearchActivity extends AppCompatActivity {
             {
                 taskViewLP.height = 0;
             }
-            else if (taskViewLP.height == 0)
+            else if (taskViewLP.height == 0 && listViewTaskResults.getCount() > 0)
             {
                 // One item is showing, we wanna hide it all now.
                 taskViewLP.height = 250;
@@ -649,7 +664,7 @@ public class SearchActivity extends AppCompatActivity {
             {
                 task2ViewLP.height = 0;
             }
-            else if (task2ViewLP.height == 0)
+            else if (task2ViewLP.height == 0 && listViewTaskResults2.getCount() > 0)
             {
                 // One item is showing, we wanna hide it all now.
                 task2ViewLP.height = 250;
@@ -673,6 +688,7 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
+            setTitle(view);
             RegularUser testUser = userResults.get(position);
             dialogEvent(view, testUser.getEmail(), testUser.getFullName());
         }
@@ -683,6 +699,7 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
+            setTitle(view);
             Task testTask = taskResults.get(position);
             String title123 = testTask.getTopic();
             String text = "Opgave Beskrivelse:\n" + testTask.getDescription()
@@ -698,6 +715,7 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
+            setTitle(view);
             Task testTask = taskResults2.get(position);
             String title123 = testTask.getTopic();
             String text = "Opgave Beskrivelse:\n" + testTask.getDescription()
@@ -705,6 +723,54 @@ public class SearchActivity extends AppCompatActivity {
                     + "\nPris: " + testTask.getPrice()
                     + "\nKunde: " + testTask.getName() + ", " + testTask.getPhone() + ", " + testTask.getEmail();
             dialogEvent(view, text, title123);
+        }
+    };
+
+    private String header;
+    private String body;
+    private DatabaseReference customerTaskRef;
+    private AdapterView.OnItemClickListener itemClickListener4 = new AdapterView.OnItemClickListener()
+    {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+        {
+            setTitle(view);
+            Customer customer = customerResults.get(position);
+            header = customer.getFullName();
+            body = "tlf.: " + customer.getPhoneNumber() + " Mail: " + customer.getEmail();
+            body += "\nAdresse: " + customer.getAddress() + ", " + customer.getZipCode() + " " + customer.getCity();
+            body += "\nOpgaver: ";
+
+            final View view1 = view;
+
+            if (!regUserType)
+            {
+                customerTaskRef = mFirebaseDatabase.getReference(userID + "/Customers/" + customer.getCustomerID() + "/Tasks");
+            }
+            else
+            {
+                customerTaskRef = mFirebaseDatabase.getReference(bossID + "/Customers/" + customer.getCustomerID() + "/Tasks");
+            }
+
+            customerTaskRef.addValueEventListener(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    for (DataSnapshot ds : dataSnapshot.getChildren())
+                    {
+                        Task task = ds.getValue(Task.class);
+                        body += "\n- " + task.getTopic();
+                    }
+                    dialogEvent(view1, body, header);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+
+                }
+            });
         }
     };
 
@@ -747,6 +813,14 @@ public class SearchActivity extends AppCompatActivity {
         // This is where it shows the search bar at first.
         else
         {
+            setSearch();
+        }
+    }
+
+    private void setSearch()
+    {
+        if (titleBar.getText().equals(title))
+        {
             searchBar.setHint("Søg...");
             titleBar.setText("");
             searchBar.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -755,9 +829,12 @@ public class SearchActivity extends AppCompatActivity {
             {
                 searchBar.setText(saveSearch);
             }
-
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(searchBar, InputMethodManager.SHOW_IMPLICIT);
+        }
+        else
+        {
+
         }
     }
 

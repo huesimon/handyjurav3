@@ -100,10 +100,8 @@ public class MyMenuActivity extends AppCompatActivity
         relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
         relativeLayout.setOnClickListener(buttonClickListener);
 
-        if (userType != true)
-        {
-            makeTaskBtn.setText("Kunder");
-        }
+        makeTaskBtn.setText("Kunder");
+
 
 
 
@@ -170,8 +168,9 @@ public class MyMenuActivity extends AppCompatActivity
                     setTitle(view);
                     break;
                 case R.id.btn2: // Add task Button
-                    if (userType != true)
-                    {
+                    // The commented code is for, if the RegUser is not allowed to see the CustomerView.
+                    //if (userType != true)
+                    //{
                         makeTaskBtn.setText("Kunder");
                         Intent intent2 = new Intent(MyMenuActivity.this, CustomerViewActivity.class);
                         intent2.putExtra("bossID", bossID);
@@ -179,16 +178,16 @@ public class MyMenuActivity extends AppCompatActivity
                         intent2.putExtra("userID", userID);
                         startActivity(intent2);
                         setTitle(view);
-                    }
-                    else
-                    {
-                        Intent intent2 = new Intent(MyMenuActivity.this, CreateTaskActivity.class);
-                        intent2.putExtra("bossID", bossID);
-                        intent2.putExtra("userType", userType);
-                        intent2.putExtra("userID", userID);
-                        startActivity(intent2);
-                        setTitle(view);
-                    }
+                    //}
+                    //else
+                    //{
+                        //Intent intent2 = new Intent(MyMenuActivity.this, CreateTaskActivity.class);
+                        //intent2.putExtra("bossID", bossID);
+                        //intent2.putExtra("userType", userType);
+                        //intent2.putExtra("userID", userID);
+                        //startActivity(intent2);
+                        //setTitle(view);
+                    //}
 
                     break;
                 case R.id.btn3: // Workers button

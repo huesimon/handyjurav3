@@ -62,30 +62,30 @@
         android:textColor="@android:color/white"
         android:background="@color/colorDarkGrey"/>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/listViewTaskResults"
-        android:layout_below="@id/myTasksGreyArea">
-    </ListView>
+       <ListView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/listViewTaskResults"
+           android:layout_below="@id/myTasksGreyArea">
+       </ListView>
 
-    <TextView
-        android:id="@+id/workersTasksGreyArea"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_below="@id/listViewTaskResults"
-        android:text="  Medarbejderes Opgaver"
-        android:textSize="16dp"
-        android:textColor="@android:color/white"
-        android:background="@color/colorDarkGrey"/>
+      <TextView
+            android:id="@+id/workersTasksGreyArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/listViewTaskResults"
+            android:text="  Medarbejderes Opgaver"
+            android:textSize="16dp"
+            android:textColor="@android:color/white"
+            android:background="@color/colorDarkGrey"/>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/listViewTaskResults2"
-        android:layout_below="@id/workersTasksGreyArea">
-    </ListView>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/listViewTaskResults2"
+            android:layout_below="@id/workersTasksGreyArea">
+        </ListView>
 
         <TextView
             android:id="@+id/customersGreyArea"
