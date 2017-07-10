@@ -163,6 +163,7 @@ public class LoginActivity extends AppCompatActivity {
                                 intent.putExtra("userType", check);
                                 intent.putExtra("userID", regUser.getUserID());
                                 intent.putExtra("bossID", regUser.getBossUserID());
+                                //toastMessage(check + "\n" + regUser.getUserID() + "\n" + regUser.getBossUserID());
                                 startActivity(intent);
                             }
 

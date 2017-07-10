@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.anthonsteiness.handyjuralayout.objects.Customer;
 import com.example.anthonsteiness.handyjuralayout.objects.RegularUser;
 import com.example.anthonsteiness.handyjuralayout.objects.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,6 +41,7 @@ public class SearchActivity extends AppCompatActivity {
     private String saveSearch;
     private ListView listViewTaskResults; // Result of own tasks
     private ListView listViewTaskResults2; // Result of workers tasks
+    private ListView listViewCustomerResults;
 
     private TextView textViewWorkersTasks;
     private TextView textViewUsersGreyArea;
@@ -68,6 +70,10 @@ public class SearchActivity extends AppCompatActivity {
     List<Task> taskResults2;
     List<String> searchArray3;
 
+    List<Customer> customerList;
+    List<Customer> customerResults;
+    List<String> customerStringList;
+
 
     List<String> workerIDList;
     boolean check;
@@ -84,6 +90,7 @@ public class SearchActivity extends AppCompatActivity {
     private DatabaseReference myBossIDRef;
     private DatabaseReference myTaskRef;
     private DatabaseReference myWorkerRef;
+    private DatabaseReference myCustomerRef;
     private String bossID;
     private String userID;
     private String regUserID;
@@ -106,6 +113,8 @@ public class SearchActivity extends AppCompatActivity {
         Intent intent = getIntent();
         saveSearch = intent.getExtras().getString("searchText");
         regUserType = intent.getExtras().getBoolean("userType");
+        bossID = intent.getExtras().getString("bossID");
+        userID = intent.getExtras().getString("userID");
 
         textViewSearchText = (TextView) findViewById(R.id.textViewSearchText);
         textViewSearchText.setText("Søgning: " + saveSearch);
@@ -115,6 +124,7 @@ public class SearchActivity extends AppCompatActivity {
         listViewTaskResults.setOnItemClickListener(itemClickListener2);
         listViewTaskResults2 = (ListView) findViewById(R.id.listViewTaskResults2);
         listViewTaskResults2.setOnItemClickListener(itemClickListener3);
+        listViewCustomerResults = (ListView) findViewById(R.id.listViewCustomerResults1);
 
         textViewUsersGreyArea = (TextView) findViewById(R.id.usersGreyArea);
         textViewUsersGreyArea.setClickable(true);
@@ -169,6 +179,10 @@ public class SearchActivity extends AppCompatActivity {
 
         workerIDList = new ArrayList<>();
 
+        customerList = new ArrayList<>();
+        customerStringList = new ArrayList<>();
+        customerResults = new ArrayList<>();
+
         // Firebase declaration stuff
         firebaseAuth = FirebaseAuth.getInstance();
         // Check if Firebase is already logged in to
@@ -178,8 +192,8 @@ public class SearchActivity extends AppCompatActivity {
         }
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        fbUser = user;
-        userID = user.getUid();
+        //fbUser = user;
+        //userID = user.getUid();
 
         myRootRef = mFirebaseDatabase.getReference();
         myUserIDRef = mFirebaseDatabase.getReference(userID + "/UserInfo");
@@ -255,98 +269,90 @@ public class SearchActivity extends AppCompatActivity {
 
     private void checkUserType()
     {
-
-        myUserIDRef.addValueEventListener(new ValueEventListener()
+        if (!regUserType)
         {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
+            // this is the BossUser
+            myRegUserRef.addValueEventListener(new ValueEventListener()
             {
-                    RegularUser regUser = new RegularUser();
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    showUsers(dataSnapshot);
 
-                    regUser = dataSnapshot.getValue(RegularUser.class);
+                    showAllTasks(dataSnapshot);
+                }
 
-                    regUserType = regUser.isRegUser();
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
 
-                    if (!regUserType)
-                    {
+                }
+            });
 
-                        // this is the BossUser
-                        myRegUserRef.addValueEventListener(new ValueEventListener()
-                        {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot)
-                            {
-                                showUsers(dataSnapshot);
-
-                                showAllTasks(dataSnapshot);
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError)
-                            {
-
-                            }
-                        });
-
-                        myTaskRef.addValueEventListener(new ValueEventListener()
-                        {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot)
-                            {
-                                showTasks(dataSnapshot);
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError)
-                            {
-
-                            }
-                        });
-
-                    }
-                    else
-                    {
-                        // This is the RegularUser
-                        bossID = regUser.getBossUserID();
-                        //toastMessage("This is test, this is RegUser \n" + bossID);
-
-                        myBossIDRef = mFirebaseDatabase.getReference(bossID + "/RegularUsers");
-
-                        myBossIDRef.addValueEventListener(new ValueEventListener()
-                        {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot)
-                            {
-                                showUsers(dataSnapshot);
-                            }
-                            @Override
-                            public void onCancelled(DatabaseError databaseError)
-                            {
-                            }
-                        });
-
-
-                        myTaskRef.addValueEventListener(new ValueEventListener()
-                        {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot)
-                            {
-                                showTasks(dataSnapshot);
-                            }
-                            @Override
-                            public void onCancelled(DatabaseError databaseError)
-                            {
-
-                            }
-                        });
-                    }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError)
+            myTaskRef.addValueEventListener(new ValueEventListener()
             {
-            }
-        });
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    showTasks(dataSnapshot);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+
+                }
+            });
+
+            // Show Customers
+
+            myCustomerRef = mFirebaseDatabase.getReference(userID + "/Customers");
+
+            myCustomerRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    showCustomers(dataSnapshot);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+        else
+        {
+            // This is the RegularUser
+
+            myBossIDRef = mFirebaseDatabase.getReference(bossID + "/RegularUsers");
+
+            myBossIDRef.addValueEventListener(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    showUsers(dataSnapshot);
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+                }
+            });
+            myTaskRef.addValueEventListener(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    showTasks(dataSnapshot);
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+                }
+            });
+        }
     }
 
     private void showAllTasks(DataSnapshot dataSnapshot)
@@ -394,11 +400,6 @@ public class SearchActivity extends AppCompatActivity {
                             //toastMessage("Only letters...");
                             string = task.getTopic();
                             string += ", " + task.getAddress() + ", " + task.getCity();
-                        }
-                        else
-                        {
-                            // this is to test, because this should never come...
-                            string = "THIS SHOULD NOT BE HERE";
                         }
 
                         if (string.matches("(?i).*" + saveSearch +".*"))
@@ -551,6 +552,55 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+    private void showCustomers(DataSnapshot dataSnapshot)
+    {
+        //customerList.clear();
+        for (DataSnapshot ds : dataSnapshot.getChildren())
+        {
+            Customer cust = ds.child("CustomerInfo").getValue(Customer.class);
+            //toastMessage(cust.getFullName());
+            customerList.add(cust);
+            //customerStringList.add(cust.getFullName() + ", " + cust.getAddress());
+        }
+
+        for (Customer c : customerList)
+        {
+            String string = "";
+            if (saveSearch.contains("@"))
+            {
+                // Searching for mails
+                string = c.getEmail();
+            }
+            else if (saveSearch.matches("[0-9]+"))
+            {
+                //toastMessage("Only numbers!");
+                string = c.getAddress();
+                string += ", " + c.getZipCode();
+                string += " " + c.getCity();
+            }
+            else if (saveSearch.matches(".*\\d+.*"))
+            {
+                //toastMessage("Numbers + letters...");
+                string = c.getAddress();
+                string += ", " + c.getZipCode() + " " + c.getCity();
+            }
+            else if (!saveSearch.matches(".*\\d+.*"))
+            {
+                //toastMessage("Only letters...");
+                string = c.getFullName();
+                string += ", " + c.getAddress() + ", " + c.getCity();
+            }
+
+            if (string.matches("(?i).*" + saveSearch +".*"))
+            {
+                customerStringList.add(string);
+                customerResults.add(c);
+            }
+        }
+        ArrayAdapter adapter = new ArrayAdapter(SearchActivity.this, android.R.layout.simple_list_item_1, customerStringList);
+        listViewCustomerResults.setAdapter(adapter);
+    }
+
     private void hideOrShowItems(int number)
     {
         if (number == 1)
@@ -558,16 +608,16 @@ public class SearchActivity extends AppCompatActivity {
             // This is gonna hide halfway, hide allway and show Workers
             if (userViewLP.height > 172 || listViewUserResults.getHeight() > 172)
             {
-                userViewLP.height = 169;
-            }
-            else if (userViewLP.height == 169)
-            {
                 userViewLP.height = 0;
+            }
+            else if (userViewLP.height == 0)
+            {
+                userViewLP.height = 160;
             }
             else
             {
                 int j = userResults.size();
-                j = j * 169;
+                j = j * 160;
                 userViewLP.height = j;
             }
             listViewUserResults.setLayoutParams(userViewLP);
@@ -577,17 +627,17 @@ public class SearchActivity extends AppCompatActivity {
             // This is gonna hide halfway, hide allway and show MyTasks
             if (taskViewLP.height > 280 || listViewTaskResults.getHeight() > 280)
             {
-                taskViewLP.height = 277;
+                taskViewLP.height = 0;
             }
-            else if (taskViewLP.height == 277)
+            else if (taskViewLP.height == 0)
             {
                 // One item is showing, we wanna hide it all now.
-                taskViewLP.height = 0;
+                taskViewLP.height = 250;
             }
             else
             {
                 int j = taskResults.size();
-                j = j * 277;
+                j = j * 250;
                 taskViewLP.height = j;
             }
             listViewTaskResults.setLayoutParams(taskViewLP);
@@ -597,17 +647,17 @@ public class SearchActivity extends AppCompatActivity {
             // This is gonna hide halfway, hide allway and show MyWorkersTasks
             if (task2ViewLP.height > 280 || listViewTaskResults2.getHeight() > 280)
             {
-                task2ViewLP.height = 277;
+                task2ViewLP.height = 0;
             }
-            else if (task2ViewLP.height == 277)
+            else if (task2ViewLP.height == 0)
             {
                 // One item is showing, we wanna hide it all now.
-                task2ViewLP.height = 0;
+                task2ViewLP.height = 250;
             }
             else
             {
                 int j = taskResults2.size(); // Maybe taskResults2
-                j = j * 277;
+                j = j * 250;
                 task2ViewLP.height = j;
             }
             listViewTaskResults2.setLayoutParams(task2ViewLP);
@@ -684,6 +734,8 @@ public class SearchActivity extends AppCompatActivity {
                 Intent intent = new Intent(SearchActivity.this, SearchActivity.class);
                 intent.putExtra("searchText", searchBar.getText().toString().trim());
                 intent.putExtra("userType", regUserType);
+                intent.putExtra("bossID", bossID);
+                intent.putExtra("userID", userID);
                 startActivity(intent);
             }
             else
