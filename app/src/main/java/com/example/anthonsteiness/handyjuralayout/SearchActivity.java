@@ -49,7 +49,7 @@ public class SearchActivity extends AppCompatActivity {
     private TextView textViewMyTasksGreyArea;
     private TextView textViewCustomersGreyArea;
     RelativeLayout relativeSearchBG;
-    RelativeLayout.LayoutParams userViewLP, taskViewLP, task2ViewLP;
+    RelativeLayout.LayoutParams userViewLP, taskViewLP, task2ViewLP, customerViewLP;
     ViewGroup.MarginLayoutParams marginParams;
 
     List<RegularUser> userList;
@@ -148,6 +148,7 @@ public class SearchActivity extends AppCompatActivity {
         userViewLP = (RelativeLayout.LayoutParams) listViewUserResults.getLayoutParams();
         taskViewLP = (RelativeLayout.LayoutParams) listViewTaskResults.getLayoutParams();
         task2ViewLP = (RelativeLayout.LayoutParams) listViewTaskResults2.getLayoutParams();
+        customerViewLP = (RelativeLayout.LayoutParams) listViewCustomerResults.getLayoutParams();
 
         textViewSearchText.setClickable(true);
         textViewSearchText.setOnClickListener(buttonClickListener);
@@ -263,6 +264,10 @@ public class SearchActivity extends AppCompatActivity {
                     break;
                 case R.id.workersTasksGreyArea:
                     hideOrShowItems(3);
+                    setTitle(view);
+                    break;
+                case R.id.customersGreyArea:
+                    hideOrShowItems(4);
                     setTitle(view);
                     break;
             }
@@ -621,7 +626,7 @@ public class SearchActivity extends AppCompatActivity {
         if (number == 1)
         {
             // This is gonna hide halfway, hide allway and show Workers
-            if (userViewLP.height > 172 || listViewUserResults.getHeight() > 172)
+            if (userViewLP.height > 172 || (listViewUserResults.getHeight() > 150 && userViewLP.height != 160))
             {
                 userViewLP.height = 0;
             }
@@ -629,7 +634,7 @@ public class SearchActivity extends AppCompatActivity {
             {
                 userViewLP.height = 160;
             }
-            else
+            else if (userViewLP.height == 160)
             {
                 int j = userResults.size();
                 j = j * 160;
@@ -640,7 +645,7 @@ public class SearchActivity extends AppCompatActivity {
         else if (number == 2)
         {
             // This is gonna hide halfway, hide allway and show MyTasks
-            if (taskViewLP.height > 280 || listViewTaskResults.getHeight() > 280)
+            if (taskViewLP.height > 280 || (listViewTaskResults.getHeight() > 242 && taskViewLP.height != 250))
             {
                 taskViewLP.height = 0;
             }
@@ -649,7 +654,7 @@ public class SearchActivity extends AppCompatActivity {
                 // One item is showing, we wanna hide it all now.
                 taskViewLP.height = 250;
             }
-            else
+            else if (taskViewLP.height == 250)
             {
                 int j = taskResults.size();
                 j = j * 250;
@@ -660,7 +665,7 @@ public class SearchActivity extends AppCompatActivity {
         else if (number == 3)
         {
             // This is gonna hide halfway, hide allway and show MyWorkersTasks
-            if (task2ViewLP.height > 280 || listViewTaskResults2.getHeight() > 280)
+            if (task2ViewLP.height > 280 || (listViewTaskResults2.getHeight() > 242 && task2ViewLP.height != 250))
             {
                 task2ViewLP.height = 0;
             }
@@ -669,7 +674,7 @@ public class SearchActivity extends AppCompatActivity {
                 // One item is showing, we wanna hide it all now.
                 task2ViewLP.height = 250;
             }
-            else
+            else if (task2ViewLP.height == 250)
             {
                 int j = taskResults2.size(); // Maybe taskResults2
                 j = j * 250;
@@ -680,6 +685,21 @@ public class SearchActivity extends AppCompatActivity {
         else if (number == 4)
         {
             // this is gonna hide halfway, hide allway and show Customers
+            if (customerViewLP.height > 172 || (listViewCustomerResults.getHeight() > 150 && customerViewLP.height != 160))
+            {
+                customerViewLP.height = 0;
+            }
+            else if (customerViewLP.height == 0 && listViewCustomerResults.getCount() > 0)
+            {
+                customerViewLP.height = 160;
+            }
+            else if (customerViewLP.height == 160)
+            {
+                int j = customerResults.size();
+                j = j * 160;
+                customerViewLP.height = j;
+            }
+            listViewCustomerResults.setLayoutParams(customerViewLP);
         }
     }
 
