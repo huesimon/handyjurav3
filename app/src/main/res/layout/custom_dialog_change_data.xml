@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/dialogTxtTitle3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textAlignment="center"
+        android:text="TITLE"
+        android:textSize="17dp" />
+
+    <EditText
+        android:id="@+id/editNameDialog"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/dialogTxtTitle3"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:inputType="text"
+        android:hint="Navn"
+        android:textAlignment="center"/>
+
+    <EditText
+        android:id="@+id/editMailDialog"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/editNameDialog"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:inputType="text"
+        android:hint="Email"
+        android:textAlignment="center"/>
+
+    <EditText
+        android:id="@+id/editBranchDialog"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/editMailDialog"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:inputType="text"
+        android:hint="Branch"
+        android:textAlignment="center"/>
+
+    <EditText
+        android:id="@+id/editCvrDialog"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/editBranchDialog"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:inputType="text"
+        android:hint="CVR"
+        android:textAlignment="center"/>
+
+    <Button
+        android:id="@+id/dialogBtnChange1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="         Ændrer         "
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignLeft="@+id/dialogTxtTitle3"
+        android:layout_below="@+id/editCvrDialog" />
+
+    <Button
+        android:id="@+id/dialogBtnCancel1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Annuller"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignRight="@+id/dialogTxtTitle3"
+        android:layout_below="@+id/editCvrDialog" />
+
+</RelativeLayout>

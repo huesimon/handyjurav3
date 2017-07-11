@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -51,6 +52,8 @@ import java.util.UUID;
  */
 
 public class CreateTaskActivity extends AppCompatActivity {
+
+    private static final String TAG = "CreateTaskActivity";
 
     private String title = "Opret opgave";
 
@@ -158,6 +161,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
         myRootRef = mFirebaseDatabase.getReference();
+
         myChildRef = mFirebaseDatabase.getReference(userID);
 
         // Checks usertype, and makes reference to Customer data under bosses userID.

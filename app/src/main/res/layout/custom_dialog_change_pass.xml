@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/dialogTxtTitle4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textAlignment="center"
+        android:text="TITLE"
+        android:textSize="17dp" />
+
+    <EditText
+        android:id="@+id/editPassDialog"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/dialogTxtTitle4"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:inputType="textPassword"
+        android:hint="Kode"
+        android:textAlignment="center"/>
+
+    <EditText
+        android:id="@+id/editPassDialogRepeat"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/editPassDialog"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:inputType="textPassword"
+        android:hint="Gentag Kode"
+        android:textAlignment="center"/>
+
+    <Button
+        android:id="@+id/dialogBtnChange2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="         Ændrer         "
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignLeft="@+id/dialogTxtTitle4"
+        android:layout_below="@+id/editPassDialogRepeat" />
+
+    <Button
+        android:id="@+id/dialogBtnCancel2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Annuller"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignRight="@+id/dialogTxtTitle4"
+        android:layout_below="@+id/editPassDialogRepeat" />
+
+</RelativeLayout>

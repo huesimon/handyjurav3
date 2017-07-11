@@ -48,9 +48,6 @@
         <activity
             android:name=".ContractActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".MyMenu2Activity"
-            android:screenOrientation="portrait" />
         <activity android:name=".SearchActivity" />
         <activity
             android:name=".CustomerViewActivity"

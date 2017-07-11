@@ -516,7 +516,7 @@ public class TaskViewActivity extends AppCompatActivity
 
         String url = task.getDownloadUrl();
         ImageView image = (ImageView) dialog.findViewById(R.id.dialogImg);
-        image.setImageResource(R.drawable.addbtnblue);
+        //image.setImageResource(R.drawable.addbtnblue);
 
         Picasso.with(this).load(url).placeholder(R.drawable.plumber)
                 .error(R.drawable.plumber)

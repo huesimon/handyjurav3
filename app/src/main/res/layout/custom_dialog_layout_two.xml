@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/dialogTxtTitle2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textAlignment="center"
+        android:text="TITLE"
+        android:textSize="23dp" />
+
+    <TextView
+        android:id="@+id/dialogTxt2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textAlignment="center"
+        android:text="Body"
+        android:textSize="17dp"
+        android:layout_below="@+id/dialogTxtTitle2"/>
+
+    <Button
+        android:id="@+id/dialogBtnChange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="         Ændrer         "
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignLeft="@+id/dialogTxtTitle2"
+        android:layout_below="@+id/dialogTxt2" />
+
+    <Button
+        android:id="@+id/dialogBtnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Annuller"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignRight="@+id/dialogTxtTitle2"
+        android:layout_below="@+id/dialogTxt2" />
+
+</RelativeLayout>
