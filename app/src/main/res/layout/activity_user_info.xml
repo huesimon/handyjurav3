@@ -27,4 +27,15 @@
         android:id="@+id/listView">
     </ListView>
 
+    <Button
+        android:id="@+id/changePassBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Skift kode"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignLeft="@+id/tvUserInfo"
+        android:layout_below="@+id/listView" />
+
 </LinearLayout>

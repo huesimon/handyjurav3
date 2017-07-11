@@ -317,7 +317,7 @@ public class WorkersActivity extends AppCompatActivity
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
-            //for (RegularUser testUser : userList)
+            //for (RegularUser testUser : customerList)
             //{
                 //toastMessage(testUser.getFullName());
             //}

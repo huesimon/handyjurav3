@@ -164,15 +164,19 @@ public class CustomerViewActivity extends AppCompatActivity
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError)
-                {
-
-                }
+                public void onCancelled(DatabaseError databaseError) {}
             });
         }
         else
         {
             // This is Regular user, userType = true
+            myBossIDRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) { showData(dataSnapshot); }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
         }
     }
 
@@ -220,7 +224,15 @@ public class CustomerViewActivity extends AppCompatActivity
 
             final View view1 = view;
 
-            customerTaskRef = mFirebaseDatabase.getReference(userID + "/Customers/" + customer.getCustomerID() + "/Tasks");
+            if (!userType)
+            {
+                customerTaskRef = mFirebaseDatabase.getReference(userID + "/Customers/" + customer.getCustomerID() + "/Tasks");
+            }
+            else
+            {
+                customerTaskRef = mFirebaseDatabase.getReference(bossID + "/Customers/" + customer.getCustomerID() + "/Tasks");
+            }
+
             customerTaskRef.addValueEventListener(new ValueEventListener()
             {
                 @Override

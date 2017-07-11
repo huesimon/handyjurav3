@@ -1,6 +1,5 @@
 package com.example.anthonsteiness.handyjuralayout;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -8,40 +7,41 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.example.anthonsteiness.handyjuralayout.objects.Customer;
-import com.example.anthonsteiness.handyjuralayout.objects.RegularUser;
 import com.example.anthonsteiness.handyjuralayout.objects.Task;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -52,6 +52,8 @@ import java.util.UUID;
  */
 
 public class CreateTaskActivity extends AppCompatActivity {
+
+    private static final String TAG = "CreateTaskActivity";
 
     private String title = "Opret opgave";
 
@@ -70,21 +72,16 @@ public class CreateTaskActivity extends AppCompatActivity {
     private static int camReqCode =1;
     //camera Storage reference
     private StorageReference picStorage;
-    //picture1 progressDialog
-    private ProgressDialog picDialog;
     //private TextView downloadUrl;
     private String pictureURL;
 
-
-
     ViewGroup.MarginLayoutParams marginParams;
-
+    ListView listViewCustomer;
 
     // Buttons and stuff from app_bar class
     private ImageButton searchBtn;
     private Spinner helpDropDown;
     private ArrayAdapter<CharSequence> adapter;
-
     private TextView titleBar;
     private EditText searchBar;
     private String saveSearch = "";
@@ -101,13 +98,17 @@ public class CreateTaskActivity extends AppCompatActivity {
     private FirebaseUser fbUser;
     private boolean userType;
     private String bossID;
-
     private DatabaseReference myCustomerRef;
     private DatabaseReference myTestRef;
-    List<Customer> userList; // Maybe rename to customerList as this list contain all the customers.
+
+    List<Customer> customerList;
+    List<String> cNameList;
     private String taskID;
     private boolean checkCustomer;
     private Customer testCustomer;
+
+    private Animation animBounce;
+    private Animation animLinear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,61 +122,11 @@ public class CreateTaskActivity extends AppCompatActivity {
         Intent intent = getIntent();
         userType = intent.getExtras().getBoolean("userType");
         bossID = intent.getExtras().getString("bossID");
+        userID = intent.getExtras().getString("userID");
         //toastMessage(userType + " " + bossID, false);
 
-        userList = new ArrayList<>();
-
-        // Firebase declaration
-        firebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        fbUser = user;
-        userID = user.getUid();
-
-        myRootRef = mFirebaseDatabase.getReference();
-        myChildRef = mFirebaseDatabase.getReference(userID);
-
-        // Checks usertype, and makes reference to Customer data under bosses userID.
-        if (userType == true)
-        {
-            // Regular User
-            myCustomerRef = mFirebaseDatabase.getReference(bossID + "/Customers");
-        }
-        else
-        {
-            // Boss User
-            myCustomerRef = mFirebaseDatabase.getReference(userID + "/Customers");
-        }
-
-        myCustomerRef.addValueEventListener(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                userList.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren())
-                {
-                    //Customer customer = ds.getValue(Customer.class);
-                    //toastMessage(customer.getFullName(),false);
-
-                    Customer cust = ds.child("CustomerInfo").getValue(Customer.class);
-                    //toastMessage(cust.getFullName() , false);
-                    userList.add(cust);
-                }
-
-                //for (Customer c : userList)
-               // {
-                    //toastMessage(c.getFullName(), true);
-                //}
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-
-            }
-        });
+        animBounce = AnimationUtils.loadAnimation(this, R.anim.bounce);
+        animLinear = AnimationUtils.loadAnimation(this, R.anim.linear);
 
         loadCustomerBtn = (ImageButton) findViewById(R.id.loadCustomerBtn);
         loadCustomerBtn.setOnClickListener(buttonClickListener);
@@ -198,91 +149,116 @@ public class CreateTaskActivity extends AppCompatActivity {
         //downloadUrl= (TextView) findViewById(R.id.urlTextview);
         editStartDate = (EditText) findViewById(R.id.editStartDate1);
         editDueDate = (EditText) findViewById(R.id.editDueDate1);
+        listViewCustomer = (ListView) findViewById(R.id.listViewCustomers1);
+        marginParams = (ViewGroup.MarginLayoutParams) listViewCustomer.getLayoutParams();
+        listViewCustomer.setOnItemClickListener(itemClickListener);
 
-        //progress dialog uploading image
-        picDialog = new ProgressDialog(this);
+        customerList = new ArrayList<>();
+        cNameList = new ArrayList<>();
 
+        // Firebase declaration
+        firebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
 
-        //open camera
-        camerabtn.setOnClickListener(new View.OnClickListener() {
+        myRootRef = mFirebaseDatabase.getReference();
+
+        myChildRef = mFirebaseDatabase.getReference(userID);
+
+        // Checks usertype, and makes reference to Customer data under bosses userID.
+        if (userType == true)
+        {
+            // Regular User
+            myCustomerRef = mFirebaseDatabase.getReference(bossID + "/Customers");
+        }
+        else
+        {
+            // Boss User
+            myCustomerRef = mFirebaseDatabase.getReference(userID + "/Customers");
+        }
+
+        myCustomerRef.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onClick(View v) {
-            Intent camIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                customerList.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren())
+                {
+                    Customer cust = ds.child("CustomerInfo").getValue(Customer.class);
+                    //toastMessage(cust.getFullName() , false);
+                    customerList.add(cust);
+                    cNameList.add(cust.getFullName() + ", " + cust.getAddress());
+                }
 
-
-                startActivityForResult(camIntent,camReqCode);
+                ArrayAdapter adapter = new ArrayAdapter(CreateTaskActivity.this, R.layout.simple_list_layout, R.id.label, cNameList);
+                listViewCustomer.setAdapter(adapter);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
 
             }
         });
 
 
-        // Fierbase declaration stuff
-        firebaseAuth = FirebaseAuth.getInstance();
-        // Check if Firebase is already logged in to
-        if (firebaseAuth.getCurrentUser() != null)
-        {
-            // The Firebase is logged in to
-        }
-        mAuthListener = new FirebaseAuth.AuthStateListener()
-        {
+        //open camera
+        /*camerabtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth)
-            {
-                if (firebaseAuth.getCurrentUser() != null)
-                {
-                    // The Firebase is logged in to
-                }
-                else
-                {
-                    // Could display not signed in. But might cause toasting issues...
-                }
+            public void onClick(View v) {
+            Intent camIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(camIntent,camReqCode);
             }
-        };
-
+        });*/
+        camerabtn.setOnClickListener(buttonClickListener);
 
 
         // Everything here is from app_bar class -----------------
         searchBtn = (ImageButton) findViewById(R.id.searchbtn);
         searchBtn.setOnClickListener(buttonClickListener);
-
         searchBar = (EditText) findViewById(R.id.searchBar);
         titleBar = (TextView) findViewById(R.id.titleBar);
-
         helpDropDown = (Spinner) findViewById(R.id.helpDropDown);
         adapter = ArrayAdapter.createFromResource(this, R.array.settingSelection, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         helpDropDown.setAdapter(adapter);
         helpDropDown.setOnItemSelectedListener(dropDownListener);
         titleBar.setText("Opret Opgave");
-
-        checkScreenReso();
-
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
+
         Bitmap bitmap = (Bitmap)data.getExtras().get("data");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
+
         byte[] data1 = baos.toByteArray();
-        String path = "Photos/"+UUID.randomUUID()+".png";
-        final StorageReference picstorage = mStorage.getReference(path);
-        UploadTask uploadTask = picstorage.putBytes(data1);
+        UUID imageID = UUID.randomUUID();
+        String path = "Photos/"+imageID+".png";
+        final StorageReference imageStorageRef = mStorage.getReference(path);
+        UploadTask uploadTask = imageStorageRef.putBytes(data1);
+
         picture1.setImageBitmap(bitmap);
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e)
+            {
+                // Handle on faliure
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            // This suppresses a warning this line of code shows. The code works fine, don't worry about it.
+            @SuppressWarnings("VisibleForTests")
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                //downloadUrl.setText(picstorage.toString());
-                pictureURL = picstorage.toString();
+                pictureURL = taskSnapshot.getDownloadUrl().toString();
             }
-
         });
-
-
-        }
-
-
+    }
 
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener()
@@ -296,7 +272,20 @@ public class CreateTaskActivity extends AppCompatActivity {
                     break;
                 case R.id.loadCustomerBtn:
                     // Show List View of Customers
-                    checkEmptyText();
+                    if (marginParams.topMargin > 360)
+                    {
+                        marginParams.topMargin = 300;
+                        listViewCustomer.setLayoutParams(marginParams);
+                        listViewCustomer.startAnimation(animBounce);
+                    }
+                    else
+                    {
+                        startLinearAnim();
+                    }
+                    break;
+                case R.id.billedeBtn:
+                    Intent camIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(camIntent,camReqCode);
                     break;
             }
 
@@ -304,6 +293,21 @@ public class CreateTaskActivity extends AppCompatActivity {
     };
 
 
+    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener()
+    {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+        {
+            Customer customer = customerList.get(position);
+            editName.setText(customer.getFullName());
+            editAddress.setText(customer.getAddress());
+            editCity.setText(customer.getCity());
+            editZip.setText(customer.getZipCode());
+            editPhone.setText(customer.getPhoneNumber());
+            editEmail.setText(customer.getEmail());
+            startLinearAnim();
+        }
+    };
 
     private void createCustomer(Task task)
     {
@@ -319,7 +323,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         customer.setCustomerID(customerID);
 
         // This checks if the Customer already is in the Database.
-        for (Customer cu : userList)
+        for (Customer cu : customerList)
         {
             if (customer.equals(cu) == true)
             {
@@ -428,7 +432,6 @@ public class CreateTaskActivity extends AppCompatActivity {
         else
         {
             // true - meaning at least one field empty
-            toastMessage("ERROR: INFO MISSING", true);
         }
 
     }
@@ -476,36 +479,28 @@ public class CreateTaskActivity extends AppCompatActivity {
         return bool;
     }
 
-    private void checkScreenReso() {
-        if (height >= 1790) {
-            // For 5.2" screen
+    private void startLinearAnim()
+    {
+        listViewCustomer.startAnimation(animLinear);
 
-
-            if (height >= 1800) {
-                // For 7" Screen
-
-
-                if (height >= 1950) {
-                    // For 9" Screen
-
-
-                    if (height >= 2390) {
-                        // For 6" & 5.5" Screen
-
-
-                        if (height >= 2460) {
-                            // For 10" Screen
-
-                        }
-                    }
-                }
+        animLinear.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
             }
-        }
 
-        if (height >= 1920 && height <= 1920) {
-            // For 1920x1080 screens
-        }
+            @Override
+            public void onAnimationEnd(Animation animation)
+            {
+                marginParams.topMargin = 20000;
+                listViewCustomer.setLayoutParams(marginParams);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
     }
+
     private void toastMessage(String message, boolean length)
     {
         // If true - short message. If false - Long message

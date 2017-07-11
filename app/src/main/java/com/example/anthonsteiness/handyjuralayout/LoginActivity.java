@@ -163,6 +163,7 @@ public class LoginActivity extends AppCompatActivity {
                                 intent.putExtra("userType", check);
                                 intent.putExtra("userID", regUser.getUserID());
                                 intent.putExtra("bossID", regUser.getBossUserID());
+                                //toastMessage(check + "\n" + regUser.getUserID() + "\n" + regUser.getBossUserID());
                                 startActivity(intent);
                             }
 
@@ -231,9 +232,7 @@ public class LoginActivity extends AppCompatActivity {
                         {
                             // The login is successful
                             //toastMessage("User login successful");
-
-                            // Finish the LoginActivity and start up the MyFrontPageActivity (Not made yet) instead of main
-                            // This is done in the firebase auth listener. Because we need to check the logged in users UserType, stored in the Database.
+                            toastMessage("Login succesful - Checker Info");
                         }
                         else
                         {

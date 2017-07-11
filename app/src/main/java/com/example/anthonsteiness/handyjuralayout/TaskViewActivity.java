@@ -1,7 +1,10 @@
 package com.example.anthonsteiness.handyjuralayout;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -12,8 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -30,6 +35,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +68,7 @@ public class TaskViewActivity extends AppCompatActivity
     private FirebaseUser fbUser;
     private boolean userType;
 
-    private Activity context;
+    final Context context = this;
     //private TextView nameView, emailView, branchView, cvrView;
 
     // Buttons and stuff from app_bar class
@@ -130,14 +136,6 @@ public class TaskViewActivity extends AppCompatActivity
 
         // Firebase declaration stuff
         firebaseAuth = FirebaseAuth.getInstance();
-        // Check if Firebase is already logged in to
-        if (firebaseAuth.getCurrentUser() != null)
-        {
-            // The Firebase is logged in to
-
-        }
-
-
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -301,18 +299,19 @@ public class TaskViewActivity extends AppCompatActivity
         @Override
         public void onClick(View view)
         {
-
             switch(view.getId())
             {
                 case R.id.searchbtn:
                     toastMessage("Search function not yet implemented..");
                     break;
                 case R.id.addWorkerBtn:
-                    //Gotta finish this activity for now. As the user gets logged out.
                     Intent intent2 = new Intent(TaskViewActivity.this, CreateTaskActivity.class);
                     intent2.putExtra("bossID", bossID);
                     intent2.putExtra("userType", userType);
+                    intent2.putExtra("userID", userID);
                     startActivity(intent2);
+
+                    //customDialogEvent(view);
                     break;
                 case R.id.myTasksGreyArea:
                     hideOrShowItems(1);
@@ -447,7 +446,7 @@ public class TaskViewActivity extends AppCompatActivity
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
-            //for (RegularUser testUser : userList)
+            //for (RegularUser testUser : customerList)
             //{
                 //toastMessage(testUser.getFullName());
             //}
@@ -458,9 +457,8 @@ public class TaskViewActivity extends AppCompatActivity
                     + "\nAdresse: " + task.getAddress()
                     + "\nBy: " + task.getZipCode() + ", " + task.getCity()
                     + "\nKunde: " + task.getName() + ", " + task.getPhone() + ", " + task.getEmail();
-            dialogEvent(view, message, title);
-           // RegularUser testUser = userList.get(position);
-          //  dialogEvent(view, testUser.getEmail(), testUser.getFullName());
+            //dialogEvent(view, message, title);
+            customDialogEvent(view, message, title, task);
         }
     };
     private AdapterView.OnItemClickListener itemClickListener2 = new AdapterView.OnItemClickListener()
@@ -476,7 +474,8 @@ public class TaskViewActivity extends AppCompatActivity
                     + "\nAdresse: " + task.getAddress()
                     + "\nBy: " + task.getZipCode() + ", " + task.getCity()
                     + "\nKunde: " + task.getName() + ", " + task.getPhone() + ", " + task.getEmail();
-            dialogEvent(view, message, title);
+            //dialogEvent(view, message, title);
+            customDialogEvent(view, message, title, task);
         }
     };
 
@@ -489,6 +488,57 @@ public class TaskViewActivity extends AppCompatActivity
         alert.setTitle(title);
         alert.show();
     }
+
+    private void customDialogEvent(View view, String message, String title, Task task)
+    {
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.custom_dialog_layout);
+        dialog.setTitle(title);
+
+        // Set custom dialog components - Text, image and button
+        TextView titleView = (TextView) dialog.findViewById(R.id.dialogTxtTitle);
+        titleView.setText(title);
+
+        TextView text = (TextView) dialog.findViewById(R.id.dialogTxt);
+        text.setText("Opgave Beskrivelse: " + task.getDescription()
+                + "\nPris: " + task.getPrice()
+                + "\nAdresse: " + task.getAddress()
+                + "\nBy: " + task.getZipCode() + ", " + task.getCity()
+                + "\nKunde: " + task.getName() + ", " + task.getPhone() + ", " + task.getEmail());
+
+        Button dialogBtn = (Button) dialog.findViewById(R.id.dialogBtn);
+        dialogBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        String url = task.getDownloadUrl();
+        ImageView image = (ImageView) dialog.findViewById(R.id.dialogImg);
+        //image.setImageResource(R.drawable.addbtnblue);
+
+        Picasso.with(this).load(url).placeholder(R.drawable.plumber)
+                .error(R.drawable.plumber)
+                .into(image, new com.squareup.picasso.Callback()
+                {
+                    @Override
+                    public void onSuccess()
+                    {
+
+                    }
+
+                    @Override
+                    public void onError()
+                    {
+
+                    }
+                });
+
+        dialog.show();
+    }
+
+
 
     // This is the drop down menu with Help, Settings and About page buttons ----------------------------------
     private AdapterView.OnItemSelectedListener dropDownListener = new AdapterView.OnItemSelectedListener()

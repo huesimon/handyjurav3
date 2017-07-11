@@ -61,8 +61,7 @@ public class MyMenuActivity extends AppCompatActivity
         userType = intent.getExtras().getBoolean("userType");
         bossID = intent.getExtras().getString("bossID");
         userID = intent.getExtras().getString("userID");
-        //toastMessage(bossID);
-        //toastMessage(userType + "");
+        //toastMessage(userType + "\n" + userID + "\n" + bossID);
 
         height = getWindowManager().getDefaultDisplay().getHeight();
         width = getWindowManager().getDefaultDisplay().getWidth();
@@ -101,10 +100,8 @@ public class MyMenuActivity extends AppCompatActivity
         relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
         relativeLayout.setOnClickListener(buttonClickListener);
 
-        if (userType != true)
-        {
-            makeTaskBtn.setText("Kunder");
-        }
+        makeTaskBtn.setText("Kunder");
+
 
 
 
@@ -171,12 +168,27 @@ public class MyMenuActivity extends AppCompatActivity
                     setTitle(view);
                     break;
                 case R.id.btn2: // Add task Button
-                    Intent intent2 = new Intent(MyMenuActivity.this, CustomerViewActivity.class);
-                    intent2.putExtra("bossID", bossID);
-                    intent2.putExtra("userType", userType);
-                    intent2.putExtra("userID", userID);
-                    startActivity(intent2);
-                    setTitle(view);
+                    // The commented code is for, if the RegUser is not allowed to see the CustomerView.
+                    //if (userType != true)
+                    //{
+                        makeTaskBtn.setText("Kunder");
+                        Intent intent2 = new Intent(MyMenuActivity.this, CustomerViewActivity.class);
+                        intent2.putExtra("bossID", bossID);
+                        intent2.putExtra("userType", userType);
+                        intent2.putExtra("userID", userID);
+                        startActivity(intent2);
+                        setTitle(view);
+                    //}
+                    //else
+                    //{
+                        //Intent intent2 = new Intent(MyMenuActivity.this, CreateTaskActivity.class);
+                        //intent2.putExtra("bossID", bossID);
+                        //intent2.putExtra("userType", userType);
+                        //intent2.putExtra("userID", userID);
+                        //startActivity(intent2);
+                        //setTitle(view);
+                    //}
+
                     break;
                 case R.id.btn3: // Workers button
                     //startActivity(new Intent(MyMenuActivity.this, WorkersActivity.class));
@@ -398,6 +410,8 @@ public class MyMenuActivity extends AppCompatActivity
                 Intent intent = new Intent(MyMenuActivity.this, SearchActivity.class);
                 intent.putExtra("searchText", searchBar.getText().toString().trim());
                 intent.putExtra("userType", userType);
+                intent.putExtra("bossID", bossID);
+                intent.putExtra("userID", userID);
                 startActivity(intent);
                 setTitle(view);
             }

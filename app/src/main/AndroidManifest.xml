@@ -48,14 +48,11 @@
         <activity
             android:name=".ContractActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".MyMenu2Activity"
-            android:screenOrientation="portrait" />
         <activity android:name=".SearchActivity" />
         <activity
             android:name=".CustomerViewActivity"
             android:label="@string/title_activity_customer_view"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
