@@ -110,8 +110,8 @@
             android:layout_below="@+id/editPhone1"
             android:layout_marginTop="10dp"
             android:background="@color/colorDarkGrey"
-            android:textColor="@android:color/white"
-            />
+            android:textColor="@android:color/white" />
+
         <EditText
             android:id="@+id/editEmail1"
             android:layout_width="180dp"
@@ -142,6 +142,7 @@
             android:inputType="textMultiLine"
             android:hint="Beskrivelse"
             tools:maxLines="10" />
+
         <EditText
             android:id="@+id/editPrice1"
             android:layout_width="180dp"

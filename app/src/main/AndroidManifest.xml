@@ -55,7 +55,7 @@
         <activity
             android:name=".CustomerViewActivity"
             android:label="@string/title_activity_customer_view"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
